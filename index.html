@@ -65,6 +65,26 @@ h1,h2,h3,p{margin:0}
 .clap{width:42px;height:38px;flex:none}
 .logo h1{font-family:var(--display);font-size:30px;font-weight:400;line-height:1}
 .logo small{display:block;font-size:13px;color:var(--muted)}
+.top{position:relative}
+.menubtn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-size:15px;font-weight:500}
+.menuveil{position:fixed;inset:0;z-index:30;background:rgba(14,13,24,.25);border:0;padding:0;cursor:default}
+.menu{position:absolute;top:calc(100% + 6px);inset-inline-end:0;z-index:31;width:min(320px,calc(100vw - 32px));background:var(--surface);border:1.5px solid var(--line);border-radius:14px;box-shadow:0 16px 40px rgba(20,20,50,.22);padding:6px;display:flex;flex-direction:column}
+.menu [role=menuitem]{display:flex;align-items:center;gap:12px;text-align:start;background:none;border:0;border-radius:10px;padding:10px 12px;color:var(--ink);min-height:48px}
+.menu [role=menuitem]:hover,.menu [role=menuitem]:focus-visible{background:var(--field)}
+.menu [role=menuitem] svg{flex:none;color:var(--muted)}
+.menu b{display:block;font-weight:500;font-size:16px}
+.menu small{display:block;font-size:12.5px;color:var(--muted)}
+.menufoot{border-top:1px solid var(--line);margin-top:4px;padding:8px 12px 4px;font-size:12px;color:var(--muted)}
+.newver{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--surface);border:1.5px solid var(--accent);border-radius:12px;padding:8px 12px;font-size:15px}
+.newver span{flex:1;min-width:140px}
+.newver .x{border:0;background:none;font-size:22px;line-height:1;color:var(--muted);padding:2px 6px}
+.rel{border:1.5px solid var(--line);border-radius:12px;padding:12px;background:var(--field)}
+.rel.latest{border-color:var(--accent)}
+.relhead{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.relhead span{font-size:13px;color:var(--muted)}
+.relhead .tag{background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:1px 9px;font-size:12px;font-weight:700}
+.rel ul,.plain{margin:8px 0 0;padding-inline-start:20px;display:flex;flex-direction:column;gap:4px}
+.panel p{line-height:1.6}
 .linkbtn{background:none;border:0;color:var(--muted);font-size:14px;text-decoration:underline;padding:6px}
 
 .track{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;list-style:none;margin:0;padding:0}
@@ -297,7 +317,15 @@ document.documentElement.dir='rtl'; document.documentElement.lang='he';
 //   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
 //   {מקום} {למקום} {במקום}   the place of the scene
 //   {חפץ} {אירוע}            the important object and the event from the chosen topic
-const APP_VERSION = '2 · 16.11.2026';   // shown in teacher mode, so you can see a tablet got the update
+const APP_VERSION = '1.2';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
+const APP_DATE = '16.11.2026';
+const APP_URL = 'https://gzfilm.github.io/tasriton/';
+// "What's new": newest first. Add an entry here with every update.
+const CHANGES = [
+  {v:'1.2', d:'16.11.2026', items:['תפריט חדש: בית, שיתוף, מה חדש ובדיקת עדכונים','עמוד אודות ופרטיות','הודעה קטנה כשהאפליקציה מתעדכנת']},
+  {v:'1.1', d:'16.11.2026', items:['שורת זכויות יוצרים בעברית ובאנגלית','תצוגה מקדימה עם האייקון כששולחים את הקישור']},
+  {v:'1.0', d:'16.11.2026', items:['השקה! קבוצות שנשמרות לשבוע הבא','קוד מורה לכניסה למצב מורה','אודישנים מוגבלים, ואחריהם: אקשן! צילום הסצנה','עובדת גם בלי אינטרנט אחרי הפתיחה הראשונה','אייקון של כיסא במאי למסך הבית']},
+];
 const LETTERS=['א','ב','ג','ד','ה','ו'], KEYS=['A','B','C','D','E','F'];
 const TIMES=['בוקר','יום','צהריים','אחר הצהריים','ערב','לילה'];
 const TOPICS = [
@@ -377,10 +405,13 @@ const curGroup = ()=>groups.find(g=>g.id===curId);
 if(curGroup()) S = curGroup().state; else curId=null;
 let view = curId ? 'kid' : 'groups';                   // 'kid' | 'teacher' | 'pin' (enter the teacher code) | 'pinset' (choose a code)
 let openLine = -1;                  // index of the open line, or 'scene'
-let T = {editing:null, err:'', code:'', importErr:'', importOk:'', gform:-1, flip:false, pinErr:'', groupErr:''};
+let T = {editing:null, err:'', code:'', importErr:'', importOk:'', gform:-1, flip:false, pinErr:'', groupErr:'', menu:false, newVer:false};
 // Teacher code: kept only on this tablet, stored as a hash so it is not readable at a glance.
 const pinHash = c => { let h=2166136261; for(const ch of 'tsr|'+c){ h^=ch.charCodeAt(0); h=Math.imul(h,16777619); } return (h>>>0).toString(36); };
 let pinSaved = load(K.pin, '');
+{ const seen = load('tasritaon-seenver', null);           // tell people when the app was updated
+  if(seen && seen!==APP_VERSION) T.newVer = true;
+  if(!seen) store('tasritaon-seenver', APP_VERSION); }
 const caret = {};                   // last cursor position in each teacher textarea
 const save = ()=>{ store(K.state, S); const g=curGroup(); if(g){ g.state=S; g.updated=Date.now(); store(K.groups, groups); } };
 
@@ -515,9 +546,81 @@ function scriptText(){
 /* ================= views: kids ================= */
 const CLAP = `<svg class="clap" viewBox="0 0 42 38" aria-hidden="true"><rect x="2" y="13" width="38" height="23" rx="3" fill="var(--ink)"/><path d="M2 13 L38 4 L40 10 L4 19 Z" fill="var(--accent)"/><path d="M9 11.3 L13 16 M17 9.3 L21 14 M25 7.3 L29 12 M33 5.3 L37 10" stroke="var(--ink)" stroke-width="2.6"/><rect x="7" y="21" width="16" height="3" rx="1.5" fill="var(--surface)"/><rect x="7" y="27" width="24" height="3" rx="1.5" fill="var(--surface)" opacity=".6"/></svg>`;
 
+const ico = d => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const IC = {
+  menu: ico('<path d="M4 7h16M4 12h16M4 17h16"/>'),
+  home: ico('<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>'),
+  share: ico('<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/>'),
+  news: ico('<path d="M12 3l2.4 5 5.6.8-4 3.9.9 5.5L12 15.6 7.1 18.2l.9-5.5-4-3.9 5.6-.8z"/>'),
+  update: ico('<path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/>'),
+  teacher: ico('<rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>'),
+  about: ico('<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>'),
+};
+function menuPanel(){
+  const inTeacher = !(view==='kid'||view==='groups'||view==='news'||view==='about');
+  const item=(act,icon,label,sub)=>`<button type="button" role="menuitem" data-act="${act}">${icon}<span><b>${label}</b>${sub?`<small>${sub}</small>`:''}</span></button>`;
+  return `<button type="button" class="menuveil" data-act="menu-close" aria-label="סגירת התפריט" tabindex="-1"></button>
+  <nav class="menu" id="mainmenu" role="menu" aria-label="תפריט">
+    ${item('m-home',IC.home,'בית','מי עובד עכשיו?')}
+    ${item('m-share',IC.share,'שיתוף האפליקציה','שליחת הקישור לחברים')}
+    ${item('m-news',IC.news,'מה חדש','גרסה '+APP_VERSION+' · '+APP_DATE)}
+    ${item('m-update',IC.update,'בדיקת עדכונים','')}
+    ${item('mode',IC.teacher,inTeacher?'חזרה למצב תלמיד':'מצב מורה',inTeacher?'':'נכנסים עם קוד')}
+    ${item('m-about',IC.about,'אודות ופרטיות','')}
+    <div class="menufoot">עדכון אחרון: ${APP_DATE} · גרסה ${APP_VERSION}</div>
+  </nav>`;
+}
+function updateBanner(){
+  if(!T.newVer || !(view==='kid'||view==='groups')) return '';
+  return `<div class="newver" role="status">${IC.news}<span>האפליקציה עודכנה לגרסה ${APP_VERSION}</span><button type="button" class="btn small" data-act="m-news">מה חדש?</button><button type="button" class="x" data-act="newver-close" aria-label="סגירה">×</button></div>`;
+}
+function newsView(){
+  return `<section class="panel"><h3>מה חדש בתסריטון</h3>
+    <p class="help">האפליקציה מתעדכנת לבד בכל פתיחה עם אינטרנט. אין צורך להתקין מחדש.</p>
+    ${CHANGES.map((c,i)=>`<div class="rel ${i===0?'latest':''}"><div class="relhead"><b>גרסה ${c.v}</b><span>${c.d}</span>${i===0?'<span class="tag">העדכון האחרון</span>':''}</div>
+      <ul>${c.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('')}
+    <div class="row"><button type="button" class="btn" data-act="m-update">${IC.update}בדיקת עדכונים</button><button type="button" class="btn ghost" data-act="m-home">חזרה</button></div></section>`;
+}
+function aboutView(){
+  return `<section class="panel"><h3>אודות תסריטון</h3>
+    <p>תסריטון היא אפליקציה לכתיבת תסריט ולצילום סצנה, לכיתות ג׳–ו׳. בוחרים סיפור, מקום ודמויות, כותבים שורה אחרי שורה, עושים אודישנים ובסוף צועקים: אקשן!</p>
+    <p class="help">גרסה ${APP_VERSION} · עדכון אחרון ${APP_DATE}</p></section>
+  <section class="panel"><h3>פרטיות</h3>
+    <ul class="plain">
+      <li><b>הכל נשמר רק במכשיר הזה.</b> תסריטים, שמות, קבוצות וסרטונים לא נשלחים לשום מקום.</li>
+      <li>אין הרשמה, אין חשבון ואין פרסומות.</li>
+      <li>המצלמה והמיקרופון פועלים רק במסך האודישן והאקשן, ורק אחרי אישור.</li>
+      <li>הסרטונים נשמרים בגלריה של המכשיר, ורק מי שמחזיק אותו רואה אותם.</li>
+    </ul></section>
+  <section class="panel"><h3>להוסיף למסך הבית</h3>
+    <p class="help"><b>אייפון ואייפד (Safari):</b> כפתור השיתוף ← "הוסף למסך הבית".<br><b>אנדרואיד (Chrome):</b> שלוש הנקודות ← "התקנת אפליקציה".</p></section>
+  <section class="panel"><h3>זכויות</h3>
+    <p>© 2026 גל זיו. כל הזכויות שמורות.</p><p dir="ltr" lang="en" style="text-align:left">© 2026 Gal Ziv. All rights reserved.</p>
+    <div class="row"><button type="button" class="btn ghost" data-act="m-home">חזרה</button></div></section>`;
+}
+async function shareApp(){
+  const url = canLink ? location.origin+location.pathname : APP_URL;
+  const data = {title:'תסריטון', text:'תסריטון: אפליקציית תסריט לכיתות ג׳–ו׳. כותבים סצנה, עושים אודישן וצועקים אקשן!', url};
+  try{ if(navigator.share){ await navigator.share(data); return; } }catch(e){ if(e && e.name==='AbortError') return; }
+  copy(url, 'הקישור הועתק. אפשר להדביק אותו בוואטסאפ או במייל.');
+}
+async function checkUpdate(){
+  if(!navigator.onLine){ toast('אין חיבור לאינטרנט. נסו שוב כשיש וויי-פיי.'); return; }
+  toast('בודקים עדכונים…');
+  try{
+    const r = await fetch('index.html?check='+Date.now(), {cache:'no-store'});
+    const m = (await r.text()).match(/const APP_VERSION = '([^']+)'/);
+    if(m && m[1]!==APP_VERSION){
+      toast('נמצאה גרסה '+m[1]+'. מעדכנים…');
+      try{ const reg = navigator.serviceWorker && await navigator.serviceWorker.getRegistration(); if(reg) await reg.update(); }catch(e){}
+      setTimeout(()=>location.reload(), 900);
+    } else toast('יש לכם את הגרסה העדכנית ('+APP_VERSION+') ✓');
+  }catch(e){ toast('לא הצלחתי לבדוק. נסו שוב בעוד רגע.'); }
+}
 function header(){
   return `<header class="top"><div class="logo">${CLAP}<div><h1>תסריטון</h1><small>כותבים סצנה, שורה אחרי שורה</small></div></div>
-    <button type="button" class="linkbtn" data-act="mode">${(view==='kid'||view==='groups')?'מצב מורה':'חזרה למצב תלמיד'}</button></header>`;
+    <button type="button" class="menubtn" data-act="menu" aria-expanded="${T.menu}" aria-controls="mainmenu">${IC.menu}<span>תפריט</span></button>
+    ${T.menu?menuPanel():''}</header>${updateBanner()}`;
 }
 function track(){
   const steps=['סיפור','מקום','דמויות','תסריט'];
@@ -686,7 +789,7 @@ function teacherView(){
   if(T.editing) return editorView();
   return `<section class="panel"><h3>מצב מורה: הסיפורים שלי</h3>
     <p class="help">כאן בונים סיפור לתלמידים: כותרת סצנה, ואחריה שורה אחרי שורה. לכל שורה כותבים כמה אפשרויות, והתלמידים בוחרים ביניהן או כותבים משהו משלהם.</p>
-    <p class="help">גרסה ${APP_VERSION}</p>
+    <p class="help">גרסה ${APP_VERSION} · ${APP_DATE}</p>
     <div class="row"><button type="button" class="btn pri" data-act="t-new">+ סיפור חדש</button><button type="button" class="btn small ghost" data-act="pin-change">שינוי קוד מורה</button></div>
     ${mine.length?`<div class="mylist">${mine.map(s=>`<div class="myitem"><div><b>${esc(s.title)}</b><br><span>${esc(s.genre)} · ${s.beats.length} שורות</span></div>
       <div class="row"><button type="button" class="btn small" data-act="t-edit" data-id="${s.id}">עריכה</button><button type="button" class="btn small" data-act="t-share" data-id="${s.id}">שליחה לתלמידים</button><button type="button" class="btn small" data-act="t-try" data-id="${s.id}">לנסות</button></div>
@@ -769,6 +872,8 @@ function render(){
   if(view==='teacher') body=teacherView();
   else if(view==='pin'||view==='pinset') body=pinView();
   else if(view==='groups') body=groupsView();
+  else if(view==='news') body=newsView();
+  else if(view==='about') body=aboutView();
   else body = groupBar() + track() + (S.step===1?stepStory():S.step===2?stepTopic():S.step===3?stepChars():stepScript());
   app.innerHTML = header() + body + `<footer class="copy"><span>© 2026 גל זיו. כל הזכויות שמורות.</span><span dir="ltr" lang="en">© 2026 Gal Ziv. All rights reserved.</span></footer>`;
   if(focusId){ const el=document.getElementById(focusId); if(el){ el.focus({preventScroll:true}); try{ if(selS!=null) el.setSelectionRange(selS,selS); }catch(e){} } }
@@ -792,7 +897,15 @@ function insertTok(i, tok){
 document.addEventListener('click', e=>{
   const b=e.target.closest('[data-act]'); if(!b) return;
   const a=b.dataset.act, i=+b.dataset.i;
-  if(a==='mode'){ view = (view==='kid'||view==='groups') ? (pinSaved?'pin':'pinset') : (curGroup()?'kid':'groups'); T.editing=null; T.code=''; T.pinErr=''; render(); scrollTo(0,0);
+  if(a==='menu'){ T.menu=!T.menu; render(); if(T.menu) setTimeout(()=>{ const f=document.querySelector('#mainmenu [role=menuitem]'); if(f) f.focus(); },0); return; }
+  if(a==='menu-close'){ T.menu=false; render(); return; }
+  if(a==='newver-close'){ T.newVer=false; store('tasritaon-seenver', APP_VERSION); render(); return; }
+  if(a==='m-home'){ T.menu=false; T.editing=null; T.code=''; save(); curId=null; store(K.cur,null); view='groups'; render(); scrollTo(0,0); return; }
+  if(a==='m-share'){ T.menu=false; render(); shareApp(); return; }
+  if(a==='m-news'){ T.menu=false; T.newVer=false; store('tasritaon-seenver', APP_VERSION); T.editing=null; view='news'; render(); scrollTo(0,0); return; }
+  if(a==='m-about'){ T.menu=false; T.editing=null; view='about'; render(); scrollTo(0,0); return; }
+  if(a==='m-update'){ T.menu=false; render(); checkUpdate(); return; }
+  if(a==='mode'){ T.menu=false; view = (view==='kid'||view==='groups'||view==='news'||view==='about') ? (pinSaved?'pin':'pinset') : (curGroup()?'kid':'groups'); T.editing=null; T.code=''; T.pinErr=''; render(); scrollTo(0,0);
     if(view!=='kid') setTimeout(()=>{ const el=document.getElementById('pin1'); if(el) el.focus(); },0); return; }
   if(a==='pin-go'||a==='pin-set'){ pinSubmit(); return; }
   if(a==='pin-change'){ view='pinset'; T.pinErr=''; render(); scrollTo(0,0); return; }
@@ -893,6 +1006,7 @@ document.addEventListener('change', e=>{
   if(el.dataset.tin==='btype' && T.editing){ T.editing.beats[+el.dataset.i].t=el.value; render(); return; }
   if(el.dataset.tin==='scm' && T.editing){ T.editing.scene=Object.assign({ie:'פנים',time:'יום',loc:''}, T.editing.scene, {m:el.value}); render(); return; }
 });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && T.menu){ T.menu=false; render(); const m=document.querySelector('.menubtn'); if(m) m.focus(); } });
 document.addEventListener('keydown', e=>{ if(e.key==='Enter' && (e.target.id==='pin1'||e.target.id==='pin2')){ e.preventDefault(); if(e.target.id==='pin1' && view==='pinset'){ const n=document.getElementById('pin2'); if(n) n.focus(); return; } pinSubmit(); } });
 const remember = e=>{ const el=e.target; if(el.dataset && el.dataset.tin==='bopts') caret[+el.dataset.i]=el.selectionStart; };
 document.addEventListener('keyup', remember); document.addEventListener('click', remember, true); document.addEventListener('focusout', remember);
