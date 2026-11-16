@@ -303,7 +303,7 @@ h1,h2,h3,p{margin:0}
 
 <div id="splash" aria-hidden="true">
 <div class="sp-in">
-<svg class="sp-logo" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#1D1B38"/><g transform="translate(256 262) scale(.94) translate(-256 -262)"><g fill="none" stroke="#FFC23D" stroke-linecap="round" stroke-linejoin="round"><path d="M156 112v300M356 112v300" stroke-width="22"/><path d="M120 262h72M320 262h72" stroke-width="20"/><path d="M156 304l200 108M356 304L156 412" stroke-width="18"/></g><rect x="145" y="126" width="222" height="86" rx="10" fill="#FFC23D"/><rect x="145" y="290" width="222" height="28" rx="10" fill="#FFC23D"/><text x="256" y="186" text-anchor="middle" direction="rtl" font-family="Secular One" font-size="50" fill="#1D1B38">תסריטון</text></g></svg>
+<svg class="sp-logo" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#1D1B38"/><g transform="translate(256 262) scale(.94) translate(-256 -262)"><g fill="none" stroke="#FFC23D" stroke-linecap="round" stroke-linejoin="round"><path d="M156 112v300M356 112v300" stroke-width="22"/><path d="M120 262h72M320 262h72" stroke-width="20"/><path d="M156 304l200 108M356 304L156 412" stroke-width="18"/></g><rect x="145" y="126" width="222" height="86" rx="10" fill="#FFC23D"/><rect x="145" y="290" width="222" height="28" rx="10" fill="#FFC23D"/><g stroke="#1D1B38" stroke-width="3" opacity=".28"><path d="M153 149h206M153 170h206M153 191h206"/></g><path d="M343 130v78" stroke="#E8534A" stroke-width="3.5" opacity=".9"/><text x="246" y="189" text-anchor="middle" direction="rtl" font-family="Secular One" font-size="46" fill="#1D1B38">תסריטון</text></g></svg>
 <div class="sp-words" dir="ltr" lang="en"><span class="w1">Write</span><span class="w2">and</span><span class="w3">say</span><span class="w4">Action!</span></div>
 </div>
 </div>
@@ -350,11 +350,12 @@ document.documentElement.dir='rtl'; document.documentElement.lang='he';
 //   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
 //   {מקום} {למקום} {במקום}   the place of the scene
 //   {חפץ} {אירוע}            the important object and the event from the chosen topic
-const APP_VERSION = '1.9';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
+const APP_VERSION = '1.10';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
 const APP_DATE = '16.11.2026';
 const APP_URL = 'https://gzfilm.github.io/tasriton/';
 // "What's new": newest first. Add an entry here with every update.
 const CHANGES = [
+  {v:'1.10', d:'16.11.2026', items:['בלוגו: משענת הכיסא נראית כמו דף מחברת, עם שורות וקו שוליים']},
   {v:'1.9', d:'16.11.2026', items:['המרדף אחרי שוקו: בוחרים איפה מתחילים, בכיתה או במסדרון']},
   {v:'1.8', d:'16.11.2026', items:['לוגו חדש ונקי: כיסא במאי בצהוב על כחול']},
   {v:'1.7', d:'16.11.2026', items:['אייקון חדש לקומדיה: בננה על הרצפה ומישהו מחליק עליה']},
@@ -622,7 +623,7 @@ function scriptText(){
 }
 
 /* ================= views: kids ================= */
-const CLAP = `<svg class="clap" viewBox="0 0 512 512" role="img" aria-label="תסריטון"><rect width="512" height="512" rx="112" fill="#1D1B38"/><g transform="translate(256 262) scale(.94) translate(-256 -262)"><g fill="none" stroke="#FFC23D" stroke-linecap="round" stroke-linejoin="round"><path d="M156 112v300M356 112v300" stroke-width="22"/><path d="M120 262h72M320 262h72" stroke-width="20"/><path d="M156 304l200 108M356 304L156 412" stroke-width="18"/></g><rect x="145" y="126" width="222" height="86" rx="10" fill="#FFC23D"/><rect x="145" y="290" width="222" height="28" rx="10" fill="#FFC23D"/><rect x="196" y="160" width="120" height="18" rx="9" fill="#1D1B38"/></g></svg>`;
+const CLAP = `<svg class="clap" viewBox="0 0 512 512" role="img" aria-label="תסריטון"><rect width="512" height="512" rx="112" fill="#1D1B38"/><g transform="translate(256 262) scale(.94) translate(-256 -262)"><g fill="none" stroke="#FFC23D" stroke-linecap="round" stroke-linejoin="round"><path d="M156 112v300M356 112v300" stroke-width="22"/><path d="M120 262h72M320 262h72" stroke-width="20"/><path d="M156 304l200 108M356 304L156 412" stroke-width="18"/></g><rect x="145" y="126" width="222" height="86" rx="10" fill="#FFC23D"/><rect x="145" y="290" width="222" height="28" rx="10" fill="#FFC23D"/><g stroke="#1D1B38" stroke-width="11" stroke-linecap="round" opacity=".55"><path d="M172 152h150M172 186h150"/></g><path d="M340 134v70" stroke="#E8534A" stroke-width="10" stroke-linecap="round"/></g></svg>`;
 
 const ico = d => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 const IC = {
