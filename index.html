@@ -350,11 +350,12 @@ document.documentElement.dir='rtl'; document.documentElement.lang='he';
 //   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
 //   {מקום} {למקום} {במקום}   the place of the scene
 //   {חפץ} {אירוע}            the important object and the event from the chosen topic
-const APP_VERSION = '1.8';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
+const APP_VERSION = '1.9';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
 const APP_DATE = '16.11.2026';
 const APP_URL = 'https://gzfilm.github.io/tasriton/';
 // "What's new": newest first. Add an entry here with every update.
 const CHANGES = [
+  {v:'1.9', d:'16.11.2026', items:['המרדף אחרי שוקו: בוחרים איפה מתחילים, בכיתה או במסדרון']},
   {v:'1.8', d:'16.11.2026', items:['לוגו חדש ונקי: כיסא במאי בצהוב על כחול']},
   {v:'1.7', d:'16.11.2026', items:['אייקון חדש לקומדיה: בננה על הרצפה ומישהו מחליק עליה']},
   {v:'1.6', d:'16.11.2026', items:['ז׳אנר חדש: מרדף! והסיפור "המרדף אחרי שוקו": מהכיתה, דרך המסדרון והחצר, ובחזרה לכיתה','תסריט יכול לעבור בין כמה מקומות: סצנה 2, סצנה 3...','אייקונים חדשים לז׳אנרים, בצהוב של הלוגו','זכויות: Gal Ziv MOTION LAB']},
@@ -422,7 +423,16 @@ const BUILTIN = [
   {t:'A',o:['אף אחד לא ראה כלום, נכון?','רגע... למה יש לי זנב?','{א:אני חושב|אני חושבת} שהרובוט השאיר לנו מתנה.']},
   {t:'B',o:['בפעם הבאה אני {ב:בוחר|בוחרת} על איזה כפתור ללחוץ.','זה הסוד שלנו. לתמיד.','{א:תבטיח|תבטיחי} לי שנעשה את זה שוב מחר!']},
  ]},
- {id:'b-chase', genre:'מרדף', title:'המרדף אחרי שוקו', desc:'האוגר של הכיתה ברח! מרדף מהכיתה, דרך המסדרון והחצר, ובחזרה לכיתה.', scene:{m:'custom', ie:'פנים', loc:'כיתה ד׳', time:'בוקר'}, beats:[
+ {id:'b-chase', genre:'מרדף', title:'המרדף אחרי שוקו', desc:'האוגר של הכיתה ברח! מרדף דרך המסדרון והחצר, ובחזרה לכיתה. בוחרים איפה מתחילים: בכיתה או במסדרון.', scene:{m:'custom', ie:'פנים', loc:'כיתה ד׳', time:'בוקר'},
+  starts:[
+   {id:'class', label:'מתחילים בכיתה', desc:'הכלוב נשאר פתוח, ושוקו בורח מהכיתה.', scene:{m:'custom', ie:'פנים', loc:'כיתה ד׳', time:'בוקר'}},
+   {id:'hall', label:'מתחילים במסדרון', desc:'שוקו כבר ברח, ורץ פתאום בין הרגליים במסדרון.', scene:{m:'custom', ie:'פנים', loc:'מסדרון', time:'בוקר'}, open:[
+    {t:'act',o:['{א} ו{ב} {אב:הולכים|הולכות} במסדרון. פתאום משהו קטן ושעיר רץ בין הרגליים.','{א} {א:יוצא|יוצאת} מהשירותים ורואה את שוקו, האוגר של הכיתה, רץ לאורך המסדרון.','{ב} מחכה ליד הדלת של הכיתה. שוקו עובר ממש ליד הנעל {ב:שלו|שלה}.']},
+    {t:'B',o:['{א}! זה שוקו! הוא ברח מהכלוב!','רגע... זה האוגר שלנו?!','{א:תעצור|תעצרי} אותו!']},
+    {t:'A',o:['מהר, לפני שמישהו ישים לב!','אחריו! הוא רץ לסוף המסדרון!','{ב:תביא|תביאי} קופסה! מהר!']},
+   ]},
+  ],
+  beats:[
   {t:'act',o:['{א} {א:פותח|פותחת} את הכלוב של שוקו, האוגר של הכיתה, כדי לתת לו גזר. הדלת של הכלוב נשארת פתוחה.','כולם עסוקים בדף עבודה. רק {ב} רואה את שוקו קופץ מהכלוב ורץ לדלת.','הכלוב של שוקו פתוח וריק. על הרצפה יש שביל של נסורת שמוביל לדלת.']},
   {t:'B',o:['{א}! שוקו ברח!','אוי לא... איפה שוקו?!','{א:תסתכל|תסתכלי}! הכלוב ריק!']},
   {t:'A',o:['מהר, לפני שמישהו ישים לב!','הוא רץ למסדרון! אחריו!','אל {ב:תדאג|תדאגי}. אני {א:מומחה|מומחית} לאוגרים. בערך.']},
@@ -442,6 +452,10 @@ const BUILTIN = [
  ]},
 ];
 
+// A story with starting points: the corridor start opens in the corridor and then joins the same route.
+for(const st of BUILTIN) for(const v of (st.starts||[])){
+  if(v.open){ const i=st.beats.findIndex(b=>b.t==='sc'); v.beats=[...v.open, ...st.beats.slice(i+1)]; }
+}
 const NAMES = {m:['דני','יואב','עומר','איתי','אדם','נועם','אורי','אחמד'], f:['נועה','מאיה','תמר','שירה','רוני','יעל','לינה','אביגיל']};
 
 /* ================= storage ================= */
@@ -475,7 +489,9 @@ const save = ()=>{ store(K.state, S); const g=curGroup(); if(g){ g.state=S; g.up
 const allStories = ()=>[...got.map(s=>({...s,_src:'got'})), ...mine.map(s=>({...s,_src:'mine'})), ...BUILTIN];
 const storyById = id => allStories().find(s=>s.id===id);
 const topic = ()=>TOPICS.find(t=>t.id===S.topic) || TOPICS[0];
-const story = ()=>storyById(S.storyId);
+const withStart = (st, startId) => { if(!st || !st.starts) return st; const v=st.starts.find(x=>x.id===startId)||st.starts[0];
+  return Object.assign({}, st, {scene:v.scene, beats:v.beats||st.beats, _start:v.id}); };
+const story = ()=>withStart(storyById(S.storyId), S.start);
 const isCustomScene = st => !!(st && st.scene && st.scene.m==='custom' && st.scene.loc);
 
 /* ================= scene + text engine ================= */
@@ -529,8 +545,10 @@ function newChar(){
 }
 function ensureChars(){ const need=charsNeeded(story()); while(S.chars.length<need) S.chars.push(newChar()); }
 
-function startStory(id){
-  const st=storyById(id); if(!st) return;
+function startStory(id, startId){
+  const raw=storyById(id); if(!raw) return;
+  S.start = raw.starts ? (startId || raw.starts[0].id) : null;
+  const st=withStart(raw, S.start);
   S.storyId=id; S.scene=null;
   S.lines = st.beats.map(b=>({t:b.t, opts:b.o.slice(), pick:0, custom:''}));
   S.title = S.keepTitle || st.title; S.done = false;
@@ -739,6 +757,13 @@ function stepStory(){
 }
 function stepTopic(){
   const st=story();
+  if(st && st.starts){
+    return `<section style="display:flex;flex-direction:column;gap:12px"><h2 class="h2">איפה מתחיל המרדף?</h2>
+      <p class="lead">בוחרים את הלוקיישן של הסצנה הראשונה. משם ממשיכים באותו מסלול.</p>
+      <div class="grid">${st.starts.map(v=>`<button type="button" class="pick" data-act="start" data-id="${v.id}" aria-pressed="${st._start===v.id}">
+        <h3>${esc(v.label)}</h3><p>${esc(v.desc)}</p><span class="slug">סצנה 1. ${esc(slugOf(v.scene))}</span></button>`).join('')}</div>
+      <div class="nav"><button type="button" class="btn ghost" data-act="go" data-k="1">חזרה</button><button type="button" class="btn pri" data-act="go" data-k="3">עכשיו הדמויות</button></div></section>`;
+  }
   if(isCustomScene(st)){
     return `<section style="display:flex;flex-direction:column;gap:12px"><h2 class="h2">איפה זה קורה?</h2>
       <div class="teacher-note"><p class="lead">לסיפור הזה כבר יש מקום:</p><span class="slug">${esc(slugOf(st.scene))}</span>
@@ -1005,6 +1030,7 @@ document.addEventListener('click', e=>{
     groups=groups.filter(x=>x.id!==b.dataset.id); store(K.groups,groups); if(curId===b.dataset.id){ curId=null; store(K.cur,null); S=freshState(); } render(); toast('הקבוצה נמחקה'); return; }
   if(a==='go'){ const k=+b.dataset.k; if(k>1 && !S.storyId) return; S.step=k; openLine=-1; if(k>=3) ensureChars(); save(); render(); scrollTo(0,0); return; }
   if(a==='story'){ startStory(b.dataset.id); S.step=2; save(); render(); scrollTo(0,0); return; }
+  if(a==='start'){ if(S.start!==b.dataset.id){ startStory(S.storyId, b.dataset.id); } render(); return; }
   if(a==='topic'){ S.topic=b.dataset.id; S.scene=null; save(); render(); return; }
   if(a==='gender'){ S.chars[i].g=b.dataset.g; save(); render(); return; }
   if(a==='pickname'){ S.chars[i].name=b.dataset.n; save(); render(); return; }
@@ -1031,7 +1057,7 @@ document.addEventListener('click', e=>{
 
   // teacher
   if(a==='t-new'){ T.editing={id:'m-'+Date.now().toString(36), genre:'', title:'', desc:'', scene:{m:'topic'}, beats:[{t:'act',o:['']},{t:'A',o:['']},{t:'B',o:['']}]}; T.err=''; T.gform=-1; render(); scrollTo(0,0); return; }
-  if(a==='t-dup'){ const s=BUILTIN.find(x=>x.id===b.dataset.id); T.editing={id:'m-'+Date.now().toString(36), genre:s.genre, title:s.title+' (שלי)', desc:s.desc, scene:{m:'topic'}, beats:s.beats.map(x=>({t:x.t,o:x.o.slice()}))}; T.err=''; T.gform=-1; render(); scrollTo(0,0); return; }
+  if(a==='t-dup'){ const s=BUILTIN.find(x=>x.id===b.dataset.id); T.editing={id:'m-'+Date.now().toString(36), genre:s.genre, title:s.title+' (שלי)', desc:s.desc, scene:s.scene?Object.assign({},s.scene):{m:'topic'}, beats:s.beats.map(x=>({t:x.t,o:x.o.slice()}))}; T.err=''; T.gform=-1; render(); scrollTo(0,0); return; }
   if(a==='t-edit'){ const s=mine.find(x=>x.id===b.dataset.id); T.editing=JSON.parse(JSON.stringify(s)); if(!T.editing.scene) T.editing.scene={m:'topic'}; T.err=''; T.gform=-1; render(); scrollTo(0,0); return; }
   if(a==='t-cancel'){ T.editing=null; render(); return; }
   if(a==='t-flip'){ T.flip=!T.flip; render(); return; }
