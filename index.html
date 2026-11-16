@@ -235,6 +235,24 @@ h1,h2,h3,p{margin:0}
 .err{color:var(--a);font-size:14px}
 .gi{flex:none;width:24px;height:24px;vertical-align:-6px;background:#FFF6DC;border-radius:50%;padding:2px}
 .copy{margin-top:18px;padding-top:12px;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12.5px;color:var(--muted);text-align:center}
+/* journey map */
+.journey{overflow-x:auto;scrollbar-width:none;margin:0 -4px;padding:2px 4px}
+.journey::-webkit-scrollbar{display:none}
+.journey ol{list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:6px;width:max-content;margin-inline:auto}
+.jn{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-size:13px;line-height:1;padding:7px 11px;border-radius:999px;border:1.5px dashed var(--line);color:var(--muted);background:transparent}
+.jn b{font-size:11px}
+.jn.past{border-style:solid;border-color:var(--ink);background:var(--ink);color:var(--surface)}
+.jn.now{border-style:solid;border-color:var(--accent);background:var(--accent);color:var(--accent-ink);font-weight:700;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 30%,transparent)}
+.jn.star.next{border-style:solid;border-color:var(--accent);color:var(--ink)}
+.ja{color:var(--muted);font-size:14px;line-height:1}
+.jfork{display:flex;flex-direction:column;gap:4px;position:relative;padding:0 10px}
+.jfork::before,.jfork::after{content:"";position:absolute;top:22%;bottom:22%;width:8px;border:1.5px solid var(--muted);opacity:.6}
+.jfork::before{inset-inline-start:0;border-inline-end:0;border-radius:0 8px 8px 0}
+.jfork::after{inset-inline-end:0;border-inline-start:0;border-radius:8px 0 0 8px}
+:root[dir=rtl] .jfork::before,[dir=rtl] .jfork::before{border-radius:0 8px 8px 0}
+.jfork .jn{font-size:12px;padding:5px 9px}
+@media (prefers-reduced-motion:no-preference){ .jn.now{animation:jpulse 2.4s ease-in-out infinite} }
+@keyframes jpulse{50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 18%,transparent)}}
 .grpbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;font-size:15px}
 .pinbox{max-width:420px;width:100%;align-self:center}
 .pinbox input{font-size:24px;letter-spacing:.3em;text-align:center}
@@ -350,11 +368,12 @@ document.documentElement.dir='rtl'; document.documentElement.lang='he';
 //   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
 //   {מקום} {למקום} {במקום}   the place of the scene
 //   {חפץ} {אירוע}            the important object and the event from the chosen topic
-const APP_VERSION = '1.13';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
+const APP_VERSION = '1.14';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
 const APP_DATE = '16.11.2026';
 const APP_URL = 'https://gzfilm.github.io/tasriton/';
 // "What's new": newest first. Add an entry here with every update.
 const CHANGES = [
+  {v:'1.14', d:'16.11.2026', items:['מפת מסלול בראש העמוד: סיפור ← מקום ← דמויות ← סיום תסריט ← שוטינג ליסט ותסריט ← אודישן ← צילום הסרט']},
   {v:'1.13', d:'16.11.2026', items:['במרדף: אפשר להחליף את נקודת ההתחלה גם מעמוד התסריט']},
   {v:'1.12', d:'16.11.2026', items:['שורת הקרדיט: © 2026 G.Z. MOTION LAB']},
   {v:'1.10', d:'16.11.2026', items:['בלוגו: משענת הכיסא נראית כמו דף מחברת, עם שורות וקו שוליים']},
@@ -710,6 +729,19 @@ function track(){
 }
 const fmtDate = t => { try{ return new Date(t).toLocaleDateString('he-IL',{day:'numeric',month:'numeric'}); }catch(e){ return ''; } };
 const groupWhere = g => [g.cls&&('כיתה '+g.cls), g.school].filter(Boolean).join(' · ');
+// The journey map: the whole way from story to filming, so kids know auditions and filming are coming.
+function journey(){
+  const done=!!S.done, left=audLeft();
+  const cur = !S.storyId ? 0 : !done ? Math.min(S.step,4)-1 : left>0 ? 5 : 6;
+  const st = k => k<cur ? 'past' : k===cur ? 'now' : 'next';
+  const node = (k,label,icon='') => `<li class="jn ${st(k)} ${icon?'star':''}" ${k===cur?'aria-current="step"':''}>${k<cur?'<b aria-hidden="true">✓</b>':''}${icon}<span>${label}</span></li>`;
+  const arrow = '<li class="ja" aria-hidden="true">←</li>';
+  const fork = `<li class="jfork ${st(4)}"><span class="jn ${st(4)}">שוטינג ליסט</span><span class="jn ${st(4)}">תסריט</span></li>`;
+  return `<nav class="journey" aria-label="המסלול שלנו"><ol>
+    ${node(0,'סיפור')}${arrow}${node(1,'מקום')}${arrow}${node(2,'דמויות')}${arrow}${node(3,'סיום תסריט')}${arrow}
+    ${fork}${arrow}${node(5,'אודישן','🎭 ')}${arrow}${node(6,'צילום הסרט','🎬 ')}
+  </ol></nav>`;
+}
 function groupBar(){
   const g=curGroup(); if(!g) return '';
   return `<div class="grpbar"><span>👥 <b>${esc(g.team)}</b>${groupWhere(g)?' · '+esc(groupWhere(g)):''}</span><button type="button" class="btn small" data-act="g-switch">קבוצה אחרת</button></div>`;
@@ -983,8 +1015,9 @@ function render(){
   else if(view==='groups') body=groupsView();
   else if(view==='news') body=newsView();
   else if(view==='about') body=aboutView();
-  else body = groupBar() + track() + (S.step===1?stepStory():S.step===2?stepTopic():S.step===3?stepChars():stepScript());
+  else body = journey() + groupBar() + track() + (S.step===1?stepStory():S.step===2?stepTopic():S.step===3?stepChars():stepScript());
   app.innerHTML = header() + body + `<footer class="copy"><span dir="ltr" lang="en">© 2026 G.Z. MOTION LAB</span></footer>`;
+  { const j=app.querySelector('.journey'), c=j&&j.querySelector('[aria-current]'); if(c) j.scrollLeft = c.offsetLeft - (j.clientWidth - c.offsetWidth)/2; }
   if(focusId){ const el=document.getElementById(focusId); if(el){ el.focus({preventScroll:true}); try{ if(selS!=null) el.setSelectionRange(selS,selS); }catch(e){} } }
 }
 
