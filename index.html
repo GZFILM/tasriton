@@ -6,6 +6,8 @@
 <title>תסריטון</title>
 <meta name="description" content="כותבים סצנה, שורה אחרי שורה: אפליקציית תסריט לכיתות ג׳–ו׳">
 <meta name="theme-color" content="#1D1B38">
+<meta name="author" content="גל זיו · Gal Ziv">
+<meta name="copyright" content="© 2026 Gal Ziv. All rights reserved.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="תסריטון">
 <meta property="og:title" content="תסריטון">
@@ -211,6 +213,7 @@ h1,h2,h3,p{margin:0}
 .myitem span{font-size:13px;color:var(--muted)}
 .empty{border:1.5px dashed var(--line);border-radius:12px;padding:16px;text-align:center;color:var(--muted);font-size:14px}
 .err{color:var(--a);font-size:14px}
+.copy{margin-top:18px;padding-top:12px;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12.5px;color:var(--muted);text-align:center}
 .grpbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;font-size:15px}
 .pinbox{max-width:420px;width:100%;align-self:center}
 .pinbox input{font-size:24px;letter-spacing:.3em;text-align:center}
@@ -294,7 +297,7 @@ document.documentElement.dir='rtl'; document.documentElement.lang='he';
 //   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
 //   {מקום} {למקום} {במקום}   the place of the scene
 //   {חפץ} {אירוע}            the important object and the event from the chosen topic
-const APP_VERSION = '1 · 16.11.2026';   // shown in teacher mode, so you can see a tablet got the update
+const APP_VERSION = '2 · 16.11.2026';   // shown in teacher mode, so you can see a tablet got the update
 const LETTERS=['א','ב','ג','ד','ה','ו'], KEYS=['A','B','C','D','E','F'];
 const TIMES=['בוקר','יום','צהריים','אחר הצהריים','ערב','לילה'];
 const TOPICS = [
@@ -767,7 +770,7 @@ function render(){
   else if(view==='pin'||view==='pinset') body=pinView();
   else if(view==='groups') body=groupsView();
   else body = groupBar() + track() + (S.step===1?stepStory():S.step===2?stepTopic():S.step===3?stepChars():stepScript());
-  app.innerHTML = header() + body;
+  app.innerHTML = header() + body + `<footer class="copy"><span>© 2026 גל זיו. כל הזכויות שמורות.</span><span dir="ltr" lang="en">© 2026 Gal Ziv. All rights reserved.</span></footer>`;
   if(focusId){ const el=document.getElementById(focusId); if(el){ el.focus({preventScroll:true}); try{ if(selS!=null) el.setSelectionRange(selS,selS); }catch(e){} } }
 }
 
