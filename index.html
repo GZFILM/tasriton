@@ -350,11 +350,12 @@ document.documentElement.dir='rtl'; document.documentElement.lang='he';
 //   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
 //   {מקום} {למקום} {במקום}   the place of the scene
 //   {חפץ} {אירוע}            the important object and the event from the chosen topic
-const APP_VERSION = '1.12';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
+const APP_VERSION = '1.13';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
 const APP_DATE = '16.11.2026';
 const APP_URL = 'https://gzfilm.github.io/tasriton/';
 // "What's new": newest first. Add an entry here with every update.
 const CHANGES = [
+  {v:'1.13', d:'16.11.2026', items:['במרדף: אפשר להחליף את נקודת ההתחלה גם מעמוד התסריט']},
   {v:'1.12', d:'16.11.2026', items:['שורת הקרדיט: © 2026 G.Z. MOTION LAB']},
   {v:'1.10', d:'16.11.2026', items:['בלוגו: משענת הכיסא נראית כמו דף מחברת, עם שורות וקו שוליים']},
   {v:'1.9', d:'16.11.2026', items:['המרדף אחרי שוקו: בוחרים איפה מתחילים, בכיתה או במסדרון']},
@@ -764,6 +765,7 @@ function stepTopic(){
       <p class="lead">בוחרים את הלוקיישן של הסצנה הראשונה. משם ממשיכים באותו מסלול.</p>
       <div class="grid">${st.starts.map(v=>`<button type="button" class="pick" data-act="start" data-id="${v.id}" aria-pressed="${st._start===v.id}">
         <h3>${esc(v.label)}</h3><p>${esc(v.desc)}</p><span class="slug">סצנה 1. ${esc(slugOf(v.scene))}</span></button>`).join('')}</div>
+      <p class="hint">אפשר להחליף את נקודת ההתחלה גם אחר כך, מעמוד התסריט.</p>
       <div class="nav"><button type="button" class="btn ghost" data-act="go" data-k="1">חזרה</button><button type="button" class="btn pri" data-act="go" data-k="3">עכשיו הדמויות</button></div></section>`;
   }
   if(isCustomScene(st)){
@@ -848,6 +850,7 @@ function stepScript(){
   }).join('');
   return `<section style="display:flex;flex-direction:column;gap:12px"><h2 class="h2">${esc(st.title)}</h2>
     <p class="lead">לוחצים על כל שורה בתסריט ובוחרים מה יקרה, או כותבים בעצמכם. גם את כותרת הסצנה אפשר לשנות.</p>
+    ${st.starts?`<p class="hint">${esc((st.starts.find(v=>v.id===st._start)||st.starts[0]).label)} · <button type="button" class="linkbtn" data-act="go" data-k="2">להחליף נקודת התחלה</button></p>`:''}
     <div class="meta"><label for="title">שם הסרט<input type="text" id="title" data-in="title" value="${esc(S.title)}" maxlength="40"></label>
       <label for="authors">כתבו<input type="text" id="authors" data-in="authors" value="${esc(S.authors)}" placeholder="השמות שלכם" maxlength="60"></label></div>
     <div class="tools"><button type="button" class="btn small" data-act="shuffle">הפתיעו אותי</button><button type="button" class="btn small" data-act="copy">העתק תסריט</button><button type="button" class="btn small" data-act="file">שמור כקובץ</button><button type="button" class="btn small ghost" data-act="reset">להתחיל מחדש</button></div>
