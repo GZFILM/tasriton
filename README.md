@@ -14,5 +14,5 @@
 
 ---
 
-© 2026 גל זיו. כל הזכויות שמורות.  
-© 2026 Gal Ziv. All rights reserved.
+© 2026 גל זיו MOTION LAB. כל הזכויות שמורות.  
+© 2026 Gal Ziv MOTION LAB. All rights reserved.

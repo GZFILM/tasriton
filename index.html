@@ -6,8 +6,8 @@
 <title>תסריטון</title>
 <meta name="description" content="כותבים סצנה, שורה אחרי שורה: אפליקציית תסריט לכיתות ג׳–ו׳">
 <meta name="theme-color" content="#1D1B38">
-<meta name="author" content="גל זיו · Gal Ziv">
-<meta name="copyright" content="© 2026 Gal Ziv. All rights reserved.">
+<meta name="author" content="גל זיו · Gal Ziv MOTION LAB">
+<meta name="copyright" content="© 2026 Gal Ziv MOTION LAB. All rights reserved.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="תסריטון">
 <meta property="og:title" content="תסריטון">
@@ -233,7 +233,7 @@ h1,h2,h3,p{margin:0}
 .myitem span{font-size:13px;color:var(--muted)}
 .empty{border:1.5px dashed var(--line);border-radius:12px;padding:16px;text-align:center;color:var(--muted);font-size:14px}
 .err{color:var(--a);font-size:14px}
-.gi{flex:none;width:21px;height:21px;vertical-align:-5px}
+.gi{flex:none;width:24px;height:24px;vertical-align:-6px;background:#FFF6DC;border-radius:50%;padding:2px}
 .copy{margin-top:18px;padding-top:12px;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12.5px;color:var(--muted);text-align:center}
 .grpbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;font-size:15px}
 .pinbox{max-width:420px;width:100%;align-self:center}
@@ -273,6 +273,7 @@ h1,h2,h3,p{margin:0}
 .tl{border:0;background:none;color:#8E8BA8;text-align:center;font:inherit;font-size:18px;line-height:1.45;border-radius:10px;padding:8px 10px}
 .tl i{display:block;font-style:normal;font-family:var(--ui);font-size:12.5px;letter-spacing:.06em}
 .tl.act{font-style:italic;text-align:start;font-size:16px}
+.tl.sc{font-style:normal;font-weight:700;color:#FFC23D;border-top:1px solid #2C2A47;border-radius:0;padding-top:14px}
 .tl.mine{color:#F2F1F8;font-size:22px;font-weight:700}
 .tl.mine i{color:#FFC23D}
 .tl.cur{background:#2A2848;box-shadow:inset 0 0 0 2px #FFC23D}
@@ -372,11 +373,12 @@ document.documentElement.dir='rtl'; document.documentElement.lang='he';
 //   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
 //   {מקום} {למקום} {במקום}   the place of the scene
 //   {חפץ} {אירוע}            the important object and the event from the chosen topic
-const APP_VERSION = '1.5';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
+const APP_VERSION = '1.6';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
 const APP_DATE = '16.11.2026';
 const APP_URL = 'https://gzfilm.github.io/tasriton/';
 // "What's new": newest first. Add an entry here with every update.
 const CHANGES = [
+  {v:'1.6', d:'16.11.2026', items:['ז׳אנר חדש: מרדף! והסיפור "המרדף אחרי שוקו": מהכיתה, דרך המסדרון והחצר, ובחזרה לכיתה','תסריט יכול לעבור בין כמה מקומות: סצנה 2, סצנה 3...','אייקונים חדשים לז׳אנרים, בצהוב של הלוגו','זכויות: Gal Ziv MOTION LAB']},
   {v:'1.5', d:'16.11.2026', items:['אייקונים קטנים לכל ז׳אנר: קומדיה, הרפתקה, בלשי, מדע בדיוני, דרמה, פנטזיה ואימה קלה','מסך הפתיחה: Write and say Action!']},
   {v:'1.4', d:'16.11.2026', items:['מסך פתיחה מונפש','נגיעה במסך מדלגת על הפתיחה']},
   {v:'1.3', d:'16.11.2026', items:['הלוגו בתוך האפליקציה הוא עכשיו כיסא הבמאי, כמו האייקון במסך הבית']},
@@ -440,6 +442,24 @@ const BUILTIN = [
   {t:'act',o:['בום! הכול חוזר להיות רגיל. כמעט הכול.','{א} ו{ב} {אב:נוחתים|נוחתות} בחזרה {במקום}, עם שיער סומר.','הרובוט מנופף לשלום ונעלם באור סגול.']},
   {t:'A',o:['אף אחד לא ראה כלום, נכון?','רגע... למה יש לי זנב?','{א:אני חושב|אני חושבת} שהרובוט השאיר לנו מתנה.']},
   {t:'B',o:['בפעם הבאה אני {ב:בוחר|בוחרת} על איזה כפתור ללחוץ.','זה הסוד שלנו. לתמיד.','{א:תבטיח|תבטיחי} לי שנעשה את זה שוב מחר!']},
+ ]},
+ {id:'b-chase', genre:'מרדף', title:'המרדף אחרי שוקו', desc:'האוגר של הכיתה ברח! מרדף מהכיתה, דרך המסדרון והחצר, ובחזרה לכיתה.', scene:{m:'custom', ie:'פנים', loc:'כיתה ד׳', time:'בוקר'}, beats:[
+  {t:'act',o:['{א} {א:פותח|פותחת} את הכלוב של שוקו, האוגר של הכיתה, כדי לתת לו גזר. הדלת של הכלוב נשארת פתוחה.','כולם עסוקים בדף עבודה. רק {ב} רואה את שוקו קופץ מהכלוב ורץ לדלת.','הכלוב של שוקו פתוח וריק. על הרצפה יש שביל של נסורת שמוביל לדלת.']},
+  {t:'B',o:['{א}! שוקו ברח!','אוי לא... איפה שוקו?!','{א:תסתכל|תסתכלי}! הכלוב ריק!']},
+  {t:'A',o:['מהר, לפני שמישהו ישים לב!','הוא רץ למסדרון! אחריו!','אל {ב:תדאג|תדאגי}. אני {א:מומחה|מומחית} לאוגרים. בערך.']},
+  {t:'act',o:['{א} ו{ב} {אב:יוצאים|יוצאות} מהכיתה על קצות האצבעות, עם קופסת נעליים ריקה.','{א} {א:חוטף|חוטפת} קופסה, ו{ב} {ב:חוטף|חוטפת} גזר. {אב:הם רצים|הן רצות} החוצה.','{ב} {ב:מסמן|מסמנת} ל{א} בידיים: "שקט! אחריי!"']},
+  {t:'sc',o:['פנים. מסדרון – בוקר']},
+  {t:'act',o:['שוקו רץ לאורך המסדרון. {א} ו{ב} {אב:רצים|רצות} אחריו על קצות האצבעות.','{א} {א:מחליק|מחליקה} על הרצפה של המסדרון ו{א:נתקע|נתקעת} בתוך הקופסה.','שוקו נעלם מאחורי פח האשפה בסוף המסדרון.']},
+  {t:'B',o:['שששש! לא רצים במסדרון!','{א:תעצור|תעצרי}! הוא הלך לשם!','רגע... שמעת את זה? צפצוף!']},
+  {t:'A',o:['הוא יוצא לחצר! מהר!','{ב:תלך|תלכי} משמאל ואני מימין. ככה נתפוס אותו!','{ב:תביא|תביאי} את הגזר!']},
+  {t:'sc',o:['חוץ. חצר בית הספר – בוקר']},
+  {t:'act',o:['שוקו רץ בין העלים בחצר. {א} {א:קופץ|קופצת} עם הקופסה ו{א:מפספס|מפספסת}.','שוקו מטפס על הספסל. {ב} {ב:מתגנב|מתגנבת} מאחוריו לאט, לאט.','כדור מתגלגל ממש ליד שוקו. הוא מסתובב ורץ בחזרה פנימה.']},
+  {t:'B',o:['תפסתי אותו! ...לא, זה עלה.','{א}, {א:תן|תני} לו גזר! אוגרים אוהבים גזר!','הוא חוזר פנימה! לכיתה!']},
+  {t:'A',o:['אף פעם לא רצתי כל כך מהר בחיים!','{ב:בוא|בואי} נחזור לכיתה עם פרצוף רגוע. כאילו כלום.','שוקו, בבקשה, תחזור הביתה!']},
+  {t:'sc',o:['פנים. כיתה ד׳ – בוקר']},
+  {t:'act',o:['{א} ו{ב} {אב:נכנסים|נכנסות} לכיתה {אב:מתנשפים|מתנשפות}. שוקו כבר יושב בכלוב שלו ואוכל גזר.','כל הכיתה מסתכלת על {א} ו{ב}. יש עלים בשיער של שניהם.','פתאום משהו זז בכיס של {א}. זה שוקו! הוא היה שם כל הזמן.']},
+  {t:'B',o:['רגע... הוא היה פה כל הזמן?','אז אחרי מי רדפנו בחצר?!','אני {ב:צריך|צריכה} לשבת.']},
+  {t:'A',o:['בפעם הבאה אני {א:סוגר|סוגרת} את הכלוב. פעמיים.','אף אחד לא מספר על זה למורה. סגור?','מי רוצה לרוץ עוד סיבוב?']},
  ]},
 ];
 
@@ -514,7 +534,8 @@ function fillCtx(s, chars, sc){
 const fill = s => fillCtx(s, S.chars, scene());
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const lineText = L => L.pick===-1 ? L.custom : fill(L.opts[L.pick]);
-const ci = t => KEYS.indexOf(t);                       // 'A' -> 0
+const ci = t => KEYS.indexOf(t);
+const isTalk = t => KEYS.includes(t);                  // a character speaks (not action, not a scene heading)                       // 'A' -> 0
 
 function charsNeeded(st){
   let n=2;
@@ -552,7 +573,7 @@ function decodeStory(code){
   const j=JSON.parse(b64d(c.slice(5)));
   if(!j || !Array.isArray(j.b) || !j.b.length) throw new Error('bad');
   const st={id:'g-'+Math.random().toString(36).slice(2,9), genre:String(j.g||'סיפור'), title:String(j.t||'סיפור מהמורה'), desc:String(j.d||''),
-    beats:j.b.map(x=>({t:(x[0]==='act'||KEYS.includes(x[0]))?x[0]:'act', o:(Array.isArray(x[1])?x[1]:[]).map(String).filter(Boolean)})).filter(b=>b.o.length)};
+    beats:j.b.map(x=>({t:(x[0]==='act'||x[0]==='sc'||KEYS.includes(x[0]))?x[0]:'act', o:(Array.isArray(x[1])?x[1]:[]).map(String).filter(Boolean)})).filter(b=>b.o.length)};
   if(Array.isArray(j.s)&&j.s[1]) st.scene={m:'custom', ie:String(j.s[0]||'פנים'), loc:String(j.s[1]), time:String(j.s[2]||'יום')};
   return st;
 }
@@ -592,9 +613,11 @@ function scriptText(){
   const out=[];
   out.push(S.title||'התסריט שלנו'); if(S.authors) out.push('כתבו: '+S.authors);
   { const g=curGroup(); if(g){ const w=[g.cls&&('כיתה '+g.cls), g.school].filter(Boolean).join(', '); if(w) out.push(w); } } out.push('', 'סצנה 1. '+scene().slug, '');
+  let sn=1;
   for(const L of S.lines||[]){
     const t=lineText(L); if(!t) continue;
-    if(L.t==='act'){ out.push(t,''); }
+    if(L.t==='sc'){ sn++; out.push('', 'סצנה '+sn+'. '+t, ''); }
+    else if(L.t==='act'){ out.push(t,''); }
     else { out.push('                    '+charName(S.chars,ci(L.t)), '          '+t, ''); }
   }
   out.push('סוף');
@@ -653,7 +676,7 @@ function aboutView(){
   <section class="panel"><h3>להוסיף למסך הבית</h3>
     <p class="help"><b>אייפון ואייפד (Safari):</b> כפתור השיתוף ← "הוסף למסך הבית".<br><b>אנדרואיד (Chrome):</b> שלוש הנקודות ← "התקנת אפליקציה".</p></section>
   <section class="panel"><h3>זכויות</h3>
-    <p>© 2026 גל זיו. כל הזכויות שמורות.</p><p dir="ltr" lang="en" style="text-align:left">© 2026 Gal Ziv. All rights reserved.</p>
+    <p>© 2026 גל זיו MOTION LAB. כל הזכויות שמורות.</p><p dir="ltr" lang="en" style="text-align:left">© 2026 Gal Ziv MOTION LAB. All rights reserved.</p>
     <div class="row"><button type="button" class="btn ghost" data-act="m-home">חזרה</button></div></section>`;
 }
 async function shareApp(){
@@ -710,16 +733,17 @@ function groupsView(){
 }
 // Small genre icons on the story cards (matched by the start of the genre name).
 const GI = (d,label) => `<svg class="gi" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
-const GENRE_ICONS = [
-  ['קומ', GI('<circle cx="12" cy="12" r="10" fill="#FFC23D"/><circle cx="8.5" cy="9.5" r="1.4" fill="#1D1B38"/><circle cx="15.5" cy="9.5" r="1.4" fill="#1D1B38"/><path d="M7 13.5c1.2 2.6 3 3.6 5 3.6s3.8-1 5-3.6" stroke="#1D1B38" stroke-width="1.8" fill="none" stroke-linecap="round"/>')],
-  ['הרפ', GI('<circle cx="12" cy="14.5" r="6.5" fill="#F4C9A0"/><path d="M6.4 12.6c1-.9 2-1.2 3-1M17.6 12.6c-1-.9-2-1.2-3-1" stroke="#B5651D" stroke-width="1.6" stroke-linecap="round" fill="none"/><path d="M7.5 9.5c0-3.2 2-5 4.5-5s4.5 1.8 4.5 5z" fill="#E8B84A"/><rect x="7.5" y="7.9" width="9" height="1.6" fill="#E8534A"/><ellipse cx="12" cy="10" rx="9.5" ry="1.9" fill="#D9A23A"/><circle cx="9.7" cy="14.2" r=".9" fill="#1D1B38"/><circle cx="14.3" cy="14.2" r=".9" fill="#1D1B38"/><g fill="#C9814A"><circle cx="8.6" cy="16.1" r=".45"/><circle cx="9.6" cy="16.6" r=".45"/><circle cx="14.4" cy="16.6" r=".45"/><circle cx="15.4" cy="16.1" r=".45"/></g><path d="M10 17.6c1.2 1 2.8 1 4 0" stroke="#1D1B38" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M13.8 17.9l5.4 2.2" stroke="#E8B84A" stroke-width="1.1" stroke-linecap="round"/>')],
-  ['בלש', GI('<path d="M4.5 15c0-5.5 3.4-9 7.5-9s7.5 3.5 7.5 9z" fill="#A0703E"/><path d="M8 7.8v7.2M12 6v9M16 7.8v7.2M5.2 11.5h13.6" stroke="#6E4622" stroke-width="1" opacity=".7"/><path d="M3 15h6.5l-.9 2.8C6 17.8 3.7 16.8 3 15z" fill="#8A5C30"/><path d="M21 15h-6.5l.9 2.8c2.6 0 4.9-1 5.6-2.8z" fill="#8A5C30"/><circle cx="12" cy="5.6" r="1.4" fill="#6E4622"/>')],
-  ['מדע', GI('<g transform="rotate(45 12 12)"><path d="M9.5 16.5h5l-1 3.5-1.5 2-1.5-2z" fill="#FFC23D"/><path d="M7.7 13l-2.7 3.5v1.5h2.7zM16.3 13l2.7 3.5v1.5h-2.7z" fill="#E8534A"/><path d="M12 2.5c3 2.2 4.3 5.6 4.3 9.3v4.7H7.7v-4.7c0-3.7 1.3-7.1 4.3-9.3z" fill="#EEF0F7" stroke="#1D1B38" stroke-width="1"/><path d="M12 2.5c1.6 1.2 2.7 2.7 3.4 4.4H8.6c.7-1.7 1.8-3.2 3.4-4.4z" fill="#E8534A"/><circle cx="12" cy="10.5" r="2" fill="#2F7FD8" stroke="#1D1B38" stroke-width="1"/></g>')],
-  ['דרמ', GI('<path d="M2.5 5.2c2.7-1.3 5.8-1.3 8.5 0v5.2c0 3.1-1.9 5.4-4.25 5.4S2.5 13.5 2.5 10.4z" fill="#FFC23D"/><path d="M4.5 8.2h1.6M7.4 8.2H9" stroke="#1D1B38" stroke-width="1.2" stroke-linecap="round"/><path d="M4.9 11.5c1.1 1.3 2.6 1.3 3.7 0" stroke="#1D1B38" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M13 8.8c2.7-1.3 5.8-1.3 8.5 0V14c0 3.1-1.9 5.4-4.25 5.4S13 17.1 13 14z" fill="#7B5CE0"/><path d="M15 11.8h1.6M17.9 11.8h1.6" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/><path d="M15.4 16.4c1.1-1.3 2.6-1.3 3.7 0" stroke="#fff" stroke-width="1.2" fill="none" stroke-linecap="round"/>')],
-  ['פנט', GI('<path d="M4 20.5L13.5 11" stroke="#5B3FC4" stroke-width="2.4" stroke-linecap="round"/><path d="M4 20.5l1.8-1.8" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M16 2.8l1.5 3.3 3.6.4-2.7 2.4.8 3.5L16 10.6l-3.2 1.8.8-3.5-2.7-2.4 3.6-.4z" fill="#FFC23D"/><circle cx="20.5" cy="15" r="1" fill="#FFC23D"/><circle cx="8.5" cy="4.5" r=".8" fill="#FFC23D"/>')],
-  ['אימ', GI('<path d="M5 21V11a7 7 0 0 1 14 0v10l-2.3-1.8L14.3 21 12 19.2 9.7 21l-2.4-1.8z" fill="#EEF0F7" stroke="#1D1B38" stroke-width="1.2" stroke-linejoin="round"/><ellipse cx="9.6" cy="11" rx="1.1" ry="1.5" fill="#1D1B38"/><ellipse cx="14.4" cy="11" rx="1.1" ry="1.5" fill="#1D1B38"/><ellipse cx="12" cy="14.8" rx="1" ry="1.3" fill="#1D1B38"/>')],
+const GENRE_ICONS = [   // all in the logo's yellow with dark outlines
+  ['קומ', GI('<path d="M10.6 11.2C10.2 8.4 10.8 6.4 12 5.2c1.2 1.2 1.8 3.2 1.4 6z" fill="#FFC23D" stroke="#1D1B38" stroke-width="1.2" stroke-linejoin="round"/><path d="M10.4 11.4C8.2 12.6 5.6 14.6 3 19.4c3.4-.4 6.2-2.6 8.2-6.4z" fill="#FFC23D" stroke="#1D1B38" stroke-width="1.2" stroke-linejoin="round"/><path d="M13.6 11.4c2.2 1.2 4.8 3.2 7.4 8-3.4-.4-6.2-2.6-8.2-6.4z" fill="#FFC23D" stroke="#1D1B38" stroke-width="1.2" stroke-linejoin="round"/><path d="M10.8 11.6c-.4 3.4.1 6.6 1.2 9.6 1.1-3 1.6-6.2 1.2-9.6z" fill="#FFE08A" stroke="#1D1B38" stroke-width="1.2" stroke-linejoin="round"/><path d="M11.4 5.4V3.2h1.2v2.2" fill="#6E4622" stroke="#6E4622" stroke-width="1"/>')],
+  ['הרפ', GI('<path d="M3.5 6.5l5.2-2.2 6.4 2.2 5.4-2.2v13.4l-5.4 2.2-6.4-2.2-5.2 2.2z" fill="#FFC23D" stroke="#1D1B38" stroke-width="1.3" stroke-linejoin="round"/><path d="M8.7 4.3v13.4M15.1 6.5v13.4" stroke="#1D1B38" stroke-width="1" opacity=".45"/><path d="M5.6 16.2c1.6-2.1 3.2-1 4.7-3.1 1.3-1.8 2.7-2.9 4.3-3" stroke="#1D1B38" stroke-width="1.3" stroke-dasharray="1.6 1.5" fill="none" stroke-linecap="round"/><path d="M15.7 7.5l2.6 2.6M18.3 7.5l-2.6 2.6" stroke="#E8534A" stroke-width="1.8" stroke-linecap="round"/>')],
+  ['בלש', GI('<path d="M15 15l5.8 5.8" stroke="#1D1B38" stroke-width="3.4" stroke-linecap="round"/><circle cx="10" cy="10" r="7.2" fill="#FFC23D" stroke="#1D1B38" stroke-width="1.4"/><circle cx="10" cy="10" r="4.7" fill="#EAF4FF" stroke="#1D1B38" stroke-width="1.3"/><path d="M7.6 8.8a2.7 2.7 0 0 1 2.5-2" stroke="#FFFFFF" stroke-width="1.4" fill="none" stroke-linecap="round"/>')],
+  ['מדע', GI('<path d="M9.4 14.6h5.2l3 7.4H6.4z" fill="#FFC23D" opacity=".4"/><path d="M12 6.4V4.6" stroke="#1D1B38" stroke-width="1.2"/><circle cx="12" cy="4" r="1" fill="#FFC23D" stroke="#1D1B38" stroke-width=".9"/><path d="M7.6 10.8a4.4 4.4 0 0 1 8.8 0z" fill="#CFE6FF" stroke="#1D1B38" stroke-width="1.3" stroke-linejoin="round"/><ellipse cx="12" cy="12" rx="10.2" ry="3.1" fill="#FFC23D" stroke="#1D1B38" stroke-width="1.4"/><g fill="#1D1B38"><circle cx="6.8" cy="12.3" r=".85"/><circle cx="12" cy="13" r=".85"/><circle cx="17.2" cy="12.3" r=".85"/></g>')],
+  ['דרמ', GI('<path d="M2.5 5.2c2.7-1.3 5.8-1.3 8.5 0v5.2c0 3.1-1.9 5.4-4.25 5.4S2.5 13.5 2.5 10.4z" fill="#FFC23D" stroke="#1D1B38" stroke-width="1.2" stroke-linejoin="round"/><path d="M4.5 8.2h1.6M7.4 8.2H9" stroke="#1D1B38" stroke-width="1.2" stroke-linecap="round"/><path d="M4.9 11.5c1.1 1.3 2.6 1.3 3.7 0" stroke="#1D1B38" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M13 8.8c2.7-1.3 5.8-1.3 8.5 0V14c0 3.1-1.9 5.4-4.25 5.4S13 17.1 13 14z" fill="#1D1B38" stroke="#1D1B38" stroke-width="1.2" stroke-linejoin="round"/><path d="M15 11.8h1.6M17.9 11.8h1.6" stroke="#FFC23D" stroke-width="1.2" stroke-linecap="round"/><path d="M15.4 16.4c1.1-1.3 2.6-1.3 3.7 0" stroke="#FFC23D" stroke-width="1.2" fill="none" stroke-linecap="round"/>')],
+  ['פנט', GI('<path d="M4 20.5L13.5 11" stroke="#1D1B38" stroke-width="2.4" stroke-linecap="round"/><path d="M16 2.6l1.6 3.4 3.7.4-2.8 2.5.8 3.6L16 10.6l-3.3 1.9.8-3.6-2.8-2.5 3.7-.4z" fill="#FFC23D" stroke="#1D1B38" stroke-width="1.2" stroke-linejoin="round"/><circle cx="20.5" cy="15.2" r="1.1" fill="#FFC23D" stroke="#1D1B38" stroke-width=".8"/><circle cx="8.5" cy="4.6" r=".9" fill="#FFC23D" stroke="#1D1B38" stroke-width=".8"/>')],
+  ['מרד', GI('<path d="M.8 8.2h2.6M.4 11.4h2.4M1 14.6h2" stroke="#1D1B38" stroke-width="1.1" stroke-linecap="round" opacity=".55"/><g stroke="#1D1B38" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M7.4 8.2l-1 4.6"/><path d="M4.2 10.2l2.8-1.6 2.4 2"/><path d="M6.4 12.8l2.6 2.2-.9 3.8"/><path d="M6.4 12.8l-2.2 3.3-2 .3"/><path d="M17 8.2l-.8 3.6"/><path d="M13.8 10l2.8-1.6 2.6 2"/><path d="M15.2 14.6l-1.6 3.8"/><path d="M17 14.6l2.4 2.2-.3 2.4"/></g><path d="M16.3 11.2l-2.5 3.6h4.9z" fill="#FFC23D" stroke="#1D1B38" stroke-width="1.2" stroke-linejoin="round"/><circle cx="7.8" cy="5.6" r="2.2" fill="#FFC23D" stroke="#1D1B38" stroke-width="1.2"/><path d="M18.6 4.6c1.4-.6 2.8-.2 3.8 1-1.2.2-2 .1-2.8.6" fill="#FFC23D" stroke="#1D1B38" stroke-width="1.1" stroke-linejoin="round"/><circle cx="17.4" cy="5.6" r="2.2" fill="#FFC23D" stroke="#1D1B38" stroke-width="1.2"/>')],
+  ['אימ', GI('<path d="M5 21V11a7 7 0 0 1 14 0v10l-2.3-1.8L14.3 21 12 19.2 9.7 21l-2.4-1.8z" fill="#FFF1C2" stroke="#1D1B38" stroke-width="1.3" stroke-linejoin="round"/><ellipse cx="9.6" cy="11" rx="1.1" ry="1.5" fill="#1D1B38"/><ellipse cx="14.4" cy="11" rx="1.1" ry="1.5" fill="#1D1B38"/><ellipse cx="12" cy="14.8" rx="1" ry="1.3" fill="#1D1B38"/>')],
 ];
-const BOOK_ICON = GI('<path d="M3 5.5c3-1 6-1 9 .8v13c-3-1.8-6-1.8-9-.8z" fill="#2F7FD8"/><path d="M21 5.5c-3-1-6-1-9 .8v13c3-1.8 6-1.8 9-.8z" fill="#139C8C"/>');
+const BOOK_ICON = GI('<path d="M3 5.5c3-1 6-1 9 .8v13c-3-1.8-6-1.8-9-.8z" fill="#FFC23D" stroke="#1D1B38" stroke-width="1.3" stroke-linejoin="round"/><path d="M21 5.5c-3-1-6-1-9 .8v13c3-1.8 6-1.8 9-.8z" fill="#FFF1C2" stroke="#1D1B38" stroke-width="1.3" stroke-linejoin="round"/>');
 const genreIcon = g => { const t=String(g||'').trim(); const hit=GENRE_ICONS.find(([k])=>t.startsWith(k)); return hit?hit[1]:BOOK_ICON; };
 function stepStory(){
   const list=allStories();
@@ -738,7 +762,7 @@ function stepTopic(){
   const st=story();
   if(isCustomScene(st)){
     return `<section style="display:flex;flex-direction:column;gap:12px"><h2 class="h2">איפה זה קורה?</h2>
-      <div class="teacher-note"><p class="lead">המורה כבר בחר את המקום של הסיפור הזה:</p><span class="slug">${esc(slugOf(st.scene))}</span>
+      <div class="teacher-note"><p class="lead">לסיפור הזה כבר יש מקום:</p><span class="slug">${esc(slugOf(st.scene))}</span>
       <p class="hint">בעמוד התסריט אפשר לשנות אותו, אם רוצים.</p></div>
       <div class="nav"><button type="button" class="btn ghost" data-act="go" data-k="1">חזרה</button><button type="button" class="btn pri" data-act="go" data-k="3">עכשיו הדמויות</button></div></section>`;
   }
@@ -779,12 +803,12 @@ function optsPanel(L,i){
   const opts = L.opts.map((o,j)=>`<button type="button" class="opt" data-act="choose" data-i="${i}" data-j="${j}" aria-pressed="${L.pick===j}">${esc(fill(o))}</button>`).join('');
   return `<div class="opts">${whoPick}${opts}
     <label class="lbl" for="custom-${i}">${isCustomLine?'מה כתוב בשורה?':'או כתבו בעצמכם:'}</label>
-    <textarea id="custom-${i}" data-in="custom" data-i="${i}" placeholder="${L.t==='act'?'מה רואים עכשיו?':'מה הדמות אומרת?'}">${esc(L.custom)}</textarea>
+    <textarea id="custom-${i}" data-in="custom" data-i="${i}" placeholder="${L.t==='sc'?'למשל: פנים. ספרייה – צהריים':L.t==='act'?'מה רואים עכשיו?':'מה הדמות אומרת?'}">${esc(L.custom)}</textarea>
     <div class="row"><button type="button" class="btn small" data-act="close">סגור</button>${isCustomLine?`<button type="button" class="btn small" data-act="delline" data-i="${i}">מחק שורה</button>`:''}</div></div>`;
 }
 const CAM_ICON = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3z"/></svg>`;
 // Auditions are limited: 3, or one per speaking character if there are more. The teacher can add more.
-const speakersIn = st => new Set((st&&st.lines||[]).filter(L=>L.t!=='act').map(L=>L.t)).size;
+const speakersIn = st => new Set((st&&st.lines||[]).filter(L=>isTalk(L.t)).map(L=>L.t)).size;
 const audLimit = (st=S) => Math.max(3, speakersIn(st)) + (st.audExtra||0);
 const audLeft = () => Math.max(0, audLimit() - (S.auds||0));
 const CLAP_ICON = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 10h18v10H3z"/><path d="M3 10l2-5 16-1 0 6"/><path d="M8 4.7l2 5M13 4.4l2 5.4"/></svg>`;
@@ -803,8 +827,13 @@ function finishBlock(){
 }
 function stepScript(){
   const st=story(); if(!st||!S.lines) return stepStory();
+  let sn=1;
   const rows = S.lines.map((L,i)=>{
     const t=lineText(L), k=ci(L.t), cls = L.t==='act'?'act':'c'+k, custom = L.pick===-1;
+    if(L.t==='sc'){ sn++;
+      return `<button type="button" class="slugline" data-act="line" data-i="${i}" aria-expanded="${openLine===i}"><span class="pen">לשנות</span>סצנה ${sn}. ${esc(t)}</button>
+      ${openLine===i?optsPanel(L,i):''}
+      <div class="add"><button type="button" data-act="addline" data-i="${i}" aria-label="הוסף שורה אחרי שורה ${i+1}">+ שורה</button></div>`; }
     const body = L.t==='act' ? `<span class="say">${esc(t)||'<i>(שורה ריקה)</i>'}</span>`
       : `<span class="who">${esc(charName(S.chars,k))}</span><span class="say">${esc(t)||'<i>(שורה ריקה)</i>'}</span>`;
     return `<button type="button" class="ln ${cls} ${openLine===i?'open':''} ${custom?'custom':''}" data-act="line" data-i="${i}" aria-expanded="${openLine===i}"><span class="pen">${custom?'כתבתי בעצמי':'לשנות'}</span>${body}</button>
@@ -831,7 +860,7 @@ function stepScript(){
 /* ================= views: teacher ================= */
 const SAMPLE = [{name:'דני',g:'m'},{name:'נועה',g:'f'},{name:'עומר',g:'m'},{name:'מאיה',g:'f'},{name:'איתי',g:'m'},{name:'שירה',g:'f'}];
 const SAMPLE_FLIP = [{name:'נועה',g:'f'},{name:'דני',g:'m'},{name:'מאיה',g:'f'},{name:'עומר',g:'m'},{name:'שירה',g:'f'},{name:'איתי',g:'m'}];
-const typeLabel = t => t==='act' ? 'אקשן: מה רואים' : 'דמות '+LETTERS[ci(t)]+' מדברת';
+const typeLabel = t => t==='sc' ? 'סצנה חדשה: מקום וזמן' : t==='act' ? 'אקשן: מה רואים' : 'דמות '+LETTERS[ci(t)]+' מדברת';
 
 function pinView(){
   const setting = view==='pinset', changing = setting && !!pinSaved;
@@ -888,7 +917,7 @@ function beatPreview(b){
   if(!opts.length) return '';
   const k=ci(b.t);
   return `<div class="preview"><b>ככה התלמידים יראו (בדוגמה: ${esc(chars[0].name)} ו${esc(chars[1].name)}):</b>
-    ${opts.map(o=>b.t==='act'?`<div class="pv-act">${esc(fillCtx(o,chars,sc))}</div>`:`<div class="pv-dlg"><i>${esc(charName(chars,k))}</i>${esc(fillCtx(o,chars,sc))}</div>`).join('')}</div>`;
+    ${opts.map(o=>b.t==='sc'?`<div class="pv-act"><b style="font-family:inherit;font-size:inherit;color:inherit">סצנה חדשה. ${esc(fillCtx(o,chars,sc))}</b></div>`:b.t==='act'?`<div class="pv-act">${esc(fillCtx(o,chars,sc))}</div>`:`<div class="pv-dlg"><i>${esc(charName(chars,k))}</i>${esc(fillCtx(o,chars,sc))}</div>`).join('')}</div>`;
 }
 function beatTools(i, nChars){
   const st=T.editing, custom=isCustomScene(st);
@@ -926,10 +955,10 @@ function editorView(){
     <p class="help">אחרי הכותרת באה שורת <b>אקשן</b>: מה רואים כשהסצנה נפתחת. אחר כך הדמויות מדברות. בכל שורה כותבים כמה אפשרויות, <b>כל אפשרות בשורה נפרדת</b>, והתלמידים בוחרים ביניהן.</p>
     <p class="help">כדי שהתלמידים יוכלו לבחור שמות, לוחצים על <b>"שם דמות א"</b> במקום לכתוב שם. ומילה שמשתנה בין בן לבת (נכנס/נכנסה) מכניסים עם <b>"מילה שמשתנה לבן/בת"</b>. מתחת לכל שורה רואים איך זה ייראה.</p>
     <div class="row"><button type="button" class="btn small" data-act="t-flip">בדוגמה: ${T.flip?'נועה (בת) ודני (בן)':'דני (בן) ונועה (בת)'} · החלף</button></div>
-    ${st.beats.map((b,i)=>{ const k=ci(b.t); return `<div class="beat ${b.t==='act'?'act':'c'+k}"><div class="beat-head"><span class="num">${i+1}</span>
-      <select data-tin="btype" data-i="${i}" aria-label="סוג שורה ${i+1}"><option value="act" ${b.t==='act'?'selected':''}>${typeLabel('act')}</option>${KEYS.slice(0,nChars).map(K2=>`<option value="${K2}" ${b.t===K2?'selected':''}>${typeLabel(K2)}</option>`).join('')}</select>
+    ${st.beats.map((b,i)=>{ const k=ci(b.t); return `<div class="beat ${b.t==='act'||b.t==='sc'?'act':'c'+k}"><div class="beat-head"><span class="num">${i+1}</span>
+      <select data-tin="btype" data-i="${i}" aria-label="סוג שורה ${i+1}"><option value="act" ${b.t==='act'?'selected':''}>${typeLabel('act')}</option><option value="sc" ${b.t==='sc'?'selected':''}>${typeLabel('sc')}</option>${KEYS.slice(0,nChars).map(K2=>`<option value="${K2}" ${b.t===K2?'selected':''}>${typeLabel(K2)}</option>`).join('')}</select>
       <span class="sp"></span><button type="button" class="iconbtn" data-act="t-up" data-i="${i}" aria-label="הזז למעלה" ${i===0?'disabled':''}>↑</button><button type="button" class="iconbtn" data-act="t-down" data-i="${i}" aria-label="הזז למטה" ${i===st.beats.length-1?'disabled':''}>↓</button><button type="button" class="iconbtn" data-act="t-del" data-i="${i}" aria-label="מחק שורה">×</button></div>
-      <div class="field"><label for="b-${i}">${b.t==='act'?'מה רואים? (כל אפשרות בשורה נפרדת)':'מה הדמות אומרת? (כל אפשרות בשורה נפרדת)'}</label><textarea id="b-${i}" data-tin="bopts" data-i="${i}">${esc(b.o.join('\n'))}</textarea></div>
+      <div class="field"><label for="b-${i}">${b.t==='sc'?'פנים או חוץ, המקום והזמן. למשל: חוץ. חצר בית הספר – בוקר':b.t==='act'?'מה רואים? (כל אפשרות בשורה נפרדת)':'מה הדמות אומרת? (כל אפשרות בשורה נפרדת)'}</label><textarea id="b-${i}" data-tin="bopts" data-i="${i}">${esc(b.o.join('\n'))}</textarea></div>
       ${beatTools(i,nChars)}
       <div id="pv-${i}">${beatPreview(b)}</div></div>`;}).join('')}
     <div class="row"><button type="button" class="btn small" data-act="t-add" data-t="act">+ שורת אקשן</button><button type="button" class="btn small" data-act="t-add" data-t="dlg">+ דמות מדברת</button></div></section>
@@ -946,7 +975,7 @@ function render(){
   else if(view==='news') body=newsView();
   else if(view==='about') body=aboutView();
   else body = groupBar() + track() + (S.step===1?stepStory():S.step===2?stepTopic():S.step===3?stepChars():stepScript());
-  app.innerHTML = header() + body + `<footer class="copy"><span>© 2026 גל זיו. כל הזכויות שמורות.</span><span dir="ltr" lang="en">© 2026 Gal Ziv. All rights reserved.</span></footer>`;
+  app.innerHTML = header() + body + `<footer class="copy"><span>© 2026 גל זיו MOTION LAB. כל הזכויות שמורות.</span><span dir="ltr" lang="en">© 2026 Gal Ziv MOTION LAB. All rights reserved.</span></footer>`;
   if(focusId){ const el=document.getElementById(focusId); if(el){ el.focus({preventScroll:true}); try{ if(selS!=null) el.setSelectionRange(selS,selS); }catch(e){} } }
 }
 
@@ -1029,7 +1058,7 @@ document.addEventListener('click', e=>{
   if(a==='t-flip'){ T.flip=!T.flip; render(); return; }
   if(a==='t-sc'){ T.editing.scene=Object.assign({ie:'פנים',time:'יום',loc:''}, T.editing.scene, {[b.dataset.f]:b.dataset.v}); render(); return; }
   if(a==='t-add'){ const bs=T.editing.beats; let t=b.dataset.t;
-    if(t==='dlg'){ const last=[...bs].reverse().find(x=>x.t!=='act'); t = last&&last.t==='A'?'B':'A'; }
+    if(t==='dlg'){ const last=[...bs].reverse().find(x=>isTalk(x.t)); t = last&&last.t==='A'?'B':'A'; }
     bs.push({t,o:['']}); render(); setTimeout(()=>{ const el=document.getElementById('b-'+(bs.length-1)); if(el) el.focus(); },0); return; }
   if(a==='t-del'){ T.editing.beats.splice(i,1); T.gform=-1; render(); return; }
   if(a==='t-up'||a==='t-down'){ const j=a==='t-up'?i-1:i+1, bs=T.editing.beats; [bs[i],bs[j]]=[bs[j],bs[i]]; T.gform=-1; render(); return; }
@@ -1093,7 +1122,7 @@ function openAud(mode){
   AUD.mode = mode||'aud';
   if(AUD.mode==='aud' && audLeft()===0){ toast('נגמרו האודישנים. עכשיו אקשן!'); render(); return; }
   AUD.facing = AUD.mode==='scene' ? 'environment' : 'user';   // the scene is filmed by a friend, an audition by yourself
-  const speakers=[...new Set(lines.filter(x=>x.t!=='act').map(x=>ci(x.t)))];
+  const speakers=[...new Set(lines.filter(x=>isTalk(x.t)).map(x=>ci(x.t)))];
   if(!speakers.includes(AUD.who)) AUD.who = speakers[0] ?? 0;
   AUD.idx = 0;
   $id('aud').hidden=false; document.body.style.overflow='hidden';
@@ -1121,21 +1150,23 @@ function noCamText(err){
 function stopAudCam(){ if(AUD.stream){ AUD.stream.getTracks().forEach(t=>t.stop()); AUD.stream=null; } const v=$id('audVid'); if(v) v.srcObject=null; }
 
 function slateText(){
-  if(AUD.mode==='scene') return `<b>סצנה 1</b> · טייק ${(S.takes||0)+1}<br>${esc(S.title||'')}`;
+  if(AUD.mode==='scene'){ const n=1+audLines().slice(0,AUD.idx+1).filter(x=>x.t==='sc').length; return `<b>סצנה ${n}</b> · טייק ${(S.takes||0)+1}<br>${esc(S.title||'')}`; }
   const role=charName(S.chars,AUD.who);
   return `<b>אודישן</b> · ${esc(AUD.actor||'השחקן/ית')} בתפקיד <b>${esc(role)}</b><br>${esc(S.title||'')}`;
 }
 function renderAudSide(){
   const lines=audLines();
-  const speakers=[...new Set(lines.filter(x=>x.t!=='act').map(x=>ci(x.t)))].sort((a,b)=>a-b);
+  const speakers=[...new Set(lines.filter(x=>isTalk(x.t)).map(x=>ci(x.t)))].sort((a,b)=>a-b);
   if(AUD.mode==='scene') $id('audHead').innerHTML = `<b style="font-size:17px">🎬 צילום הסצנה · טייק ${(S.takes||0)+1}</b>
     <span class="lbl">מישהו אחד מצלם, וכולם משחקים. התסריט כאן כדי להציץ בו בין טייקים.</span>`;
   else $id('audHead').innerHTML = `<span class="lbl">${audLeft()?`אודישן ${(S.auds||0)+1} מתוך ${audLimit()}`:'<b style="color:#FFC23D">סיימתם את כל האודישנים! סגרו ולחצו אקשן.</b>'}</span>
     <span class="lbl">על איזה תפקיד האודישן?</span>
     <div class="row">${speakers.map(k=>`<button type="button" class="rolechip" data-act="aud-who" data-k="${k}" aria-pressed="${AUD.who===k}">${esc(charName(S.chars,k))}</button>`).join('')}</div>
     <div class="row"><label class="lbl" for="audActor">מי משחק?</label><input type="text" id="audActor" value="${esc(AUD.actor)}" placeholder="שם השחקן/ית" maxlength="24"></div>`;
+  let sn=1;
   $id('audTele').innerHTML = lines.map((x,n)=>{
-    const mine = AUD.mode==='aud' && x.t!=='act' && ci(x.t)===AUD.who;
+    const mine = AUD.mode==='aud' && isTalk(x.t) && ci(x.t)===AUD.who;
+    if(x.t==='sc'){ sn++; return `<button type="button" class="tl act sc ${n===AUD.idx?'cur':''}" data-act="aud-go" data-n="${n}"><i>סצנה ${sn}</i>${esc(x.text)}</button>`; }
     if(x.t==='act') return `<button type="button" class="tl act ${n===AUD.idx?'cur':''}" data-act="aud-go" data-n="${n}">${esc(x.text)}</button>`;
     return `<button type="button" class="tl ${mine?'mine':''} ${n===AUD.idx?'cur':''}" data-act="aud-go" data-n="${n}"><i>${esc(charName(S.chars,ci(x.t)))}</i>${esc(x.text)}</button>`;
   }).join('');
