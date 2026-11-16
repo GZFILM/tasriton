@@ -1,0 +1,1041 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>תסריטון</title>
+<meta name="description" content="כותבים סצנה, שורה אחרי שורה: אפליקציית תסריט לכיתות ג׳–ו׳">
+<meta name="theme-color" content="#1D1B38">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="תסריטון">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+</head>
+<body>
+<style>
+/* Layout: one centered column like a school workbook; a 4-step track on top; the finished script sits on a white "page"
+   and every character has its own color (א coral, ב teal, ג purple...) so kids can see who talks. */
+:root{
+  --bg:#EEF0F7; --surface:#FFFFFF; --ink:#1D1B38; --muted:#5E6180; --line:#D6D9E8; --field:#F6F7FB;
+  --accent:#FFC23D; --accent-ink:#2A1E00;
+  --a:#E8534A; --a-bg:#FDE7E5; --b:#139C8C; --b-bg:#DDF4F0;
+  --paper:#FFFFFF; --paper-ink:#1B1A1F; --paper-line:#E4E2EA;
+  --display:"Secular One","Rubik","Arial Hebrew",Arial,sans-serif;
+  --ui:"Rubik","Arial Hebrew","Segoe UI",Arial,sans-serif;
+  --script:"David Libre","David","Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#14142A; --surface:#1F1F3B; --ink:#EEEEF8; --muted:#A3A6C4; --line:#33345A; --field:#191932;
+  --accent:#FFC23D; --accent-ink:#2A1E00;
+  --a:#FF7A70; --a-bg:#3D1F27; --b:#3CCDB9; --b-bg:#173733;
+  --paper:#FBFAF7; --paper-ink:#1B1A1F; --paper-line:#E4E2EA; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#14142A; --surface:#1F1F3B; --ink:#EEEEF8; --muted:#A3A6C4; --line:#33345A; --field:#191932;
+  --accent:#FFC23D; --accent-ink:#2A1E00;
+  --a:#FF7A70; --a-bg:#3D1F27; --b:#3CCDB9; --b-bg:#173733;
+  --paper:#FBFAF7; --paper-ink:#1B1A1F; --paper-line:#E4E2EA; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:16px;line-height:1.5}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h1,h2,h3,p{margin:0}
+.wrap{max-width:780px;margin:0 auto;padding-block:16px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+
+/* top */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px}
+.clap{width:42px;height:38px;flex:none}
+.logo h1{font-family:var(--display);font-size:30px;font-weight:400;line-height:1}
+.logo small{display:block;font-size:13px;color:var(--muted)}
+.linkbtn{background:none;border:0;color:var(--muted);font-size:14px;text-decoration:underline;padding:6px}
+
+.track{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;list-style:none;margin:0;padding:0}
+.track button{width:100%;border:0;border-radius:10px;padding:8px 6px;background:var(--surface);color:var(--muted);font-size:14px;display:flex;align-items:center;justify-content:center;gap:6px;border:1.5px solid var(--line)}
+.track b{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--field);font-size:12px;flex:none}
+.track button[aria-current="step"]{border-color:var(--ink);color:var(--ink);font-weight:500}
+.track button[aria-current="step"] b{background:var(--accent);color:var(--accent-ink)}
+.track button.done b{background:var(--ink);color:var(--surface)}
+.track button:disabled{opacity:.5;cursor:default}
+@media (max-width:480px){ .track span{display:none} .track button{padding:8px 0} }
+
+.h2{font-family:var(--display);font-size:26px;font-weight:400;line-height:1.15;text-wrap:balance}
+.lead{color:var(--muted);font-size:15px}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.pick{position:relative;text-align:start;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.pick:hover{border-color:var(--muted)}
+.pick[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 3px var(--accent) inset}
+.pick h3{font-size:18px;font-weight:700}
+.pick p{font-size:14px;color:var(--muted)}
+.genre{align-self:flex-start;font-size:12px;font-weight:500;padding:2px 9px;border-radius:999px;background:var(--field);border:1px solid var(--line)}
+.from{position:absolute;top:10px;inset-inline-end:10px;font-size:11px;font-weight:700;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:1px 8px}
+.slug{font-family:var(--script);font-size:14px;color:var(--muted);direction:rtl}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:10px 18px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);font-weight:500}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
+.btn.ghost{background:none}
+.btn.small{min-height:38px;padding:6px 12px;font-size:14px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+/* characters */
+.chars{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.char{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.c0{--c:var(--a)} .c1{--c:var(--b)} .c2{--c:#7B5CE0} .c3{--c:#E8872A} .c4{--c:#2F7FD8} .c5{--c:#D64C9C}
+.char{border-color:var(--c)}
+.char h3{font-size:15px;font-weight:500;display:flex;align-items:center;gap:8px}
+.char h3 .sp{flex:1}
+.char .rm{border:1px solid var(--line);background:var(--surface);border-radius:8px;font-size:13px;padding:3px 10px;color:var(--muted)}
+.dot{width:12px;height:12px;border-radius:50%;flex:none;background:var(--c)}
+.addchar{border:2px dashed var(--line);background:none;border-radius:14px;padding:14px;color:var(--muted);font-size:16px;min-height:120px}
+.addchar:hover{border-color:var(--muted);color:var(--ink)}
+.teacher-note{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.teacher-note .slug{font-size:18px;color:var(--ink)}
+.char input[type=text]{width:100%;font-size:22px;font-weight:700;padding:8px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--field)}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;align-self:flex-start}
+.seg button{border:0;background:var(--surface);padding:7px 16px;font-size:15px}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--field);border-radius:999px;padding:4px 12px;font-size:14px}
+.chip:hover{border-color:var(--muted)}
+
+/* script */
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:520px){ .meta{grid-template-columns:1fr} }
+.meta label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);min-width:0}
+.meta input{font-size:16px;padding:9px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);width:100%}
+.tools{display:flex;flex-wrap:wrap;gap:8px}
+.hint{font-size:13.5px;color:var(--muted)}
+
+.page{background:var(--paper);color:var(--paper-ink);border-radius:6px;box-shadow:0 1px 0 var(--paper-line),0 10px 30px rgba(20,20,50,.12);
+  padding:34px clamp(16px,6vw,56px) 40px;font-family:var(--script);font-size:18px;line-height:1.55;display:flex;flex-direction:column;gap:2px}
+.ptitle{text-align:center;font-weight:700;font-size:26px;margin-bottom:2px}
+.pby{text-align:center;font-size:15px;color:#5a5866;margin-bottom:18px}
+.slugline{position:relative;display:block;width:100%;text-align:start;background:none;border:0;border-radius:8px;padding:6px 8px;padding-inline-end:58px;font:inherit;color:inherit;font-weight:700;margin:6px 0 10px;letter-spacing:.01em}
+.slugline:hover{background:#F3F1F7}
+.slugline .pen{position:absolute;top:6px;inset-inline-end:4px;font-family:var(--ui);font-size:11px;font-weight:400;color:#8a8796;border:1px solid #DDDAE5;border-radius:999px;padding:0 7px;background:#fff}
+.sceneed{font-family:var(--ui);font-size:15px;background:#FFFBEF;border:1.5px solid #F1D88F;border-radius:10px;padding:10px;margin:-4px 0 10px;display:flex;flex-direction:column;gap:8px;color:#2a2733}
+.sceneed input{border:1.5px solid #E7E2D3;border-radius:8px;padding:8px 10px;background:#fff;color:#2a2733;width:100%}
+.sceneed .who-pick span{font-size:13px;color:#6b6676;align-self:center;min-width:44px}
+.ln{position:relative;display:block;width:100%;text-align:start;background:none;border:0;border-radius:8px;padding:6px 8px;color:inherit;font:inherit}
+.ln:hover{background:#F3F1F7}
+.ln.open{background:#FFF6DA}
+.ln .who{display:block;text-align:center;font-weight:700;letter-spacing:.04em}
+.ln .say{display:block;max-width:30em;margin:0 auto;text-align:center}
+.ln.c0 .who{color:#C2382F} .ln.c1 .who{color:#0D7D70} .ln.c2 .who{color:#5B3FC4} .ln.c3 .who{color:#B25E0E} .ln.c4 .who{color:#1F62B0} .ln.c5 .who{color:#A8317A}
+.ln.act{padding-inline-end:58px}
+.ln.act .say{max-width:none;text-align:start}
+.ln .pen{position:absolute;top:6px;inset-inline-end:4px;font-family:var(--ui);font-size:11px;color:#8a8796;border:1px solid #DDDAE5;border-radius:999px;padding:0 7px;background:#fff}
+.ln.custom .pen{border-color:#E8B33A;color:#7a5a00}
+.opts{font-family:var(--ui);font-size:15px;background:#FFFBEF;border:1.5px solid #F1D88F;border-radius:10px;padding:10px;margin:2px 0 8px;display:flex;flex-direction:column;gap:6px;color:#2a2733}
+.opt{text-align:start;border:1.5px solid #E7E2D3;background:#fff;border-radius:8px;padding:8px 10px;line-height:1.45}
+.opt[aria-pressed="true"]{border-color:#2a2733;box-shadow:0 0 0 2px #FFC23D inset}
+.opts textarea{width:100%;min-height:64px;border:1.5px solid #E7E2D3;border-radius:8px;padding:8px 10px;background:#fff;color:#2a2733;resize:vertical}
+.opts .row{justify-content:space-between}
+.opts .lbl{font-size:13px;color:#6b6676}
+.who-pick{display:flex;gap:6px;flex-wrap:wrap}
+.who-pick button{border:1.5px solid #E7E2D3;background:#fff;border-radius:999px;padding:4px 12px;font-size:14px;color:#2a2733}
+.who-pick button[aria-pressed="true"]{background:#2a2733;color:#fff;border-color:#2a2733}
+.add{display:flex;justify-content:center;margin:0}
+.add button{font-family:var(--ui);font-size:12px;color:#8a8796;background:none;border:1px dashed #D8D4E2;border-radius:999px;padding:0 10px;line-height:20px;opacity:.75}
+.add button:hover{opacity:1;color:#2a2733;border-color:#2a2733}
+.fin{text-align:center;font-weight:700;margin-top:18px;letter-spacing:.2em}
+.finish{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;background:var(--surface);border:2px dashed var(--line);border-radius:14px;padding:18px}
+.finish.done{border:2px solid var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 25%,transparent)}
+.finish h3{font-family:var(--display);font-size:24px;font-weight:400}
+.audmeter{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.audmeter span{width:22px;height:22px;border-radius:50%;border:2px solid var(--accent);background:var(--surface)}
+.audmeter span.used{background:var(--accent)}
+.finish.action{border-color:#E8322F;box-shadow:0 0 0 4px rgba(232,50,47,.18)}
+.finish.action .btn.pri{background:#E8322F;border-color:#E8322F;color:#fff}
+.btn.big{min-height:56px;padding:12px 28px;font-size:19px}
+
+/* teacher */
+.panel{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel h3{font-size:17px}
+.field{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);min-width:0}
+.field input,.field textarea,.field select{font-size:15px;padding:9px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--field);color:var(--ink);width:100%}
+.field textarea{min-height:92px;resize:vertical;line-height:1.5}
+.beat{border:1.5px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;background:var(--field)}
+.beat{border-inline-start:5px solid var(--c,var(--muted))}
+.beat.act{--c:var(--muted)}
+.btools{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.btools .lbl{font-size:12.5px;color:var(--muted)}
+.btools button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 10px;font-size:13px}
+.btools button:hover{border-color:var(--ink)}
+.gform{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;background:var(--surface);border:1px dashed var(--muted);border-radius:10px;padding:10px}
+.gform .field{flex:1 1 110px}
+.gform select{width:auto}
+.preview{background:var(--paper);color:var(--paper-ink);border-radius:8px;padding:8px 12px;font-family:var(--script);font-size:16px;line-height:1.5;display:flex;flex-direction:column;gap:2px}
+.preview b{font-family:var(--ui);font-size:12px;font-weight:500;color:#6b6676}
+.preview .pv-act{text-align:start}
+.preview .pv-dlg{text-align:center}
+.preview .pv-dlg i{display:block;font-style:normal;font-weight:700;font-size:14px}
+.radio{display:flex;flex-direction:column;gap:6px}
+.radio label{display:flex;gap:8px;align-items:flex-start;font-size:15px;color:var(--ink);cursor:pointer}
+.radio input{margin-top:5px;accent-color:var(--ink)}
+.scenebox{display:flex;flex-direction:column;gap:10px;padding-inline-start:26px}
+.slugpv{font-family:var(--script);font-weight:700;font-size:18px;background:var(--paper);color:var(--paper-ink);border-radius:8px;padding:8px 12px}
+.beat-head{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.beat-head .num{font-size:13px;color:var(--muted);min-width:22px}
+.beat-head select{width:auto;padding:6px 10px}
+.beat-head .sp{flex:1}
+.iconbtn{border:1px solid var(--line);background:var(--surface);border-radius:8px;width:34px;height:34px;display:grid;place-items:center;font-size:15px}
+.tokens{display:flex;flex-wrap:wrap;gap:6px}
+.tok{border:1px dashed var(--muted);background:var(--surface);border-radius:8px;padding:4px 9px;font-size:13px}
+.tok code{font-family:inherit;font-weight:700}
+.help{font-size:13.5px;color:var(--muted);line-height:1.6}
+.help code{background:var(--field);border:1px solid var(--line);border-radius:5px;padding:0 5px;color:var(--ink)}
+.codebox{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;word-break:break-all;background:var(--field);border:1px solid var(--line);border-radius:8px;padding:10px;max-height:140px;overflow:auto;user-select:all;direction:ltr;text-align:left}
+.mylist{display:flex;flex-direction:column;gap:8px}
+.myitem{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--field);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.myitem b{font-size:16px}
+.myitem span{font-size:13px;color:var(--muted)}
+.empty{border:1.5px dashed var(--line);border-radius:12px;padding:16px;text-align:center;color:var(--muted);font-size:14px}
+.err{color:var(--a);font-size:14px}
+.grpbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;font-size:15px}
+.pinbox{max-width:420px;width:100%;align-self:center}
+.pinbox input{font-size:24px;letter-spacing:.3em;text-align:center}
+.ok{color:var(--b);font-size:14px}
+
+/* audition: camera on one half, script on the other */
+#aud{position:fixed;inset:0;z-index:40;background:#0E0D18;color:#F2F1F8;display:grid;grid-template-rows:1fr 1fr;font-family:var(--ui)}
+@media (orientation:landscape){ #aud{grid-template-rows:none;grid-template-columns:1fr 1fr} }
+.cam{position:relative;overflow:hidden;background:#000;min-height:0}
+.cam video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cam video.mirror{transform:scaleX(-1)}
+.cam .msg{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:20px;font-size:15px;line-height:1.6;color:#D9D7E6}
+.cam .msg b{color:#FFC23D}
+.camtop{position:absolute;top:calc(env(safe-area-inset-top,0px) + 8px);left:max(10px,env(safe-area-inset-left,0px));right:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;z-index:2}
+.cambtn{background:rgba(0,0,0,.55);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:6px 14px;font-size:14px}
+.rectime{font-family:ui-monospace,Menlo,monospace;background:rgba(0,0,0,.55);border-radius:6px;padding:3px 8px;font-size:14px}
+.rectime.on{background:#D7263D}
+.cambot{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:18px;z-index:2}
+.recbtn{width:68px;height:68px;border-radius:50%;border:4px solid #fff;background:transparent;padding:0;display:flex;align-items:center;justify-content:center}
+.recbtn span{display:block;width:52px;height:52px;border-radius:50%;background:#E8322F;transition:all .15s}
+.recbtn.on span{width:28px;height:28px;border-radius:6px}
+.slate{position:absolute;right:12px;bottom:92px;max-width:calc(100% - 24px);background:rgba(0,0,0,.6);border-radius:8px;padding:6px 10px;font-size:13px;line-height:1.4;z-index:2}
+.slate b{color:#FFC23D}
+.count{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-size:120px;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.6);z-index:3;pointer-events:none}
+.review{position:absolute;inset:0;background:#000;z-index:4;display:flex;flex-direction:column}
+.cam .review video{position:relative;inset:auto;flex:1;min-height:0;width:100%;height:auto;object-fit:contain;background:#000}
+.review .row{justify-content:center;padding:10px;background:#16152A}
+.side{min-height:0;display:flex;flex-direction:column;background:#17162A}
+.side-head{display:flex;flex-direction:column;gap:8px;padding:10px max(14px,env(safe-area-inset-right,0px)) 10px max(14px,env(safe-area-inset-left,0px));border-bottom:1px solid #2C2A47}
+.side-head .row{gap:6px}
+.side-head .lbl{font-size:12.5px;color:#A9A6C2}
+.rolechip{border:1.5px solid #3A3860;background:#201F38;color:#F2F1F8;border-radius:999px;padding:4px 12px;font-size:14px}
+.rolechip[aria-pressed="true"]{background:#FFC23D;color:#2A1E00;border-color:#FFC23D;font-weight:700}
+.side-head input{background:#201F38;border:1.5px solid #3A3860;color:#F2F1F8;border-radius:8px;padding:6px 10px;font-size:15px;flex:1;min-width:0}
+.tele{flex:1;min-height:0;overflow-y:auto;padding:14px max(14px,env(safe-area-inset-right,0px)) 30px max(14px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:10px;font-family:var(--script)}
+.tl{border:0;background:none;color:#8E8BA8;text-align:center;font:inherit;font-size:18px;line-height:1.45;border-radius:10px;padding:8px 10px}
+.tl i{display:block;font-style:normal;font-family:var(--ui);font-size:12.5px;letter-spacing:.06em}
+.tl.act{font-style:italic;text-align:start;font-size:16px}
+.tl.mine{color:#F2F1F8;font-size:22px;font-weight:700}
+.tl.mine i{color:#FFC23D}
+.tl.cur{background:#2A2848;box-shadow:inset 0 0 0 2px #FFC23D}
+.side-nav{display:flex;gap:8px;padding:8px max(14px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 8px) max(14px,env(safe-area-inset-left,0px));border-top:1px solid #2C2A47}
+.side-nav button{flex:1;min-height:46px;border-radius:10px;border:1.5px solid #3A3860;background:#201F38;color:#F2F1F8;font-size:16px}
+.side-nav .next{background:#FFC23D;color:#2A1E00;border-color:#FFC23D;font-weight:700;flex:2}
+
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 20px);background:var(--ink);color:var(--surface);padding:10px 18px;border-radius:999px;font-size:15px;z-index:50;max-width:calc(100% - 32px);text-align:center}
+@media (prefers-reduced-motion:no-preference){ .ln,.pick,.btn{transition:background .15s,border-color .15s} }
+</style>
+
+<div class="wrap" dir="rtl" lang="he" id="app"></div>
+<div id="toast" role="status" hidden></div>
+<section id="aud" hidden dir="rtl" lang="he" aria-label="אודישן">
+  <div class="cam" id="audCam">
+    <video id="audVid" playsinline muted autoplay></video>
+    <div class="msg" id="audMsg" hidden></div>
+    <div class="camtop"><button type="button" class="cambtn" data-act="aud-close">סגור</button><span class="rectime" id="audTime">00:00</span><button type="button" class="cambtn" data-act="aud-flip">החלף מצלמה</button></div>
+    <div class="slate" id="audSlate"></div>
+    <div class="cambot"><button type="button" class="recbtn" id="audRec" data-act="aud-rec" aria-label="הקלטה"><span></span></button></div>
+    <div class="count" id="audCount" hidden></div>
+    <div class="review" id="audReview" hidden>
+      <video id="audPlay" playsinline controls></video>
+      <div class="row"><button type="button" class="btn pri small" data-act="aud-save">שמור לטלפון</button><button type="button" class="btn small" data-act="aud-retake">צלם שוב</button><button type="button" class="btn small ghost" data-act="aud-close" style="color:#F2F1F8">סיום</button></div>
+    </div>
+  </div>
+  <div class="side">
+    <div class="side-head" id="audHead"></div>
+    <div class="tele" id="audTele"></div>
+    <div class="side-nav"><button type="button" data-act="aud-prev">הקודם</button><button type="button" class="next" data-act="aud-next">השורה הבאה</button></div>
+  </div>
+</section>
+
+<script>
+document.documentElement.dir='rtl'; document.documentElement.lang='he';
+(()=>{
+'use strict';
+
+/* ================= content ================= */
+// Words that swap in by themselves (the teacher inserts them with buttons, no typing needed):
+//   {א} {ב} {ג} ...          names of the characters
+//   {א:זכר|נקבה}             a word by the gender of character א (same for ב, ג ...)
+//   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
+//   {מקום} {למקום} {במקום}   the place of the scene
+//   {חפץ} {אירוע}            the important object and the event from the chosen topic
+const APP_VERSION = '1 · 16.11.2026';   // shown in teacher mode, so you can see a tablet got the update
+const LETTERS=['א','ב','ג','ד','ה','ו'], KEYS=['A','B','C','D','E','F'];
+const TIMES=['בוקר','יום','צהריים','אחר הצהריים','ערב','לילה'];
+const TOPICS = [
+  {id:'school',   name:'בית הספר',       desc:'הכיתה, בוקר רגיל. כמעט.', ie:'פנים', loc:'כיתה ד׳', time:'בוקר', place:'הכיתה', to:'לכיתה', in:'בכיתה', obj:'היומן של המורה', ev:'המבחן'},
+  {id:'trip',     name:'הטיול השנתי',    desc:'יער, שבילים וקצת פחד.', ie:'חוץ', loc:'שביל ביער', time:'צהריים', place:'היער', to:'ליער', in:'ביער', obj:'המצפן של הטיול', ev:'הטיול השנתי'},
+  {id:'birthday', name:'מסיבת יום הולדת', desc:'בלונים, עוגה ובלגן.', ie:'פנים', loc:'סלון מקושט בבלונים', time:'ערב', place:'המסיבה', to:'למסיבה', in:'במסיבה', obj:'כתר יום ההולדת', ev:'מסיבת יום ההולדת'},
+  {id:'soccer',   name:'מגרש הכדורגל',   desc:'רגע לפני המשחק הגדול.', ie:'חוץ', loc:'מגרש הכדורגל של בית הספר', time:'אחר הצהריים', place:'המגרש', to:'למגרש', in:'במגרש', obj:'הגביע', ev:'המשחק הגדול'},
+  {id:'beach',    name:'חוף הים',        desc:'שמש, חול וגלים.', ie:'חוץ', loc:'חוף הים', time:'צהריים', place:'החוף', to:'לחוף', in:'בחוף', obj:'הדלי עם הצדפים', ev:'תחרות ארמונות החול'},
+];
+const slugOf = sc => `${sc.ie}. ${sc.loc} – ${sc.time}`;
+const stripH = s => String(s||'').trim().replace(/^ה(?=\S)/,'');
+
+const BUILTIN = [
+ {id:'b-comedy', genre:'קומדיה', title:'האבידה המצחיקה', desc:'משהו חשוב נעלם, ושני חברים מנסים לפתור את זה בדרך הכי מטופשת.', beats:[
+  {t:'act',o:['{א} {א:נכנס|נכנסה} {למקום} בריצה, עם נעל אחת בלבד.','{א} {א:מגיע|מגיעה} {למקום} עם משקפי שמש ענקיים, למרות שבחוץ מעונן.','{א} {א:קופץ|קופצת} {למקום} כמו קנגורו, עם חיוך גדול מדי.']},
+  {t:'B',o:['{א}, למה {א:אתה נראה|את נראית} כל כך מוזר היום?','שלום {א}! רגע... מה קרה לך?','{א}! חיפשתי אותך בכל מקום!']},
+  {t:'A',o:['אל {ב:תשאל|תשאלי}. יש לנו בעיה גדולה: {חפץ} נעלם!','שששש! אף אחד לא יודע, אבל {חפץ} נעלם.','יש לי סוד. לקחתי את {חפץ} הביתה בטעות, ועכשיו הוא במכונת הכביסה.']},
+  {t:'act',o:['{ב} {ב:נופל|נופלת} מהכיסא מרוב הפתעה.','{ב} {ב:פותח|פותחת} את הפה בהלם. זבוב כמעט נכנס פנימה.','{ב} {ב:מסתכל|מסתכלת} ימינה, שמאלה, ושוב ימינה.']},
+  {t:'B',o:['מה?! בלי {חפץ} אי אפשר להתחיל את {אירוע}!','{א:אתה רציני|את רצינית}? צריך למצוא אותו לפני שכולם ישימו לב!','רגע, יש לי רעיון מבריק. או לפחות רעיון בינוני.']},
+  {t:'A',o:['{ב:בוא|בואי} נחפש בכל פינה!','אולי נבקש עזרה מהחתול של השכנים? הוא מומחה למצוא דברים.','אני אעמיד פנים שאני {חפץ}, ואף אחד לא ירגיש בהבדל!']},
+  {t:'act',o:['השניים זוחלים על הרצפה. פתאום נשמע קול: "מה אתם עושים?!"','{ב} {ב:מוצא|מוצאת} את {חפץ}. הוא היה על הראש של {א} כל הזמן.','{א} {א:מתחפש|מתחפשת} ל{חפץ}. זה לא נראה דומה בכלל.']},
+  {t:'B',o:['{א}... {חפץ} היה אצלך בתיק כל הזמן!','טוב, לפחות עכשיו יש לנו סיפור מצחיק לספר לכולם.','בפעם הבאה אני {ב:שומר|שומרת} על {חפץ}. אולי.']},
+  {t:'A',o:['אופס. מישהו רוצה עוגייה?','אז אף אחד לא מספר על זה לאף אחד. סגור?','{ב:חכה|חכי}... איפה הנעל השנייה שלי?']},
+ ]},
+ {id:'b-adventure', genre:'הרפתקה', title:'המפה הסודית', desc:'מפה ישנה, חידה ושביל שנפתח פתאום. מי יגיע ראשון לאוצר?', beats:[
+  {t:'act',o:['{א} ו{ב} {אב:עומדים|עומדות} {במקום}. השקט מוזר מדי.','רוח חזקה נושבת {במקום}. {א} {א:מחזיק|מחזיקה} פנס.','{א} מגלה דלת קטנה ונסתרת שאף אחד לא ראה קודם.']},
+  {t:'A',o:['{ב}, {ב:תראה|תראי}! יש פה מפה ישנה!','שמעת את הרעש הזה? זה הגיע מלמטה.','אני {א:מרגיש|מרגישה} שהיום יקרה משהו גדול.']},
+  {t:'B',o:['על המפה יש איקס אדום. ממש ליד {חפץ}!','אולי כדאי לקרוא למבוגר? ...טוב, בעצם לא.','אני לא {ב:פוחד|פוחדת}. טוב, אולי קצת.']},
+  {t:'act',o:['האדמה רועדת, ושביל צר נפתח לפניהם.','ציפור כחולה נוחתת על הכתף של {ב} ומצייצת שלוש פעמים.','{א} {א:מושיט|מושיטה} יד ל{ב}. ביחד {אב:הם צועדים|הן צועדות} קדימה.']},
+  {t:'A',o:['אם נמצא את האוצר לפני {אירוע}, כולם יזכרו אותנו!','{ב:תבטיח|תבטיחי} לי דבר אחד: לא משנה מה יקרה, נשארים ביחד.','יש פה חידה: "מה הולך בלי רגליים?"']},
+  {t:'B',o:['הזמן! הזמן הולך בלי רגליים!','{א:אתה החבר הכי אמיץ|את החברה הכי אמיצה} שיש לי.','רגע, אני {ב:שומע|שומעת} מים זורמים.']},
+  {t:'act',o:['בסוף השביל מחכה תיבה ישנה. {א} {א:פותח|פותחת} אותה לאט.','פתאום {אב:הם רואים|הן רואות} אור זהוב מאחורי הסלעים.','המפה מתחילה לזהור בידיים של {ב}.']},
+  {t:'A',o:['זה לא זהב... זה {חפץ}! כל הזמן הוא היה האוצר!','יש פה פתק: "האוצר האמיתי הוא החברים שבדרך."','{ב}, {ב:תסתכל|תסתכלי}... זו מפה להרפתקה הבאה!']},
+  {t:'B',o:['אז מה, מחר ממשיכים?','אף אחד לא יאמין לנו.','זה היה היום הכי טוב בחיים שלי!']},
+ ]},
+ {id:'b-mystery', genre:'בלשי', title:'התעלומה הגדולה', desc:'משהו נעלם, יש עקבות ופירורים. שני בלשים צעירים יוצאים לחקור.', beats:[
+  {t:'act',o:['{במקום} שקט. רק השעון מתקתק. {חפץ} נעלם.','{א} {א:עומד|עומדת} עם זכוכית מגדלת {א:ומסתכל|ומסתכלת} על הרצפה.','מישהו השאיר עקבות של בוץ {במקום}. {א} {א:מתכופף|מתכופפת} לבדוק.']},
+  {t:'A',o:['{ב}, יש לנו תעלומה. {חפץ} נעלם, ואני {א:מתכוון|מתכוונת} לפתור אותה.','{ב:תסתכל|תסתכלי} על העקבות האלה. הם קטנים מאוד...','כל בלש טוב צריך עוזר. {ב:אתה מוכן|את מוכנה}?']},
+  {t:'B',o:['מי היה פה אחרון?','אולי זה השומר? הוא תמיד אוכל וופלים...','אני {ב:מוכן|מוכנה}! ...מה זה בלש?']},
+  {t:'act',o:['{ב} {ב:מוצא|מוצאת} פירור של עוגייה ליד הדלת.','{א} {א:רושם|רושמת} משהו במחברת קטנה {א:ומהנהן|ומהנהנת} ברצינות.','נשמע צליל מוזר מאחורי הארון: "מיאו".']},
+  {t:'A',o:['פירורים... מישהו פה אוהב עוגיות. הרבה עוגיות.','יש שלושה חשודים: המורה, השכן והחתול.','שקט! {ב:תקשיב|תקשיבי}...']},
+  {t:'B',o:['{ב:אני חושב שאני יודע|אני חושבת שאני יודעת} מי עשה את זה!','אבל למה שמישהו ירצה לקחת את {חפץ}?','הנה! מאחורי הארון!']},
+  {t:'act',o:['מאחורי הארון יושב חתול ג׳ינג׳י, ו{חפץ} בין הכפות שלו.','{א} {א:מושך|מושכת} בווילון ומגלה את המורה אוכלת עוגייה.','{חפץ} נמצא בדיוק איפה שהיה כל הזמן, רק מתחת לעיתון.']},
+  {t:'A',o:['התעלומה נפתרה! החתול רק רצה לשחק.','המקרה סגור. אבל העוגיות... זו כבר תעלומה אחרת.','לפעמים התשובה נמצאת ממש מתחת לאף.']},
+  {t:'B',o:['{אב:אנחנו הבלשים הכי טובים|אנחנו הבלשיות הכי טובות} בעיר!','מחר פותחים משרד חקירות?','{א}, {א:אתה|את} גאון. טוב, חצי גאון.']},
+ ]},
+ {id:'b-scifi', genre:'מדע בדיוני', title:'הכפתור המוזר', desc:'אור סגול, רובוט קטן וכפתור אחד שאסור ללחוץ עליו. או שכן?', beats:[
+  {t:'act',o:['{במקום} מופיע פתאום עיגול של אור סגול.','{א} {א:מוצא|מוצאת} שלט רחוק עם כפתור אדום אחד.','רובוט קטן נוחת {במקום} ואומר: "שלום, בני אדם".']},
+  {t:'A',o:['{ב}, {ב:בוא|בואי} מהר! {ב:אתה חייב|את חייבת} לראות את זה!','אל {ב:תיגע|תיגעי} בכלום. זה נראה... קסום.','{א:אני חושב|אני חושבת} שזה הגיע מהחלל.']},
+  {t:'B',o:['מה קורה אם לוחצים על הכפתור?','זה בטח חלום. {א:תצבוט|תצבטי} אותי!','וואו. זה הדבר הכי מגניב שראיתי בחיים.']},
+  {t:'act',o:['{ב} {ב:לוחץ|לוחצת} על הכפתור. הכול מתחיל להסתובב.','האור הסגול גדל, ו{חפץ} מתחיל לרחף באוויר.','הרובוט מצפצף, ופתאום כולם מדברים בשפה של חייזרים.']},
+  {t:'A',o:['{חפץ} עף! צריך לתפוס אותו!','אנחנו... בשנת 3000?!','בגגללגג! זאת אומרת... הצילו!']},
+  {t:'B',o:['אני {ב:זוכר|זוכרת}! צריך ללחוץ עוד פעמיים!','אל {א:תדאג|תדאגי}, יש לי תוכנית. בערך.','{א:תחזיק|תחזיקי} לי את היד, ואל {א:תעזוב|תעזבי}!']},
+  {t:'act',o:['בום! הכול חוזר להיות רגיל. כמעט הכול.','{א} ו{ב} {אב:נוחתים|נוחתות} בחזרה {במקום}, עם שיער סומר.','הרובוט מנופף לשלום ונעלם באור סגול.']},
+  {t:'A',o:['אף אחד לא ראה כלום, נכון?','רגע... למה יש לי זנב?','{א:אני חושב|אני חושבת} שהרובוט השאיר לנו מתנה.']},
+  {t:'B',o:['בפעם הבאה אני {ב:בוחר|בוחרת} על איזה כפתור ללחוץ.','זה הסוד שלנו. לתמיד.','{א:תבטיח|תבטיחי} לי שנעשה את זה שוב מחר!']},
+ ]},
+];
+
+const NAMES = {m:['דני','יואב','עומר','איתי','אדם','נועם','אורי','אחמד'], f:['נועה','מאיה','תמר','שירה','רוני','יעל','לינה','אביגיל']};
+
+/* ================= storage ================= */
+const K = {state:'tasritaon-state-v1', mine:'tasritaon-mine-v1', got:'tasritaon-received-v1', pin:'tasritaon-pin-v1', groups:'tasritaon-groups-v1', cur:'tasritaon-cur-v1', last:'tasritaon-lastgroup-v1'};
+const load=(k,d)=>{ try{ const v=JSON.parse(localStorage.getItem(k)||'null'); return v==null?d:v; }catch(e){ return d; } };
+const store=(k,v)=>{ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
+
+let mine = load(K.mine, []);        // stories the teacher wrote here
+let got  = load(K.got, []);         // stories received from a teacher's code
+let S = load(K.state, null) || {step:1, storyId:null, topic:'school', chars:[{name:'דני',g:'m'},{name:'נועה',g:'f'}], title:'', authors:'', lines:null, scene:null};
+if(!S.chars){ S.chars=[S.A||{name:'דני',g:'m'}, S.B||{name:'נועה',g:'f'}]; delete S.A; delete S.B; }   // older saves
+// Groups: every group keeps its own script on this tablet, so it can continue next week.
+const freshState = ()=>({step:1, storyId:null, topic:'school', chars:[{name:'דני',g:'m'},{name:'נועה',g:'f'}], title:'', authors:'', lines:null, scene:null, done:false});
+let groups = load(K.groups, []);
+let curId = load(K.cur, null);
+if(!groups.length && S.storyId){ const g={id:'grp-'+Date.now().toString(36), school:'', cls:'', team:'הקבוצה הקודמת', created:Date.now(), updated:Date.now(), state:S}; groups=[g]; curId=g.id; store(K.groups,groups); store(K.cur,curId); }
+const curGroup = ()=>groups.find(g=>g.id===curId);
+if(curGroup()) S = curGroup().state; else curId=null;
+let view = curId ? 'kid' : 'groups';                   // 'kid' | 'teacher' | 'pin' (enter the teacher code) | 'pinset' (choose a code)
+let openLine = -1;                  // index of the open line, or 'scene'
+let T = {editing:null, err:'', code:'', importErr:'', importOk:'', gform:-1, flip:false, pinErr:'', groupErr:''};
+// Teacher code: kept only on this tablet, stored as a hash so it is not readable at a glance.
+const pinHash = c => { let h=2166136261; for(const ch of 'tsr|'+c){ h^=ch.charCodeAt(0); h=Math.imul(h,16777619); } return (h>>>0).toString(36); };
+let pinSaved = load(K.pin, '');
+const caret = {};                   // last cursor position in each teacher textarea
+const save = ()=>{ store(K.state, S); const g=curGroup(); if(g){ g.state=S; g.updated=Date.now(); store(K.groups, groups); } };
+
+const allStories = ()=>[...got.map(s=>({...s,_src:'got'})), ...mine.map(s=>({...s,_src:'mine'})), ...BUILTIN];
+const storyById = id => allStories().find(s=>s.id===id);
+const topic = ()=>TOPICS.find(t=>t.id===S.topic) || TOPICS[0];
+const story = ()=>storyById(S.storyId);
+const isCustomScene = st => !!(st && st.scene && st.scene.m==='custom' && st.scene.loc);
+
+/* ================= scene + text engine ================= */
+function sceneFor(st, override){
+  const tp = topic(), custom = isCustomScene(st);
+  const base = custom ? {ie:st.scene.ie||'פנים', loc:st.scene.loc, time:st.scene.time||'יום'} : {ie:tp.ie, loc:tp.loc, time:tp.time};
+  let place = custom ? base.loc : tp.place, to = custom ? 'ל'+stripH(base.loc) : tp.to, inn = custom ? 'ב'+stripH(base.loc) : tp.in;
+  const sc = Object.assign({}, base, override||{});
+  if(override && override.loc && override.loc.trim() && override.loc!==base.loc){ place=sc.loc; to='ל'+stripH(sc.loc); inn='ב'+stripH(sc.loc); }
+  return {ie:sc.ie, loc:sc.loc, time:sc.time, slug:slugOf(sc), place, to, in:inn, obj:tp.obj, ev:tp.ev};
+}
+const scene = ()=>sceneFor(story(), S.scene);
+const charName = (chars,i)=> (chars[i] && chars[i].name && chars[i].name.trim()) || ('דמות '+LETTERS[i]);
+
+function fillCtx(s, chars, sc){
+  return String(s||'').replace(/\{([^{}]+)\}/g,(m,k)=>{
+    const i=k.indexOf(':');
+    if(i>0){
+      const who=k.slice(0,i).trim(), parts=k.slice(i+1).split('|');
+      let fem=false;
+      if(who==='אב') fem = chars[0]&&chars[0].g==='f' && chars[1]&&chars[1].g==='f';
+      else if(who==='כולם') fem = chars.every(c=>c.g==='f');
+      else { const n=LETTERS.indexOf(who); fem = n>=0 && chars[n] && chars[n].g==='f'; }
+      return (fem && parts[1]!=null) ? parts[1] : parts[0];
+    }
+    const key=k.trim(), n=LETTERS.indexOf(key);
+    if(n>=0) return charName(chars,n);
+    switch(key){
+      case 'מקום': return sc.place; case 'למקום': return sc.to; case 'במקום': return sc.in;
+      case 'חפץ': return sc.obj; case 'אירוע': return sc.ev;
+    }
+    return m;
+  });
+}
+const fill = s => fillCtx(s, S.chars, scene());
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const lineText = L => L.pick===-1 ? L.custom : fill(L.opts[L.pick]);
+const ci = t => KEYS.indexOf(t);                       // 'A' -> 0
+
+function charsNeeded(st){
+  let n=2;
+  for(const b of (st?st.beats:[])){
+    if(ci(b.t)>=0) n=Math.max(n, ci(b.t)+1);
+    for(const o of b.o){ const re=/\{([אבגדהו])[:}]/g; let m; while((m=re.exec(o))) n=Math.max(n, LETTERS.indexOf(m[1])+1); }
+  }
+  return Math.min(n,6);
+}
+function newChar(){
+  return {name:'', g: S.chars.length%2?'f':'m'};   // kids type the name themselves
+}
+function ensureChars(){ const need=charsNeeded(story()); while(S.chars.length<need) S.chars.push(newChar()); }
+
+function startStory(id){
+  const st=storyById(id); if(!st) return;
+  S.storyId=id; S.scene=null;
+  S.lines = st.beats.map(b=>({t:b.t, opts:b.o.slice(), pick:0, custom:''}));
+  S.title = S.keepTitle || st.title; S.done = false;
+  const g=curGroup(); if(g && !S.authors) S.authors = g.team;
+  ensureChars(); openLine=-1; save();
+}
+
+/* ================= share codes ================= */
+const b64e = str => { const bytes=new TextEncoder().encode(str); let bin=''; bytes.forEach(b=>bin+=String.fromCharCode(b)); return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); };
+const b64d = s => { s=s.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4) s+='='; const bin=atob(s); return new TextDecoder().decode(Uint8Array.from(bin,c=>c.charCodeAt(0))); };
+function encodeStory(st){
+  const j={g:st.genre,t:st.title,d:st.desc,b:st.beats.map(b=>[b.t,b.o])};
+  if(isCustomScene(st)) j.s=[st.scene.ie,st.scene.loc,st.scene.time];
+  return 'TSR1.'+b64e(JSON.stringify(j));
+}
+function decodeStory(code){
+  const c=String(code||'').trim().replace(/^.*#story=/,'').replace(/\s+/g,'');
+  if(!c.startsWith('TSR1.')) throw new Error('bad');
+  const j=JSON.parse(b64d(c.slice(5)));
+  if(!j || !Array.isArray(j.b) || !j.b.length) throw new Error('bad');
+  const st={id:'g-'+Math.random().toString(36).slice(2,9), genre:String(j.g||'סיפור'), title:String(j.t||'סיפור מהמורה'), desc:String(j.d||''),
+    beats:j.b.map(x=>({t:(x[0]==='act'||KEYS.includes(x[0]))?x[0]:'act', o:(Array.isArray(x[1])?x[1]:[]).map(String).filter(Boolean)})).filter(b=>b.o.length)};
+  if(Array.isArray(j.s)&&j.s[1]) st.scene={m:'custom', ie:String(j.s[0]||'פנים'), loc:String(j.s[1]), time:String(j.s[2]||'יום')};
+  return st;
+}
+function receive(code){
+  const st=decodeStory(code);
+  const dup=got.find(g=>g.title===st.title && JSON.stringify(g.beats)===JSON.stringify(st.beats));
+  if(dup) return dup;
+  got.unshift(st); store(K.got, got); return st;
+}
+const canLink = !/claude\.(ai|site)|claudeusercontent/.test(location.hostname) && location.protocol.startsWith('http');
+
+/* ================= helpers ================= */
+let toastT;
+function toast(t){ const el=document.getElementById('toast'); el.textContent=t; el.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>el.hidden=true,2400); }
+function copy(text, okMsg){
+  const done=()=>toast(okMsg||'הועתק');
+  try{ navigator.clipboard.writeText(text).then(done).catch(()=>fallbackCopy(text,done)); }catch(e){ fallbackCopy(text,done); }
+}
+function fallbackCopy(text,done){
+  const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select();
+  let ok=false; try{ ok=document.execCommand('copy'); }catch(e){} ta.remove(); ok?done():toast('לא הצלחתי להעתיק. סמנו את הטקסט והעתיקו ידנית.');
+}
+async function saveFile(name, text){
+  try{
+    if(window.claude && window.claude.use){
+      const d = await window.claude.use('downloads');
+      if(d){ await d.save({filename:name, data:text}); toast('הקובץ נשמר'); return; }
+    }
+  }catch(e){ if(e && e.code==='declined') return; }
+  try{
+    const u=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'})), a=document.createElement('a');
+    a.href=u; a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),4000);
+    toast('הקובץ נשמר');
+  }catch(e){ toast('לא הצלחתי לשמור קובץ. השתמשו ב"העתק".'); }
+}
+function scriptText(){
+  const out=[];
+  out.push(S.title||'התסריט שלנו'); if(S.authors) out.push('כתבו: '+S.authors);
+  { const g=curGroup(); if(g){ const w=[g.cls&&('כיתה '+g.cls), g.school].filter(Boolean).join(', '); if(w) out.push(w); } } out.push('', 'סצנה 1. '+scene().slug, '');
+  for(const L of S.lines||[]){
+    const t=lineText(L); if(!t) continue;
+    if(L.t==='act'){ out.push(t,''); }
+    else { out.push('                    '+charName(S.chars,ci(L.t)), '          '+t, ''); }
+  }
+  out.push('סוף');
+  return out.join('\n');
+}
+
+/* ================= views: kids ================= */
+const CLAP = `<svg class="clap" viewBox="0 0 42 38" aria-hidden="true"><rect x="2" y="13" width="38" height="23" rx="3" fill="var(--ink)"/><path d="M2 13 L38 4 L40 10 L4 19 Z" fill="var(--accent)"/><path d="M9 11.3 L13 16 M17 9.3 L21 14 M25 7.3 L29 12 M33 5.3 L37 10" stroke="var(--ink)" stroke-width="2.6"/><rect x="7" y="21" width="16" height="3" rx="1.5" fill="var(--surface)"/><rect x="7" y="27" width="24" height="3" rx="1.5" fill="var(--surface)" opacity=".6"/></svg>`;
+
+function header(){
+  return `<header class="top"><div class="logo">${CLAP}<div><h1>תסריטון</h1><small>כותבים סצנה, שורה אחרי שורה</small></div></div>
+    <button type="button" class="linkbtn" data-act="mode">${(view==='kid'||view==='groups')?'מצב מורה':'חזרה למצב תלמיד'}</button></header>`;
+}
+function track(){
+  const steps=['סיפור','מקום','דמויות','תסריט'];
+  return `<ol class="track">${steps.map((n,i)=>{const k=i+1, can = k===1 || !!S.storyId;
+    return `<li><button type="button" data-act="go" data-k="${k}" ${S.step===k?'aria-current="step"':''} class="${S.step>k?'done':''}" ${can?'':'disabled'}><b>${k}</b><span>${n}</span></button></li>`;}).join('')}</ol>`;
+}
+const fmtDate = t => { try{ return new Date(t).toLocaleDateString('he-IL',{day:'numeric',month:'numeric'}); }catch(e){ return ''; } };
+const groupWhere = g => [g.cls&&('כיתה '+g.cls), g.school].filter(Boolean).join(' · ');
+function groupBar(){
+  const g=curGroup(); if(!g) return '';
+  return `<div class="grpbar"><span>👥 <b>${esc(g.team)}</b>${groupWhere(g)?' · '+esc(groupWhere(g)):''}</span><button type="button" class="btn small" data-act="g-switch">קבוצה אחרת</button></div>`;
+}
+function groupsView(){
+  const last=load(K.last,{school:'',cls:''});
+  const list=[...groups].sort((a,b)=>b.updated-a.updated);
+  return `<section style="display:flex;flex-direction:column;gap:12px"><h2 class="h2">מי עובד עכשיו?</h2>
+    <p class="lead">קבוצה שכבר התחילה בוחרת את עצמה וממשיכה מאיפה שהפסיקה. קבוצה שמתחילה עכשיו פותחת קבוצה חדשה.</p>
+    ${list.length?`<div class="grid">${list.map(g=>`<button type="button" class="pick" data-act="g-open" data-id="${g.id}">
+      <h3>👥 ${esc(g.team)}</h3>${groupWhere(g)?`<p>${esc(groupWhere(g))}</p>`:''}
+      <p>${g.state&&g.state.storyId?'התסריט: <b>'+esc(g.state.title||'בלי שם')+'</b>':'עוד לא בחרו סיפור'}</p>
+      <span class="genre">עבדו לאחרונה: ${fmtDate(g.updated)}</span></button>`).join('')}</div>`:''}
+    <div class="panel"><h3>+ קבוצה חדשה</h3>
+      <div class="meta"><div class="field"><label for="g-school">שם בית הספר</label><input type="text" id="g-school" value="${esc(last.school)}" maxlength="40"></div>
+        <div class="field"><label for="g-cls">כיתה</label><input type="text" id="g-cls" value="${esc(last.cls)}" placeholder="למשל: ה׳2" maxlength="12"></div></div>
+      <div class="field"><label for="g-team">שם הקבוצה, או השמות של כולם</label><input type="text" id="g-team" placeholder="למשל: נועה, דני ותמר" maxlength="60"></div>
+      <div class="field"><label for="g-title">שם התסריט (אפשר גם אחר כך)</label><input type="text" id="g-title" maxlength="40"></div>
+      ${T.groupErr?`<p class="err">${esc(T.groupErr)}</p>`:''}
+      <div class="row"><button type="button" class="btn pri" data-act="g-new">פותחים קבוצה ומתחילים</button></div></div></section>`;
+}
+function stepStory(){
+  const list=allStories();
+  return `<section style="display:flex;flex-direction:column;gap:12px"><h2 class="h2">איזה סיפור נכתוב היום?</h2>
+    <p class="lead">בוחרים סיפור. אחר כך בוחרים איפה הוא קורה ומי הדמויות.</p>
+    <div class="grid">${list.map(s=>`<button type="button" class="pick" data-act="story" data-id="${s.id}" aria-pressed="${S.storyId===s.id}">
+      ${s._src==='got'?'<span class="from">מהמורה</span>':s._src==='mine'?'<span class="from">שלי</span>':''}
+      <span class="genre">${esc(s.genre)}</span><h3>${esc(s.title)}</h3><p>${esc(s.desc)}</p></button>`).join('')}</div>
+    <details class="panel"><summary style="cursor:pointer;font-weight:500">קיבלתם קוד סיפור מהמורה?</summary>
+      <div class="field" style="margin-top:10px"><label for="kidcode">הדביקו כאן את הקוד</label><textarea id="kidcode" placeholder="TSR1...."></textarea></div>
+      <div class="row"><button type="button" class="btn pri small" data-act="kidimport">הוסף סיפור</button>
+      ${T.importErr?`<span class="err">${esc(T.importErr)}</span>`:''}${T.importOk?`<span class="ok">${esc(T.importOk)}</span>`:''}</div>
+    </details></section>`;
+}
+function stepTopic(){
+  const st=story();
+  if(isCustomScene(st)){
+    return `<section style="display:flex;flex-direction:column;gap:12px"><h2 class="h2">איפה זה קורה?</h2>
+      <div class="teacher-note"><p class="lead">המורה כבר בחר את המקום של הסיפור הזה:</p><span class="slug">${esc(slugOf(st.scene))}</span>
+      <p class="hint">בעמוד התסריט אפשר לשנות אותו, אם רוצים.</p></div>
+      <div class="nav"><button type="button" class="btn ghost" data-act="go" data-k="1">חזרה</button><button type="button" class="btn pri" data-act="go" data-k="3">עכשיו הדמויות</button></div></section>`;
+  }
+  return `<section style="display:flex;flex-direction:column;gap:12px"><h2 class="h2">איפה זה קורה?</h2>
+    <p class="lead">המקום קובע את כותרת הסצנה ואת החפץ החשוב בסיפור.</p>
+    <div class="grid">${TOPICS.map(t=>`<button type="button" class="pick" data-act="topic" data-id="${t.id}" aria-pressed="${S.topic===t.id}">
+      <h3>${t.name}</h3><p>${t.desc}</p><span class="slug">${esc(slugOf(t))}</span><p>החפץ החשוב: <b>${t.obj}</b></p></button>`).join('')}</div>
+    <div class="nav"><button type="button" class="btn ghost" data-act="go" data-k="1">חזרה</button><button type="button" class="btn pri" data-act="go" data-k="3">עכשיו הדמויות</button></div></section>`;
+}
+function charCard(i, need){
+  const c=S.chars[i], pool=NAMES[c.g], last=i===S.chars.length-1;
+  return `<div class="char c${i}"><h3><span class="dot"></span>דמות ${LETTERS[i]}<span class="sp"></span>${last && i>=need ? `<button type="button" class="rm" data-act="rmchar" data-i="${i}">הסר</button>`:''}</h3>
+    <label class="hint" for="name-${i}">איך קוראים לדמות?</label>
+    <input type="text" id="name-${i}" data-in="name" data-i="${i}" value="${esc(c.name)}" maxlength="18" autocomplete="off" placeholder="שם">
+    <div class="seg" role="group" aria-label="בן או בת"><button type="button" data-act="gender" data-i="${i}" data-g="m" aria-pressed="${c.g==='m'}">בן</button><button type="button" data-act="gender" data-i="${i}" data-g="f" aria-pressed="${c.g==='f'}">בת</button></div>
+    <div class="chips">${pool.map(n=>`<button type="button" class="chip" data-act="pickname" data-i="${i}" data-n="${n}">${n}</button>`).join('')}</div></div>`;
+}
+function stepChars(){
+  const need=charsNeeded(story());
+  return `<section style="display:flex;flex-direction:column;gap:12px"><h2 class="h2">מי בסיפור?</h2>
+    <p class="lead">בוחרים שם לכל דמות, ובן או בת כדי שהמשפטים יתאימו. אפשר להוסיף עוד דמויות ולתת להן שורות משלהן.</p>
+    <div class="chars">${S.chars.map((_,i)=>charCard(i,need)).join('')}
+      ${S.chars.length<6?`<button type="button" class="addchar" data-act="addchar">+ עוד דמות</button>`:''}</div>
+    <div class="nav"><button type="button" class="btn ghost" data-act="go" data-k="2">חזרה</button><button type="button" class="btn pri" data-act="go" data-k="4">לכתוב את התסריט</button></div></section>`;
+}
+function sceneEditor(){
+  const sc=scene();
+  return `<div class="sceneed">
+    <div class="who-pick"><span>איפה?</span>${['פנים','חוץ'].map(v=>`<button type="button" data-act="sc" data-f="ie" data-v="${v}" aria-pressed="${sc.ie===v}">${v}</button>`).join('')}</div>
+    <label class="lbl" for="sc-loc">המקום</label><input type="text" id="sc-loc" data-in="scloc" value="${esc(sc.loc)}" maxlength="40">
+    <div class="who-pick"><span>מתי?</span>${TIMES.map(v=>`<button type="button" data-act="sc" data-f="time" data-v="${v}" aria-pressed="${sc.time===v}">${v}</button>`).join('')}</div>
+    <p class="lbl">פנים = בתוך מבנה. חוץ = בחוץ. ככה כותבים בכל תסריט אמיתי.</p>
+    <div class="row" style="justify-content:space-between"><button type="button" class="btn small" data-act="close">סגור</button>${S.scene?'<button type="button" class="btn small" data-act="screset">חזרה למקום המקורי</button>':''}</div></div>`;
+}
+function optsPanel(L,i){
+  const isCustomLine = !L.opts.length;
+  const whoPick = isCustomLine ? `<div class="who-pick"><span class="lbl">מי?</span>${S.chars.map((c,k)=>`<button type="button" data-act="settype" data-i="${i}" data-t="${KEYS[k]}" aria-pressed="${L.t===KEYS[k]}">${esc(charName(S.chars,k))}</button>`).join('')}<button type="button" data-act="settype" data-i="${i}" data-t="act" aria-pressed="${L.t==='act'}">אקשן (מה רואים)</button></div>` : '';
+  const opts = L.opts.map((o,j)=>`<button type="button" class="opt" data-act="choose" data-i="${i}" data-j="${j}" aria-pressed="${L.pick===j}">${esc(fill(o))}</button>`).join('');
+  return `<div class="opts">${whoPick}${opts}
+    <label class="lbl" for="custom-${i}">${isCustomLine?'מה כתוב בשורה?':'או כתבו בעצמכם:'}</label>
+    <textarea id="custom-${i}" data-in="custom" data-i="${i}" placeholder="${L.t==='act'?'מה רואים עכשיו?':'מה הדמות אומרת?'}">${esc(L.custom)}</textarea>
+    <div class="row"><button type="button" class="btn small" data-act="close">סגור</button>${isCustomLine?`<button type="button" class="btn small" data-act="delline" data-i="${i}">מחק שורה</button>`:''}</div></div>`;
+}
+const CAM_ICON = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3z"/></svg>`;
+// Auditions are limited: 3, or one per speaking character if there are more. The teacher can add more.
+const speakersIn = st => new Set((st&&st.lines||[]).filter(L=>L.t!=='act').map(L=>L.t)).size;
+const audLimit = (st=S) => Math.max(3, speakersIn(st)) + (st.audExtra||0);
+const audLeft = () => Math.max(0, audLimit() - (S.auds||0));
+const CLAP_ICON = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 10h18v10H3z"/><path d="M3 10l2-5 16-1 0 6"/><path d="M8 4.7l2 5M13 4.4l2 5.4"/></svg>`;
+function finishBlock(){
+  if(S.done && audLeft()===0) return `<div class="finish done action"><h3>האודישנים נגמרו. מצלמים את הסצנה! 🎬</h3>
+    <p class="hint">מחלקים תפקידים, מישהו אחד מחזיק את הטאבלט ומצלם, וכולם משחקים.${S.takes?` עד עכשיו צילמתם ${S.takes===1?'טייק אחד':S.takes+' טייקים'}.`:''}</p>
+    <button type="button" class="btn pri big" data-act="aud-scene">${CLAP_ICON}אקשן!</button>
+    <button type="button" class="linkbtn" data-act="unfinish">רוצים עוד לשנות את התסריט?</button></div>`;
+  if(!S.done) return `<div class="finish"><p class="hint">כשהתסריט מוכן, לוחצים כאן:</p><button type="button" class="btn pri" data-act="finish">סיימנו את התסריט ✓</button></div>`;
+  const used=S.auds||0, lim=audLimit();
+  return `<div class="finish done"><h3>התסריט מוכן! 🎬</h3><p class="hint">עכשיו אודישנים: בוחרים תפקיד, ומצלמים את עצמכם קוראים את השורות.</p>
+    <div class="audmeter" aria-label="אודישנים: ${used} מתוך ${lim}">${Array.from({length:lim},(_,k)=>`<span class="${k<used?'used':''}"></span>`).join('')}</div>
+    <p class="hint"><b>${audLeft()===1?'נשאר לכם אודישן אחד':'נשארו לכם '+audLeft()+' אודישנים'}.</b> אחריהם מגיע האקשן: מצלמים את הסצנה.</p>
+    <button type="button" class="btn pri big" data-act="aud-open">${CAM_ICON}לאודישן</button>
+    <button type="button" class="linkbtn" data-act="unfinish">רוצים עוד לשנות את התסריט?</button></div>`;
+}
+function stepScript(){
+  const st=story(); if(!st||!S.lines) return stepStory();
+  const rows = S.lines.map((L,i)=>{
+    const t=lineText(L), k=ci(L.t), cls = L.t==='act'?'act':'c'+k, custom = L.pick===-1;
+    const body = L.t==='act' ? `<span class="say">${esc(t)||'<i>(שורה ריקה)</i>'}</span>`
+      : `<span class="who">${esc(charName(S.chars,k))}</span><span class="say">${esc(t)||'<i>(שורה ריקה)</i>'}</span>`;
+    return `<button type="button" class="ln ${cls} ${openLine===i?'open':''} ${custom?'custom':''}" data-act="line" data-i="${i}" aria-expanded="${openLine===i}"><span class="pen">${custom?'כתבתי בעצמי':'לשנות'}</span>${body}</button>
+      ${openLine===i?optsPanel(L,i):''}
+      <div class="add"><button type="button" data-act="addline" data-i="${i}" aria-label="הוסף שורה אחרי שורה ${i+1}">+ שורה</button></div>`;
+  }).join('');
+  return `<section style="display:flex;flex-direction:column;gap:12px"><h2 class="h2">${esc(st.title)}</h2>
+    <p class="lead">לוחצים על כל שורה בתסריט ובוחרים מה יקרה, או כותבים בעצמכם. גם את כותרת הסצנה אפשר לשנות.</p>
+    <div class="meta"><label for="title">שם הסרט<input type="text" id="title" data-in="title" value="${esc(S.title)}" maxlength="40"></label>
+      <label for="authors">כתבו<input type="text" id="authors" data-in="authors" value="${esc(S.authors)}" placeholder="השמות שלכם" maxlength="60"></label></div>
+    <div class="tools"><button type="button" class="btn small" data-act="shuffle">הפתיעו אותי</button><button type="button" class="btn small" data-act="copy">העתק תסריט</button><button type="button" class="btn small" data-act="file">שמור כקובץ</button><button type="button" class="btn small ghost" data-act="reset">להתחיל מחדש</button></div>
+    <article class="page" aria-label="התסריט">
+      <div class="ptitle">${esc(S.title||st.title)}</div><div class="pby">${S.authors?'כתבו: '+esc(S.authors):'&nbsp;'}</div>
+      <button type="button" class="slugline" data-act="scene" aria-expanded="${openLine==='scene'}"><span class="pen">לשנות</span>סצנה 1. ${esc(scene().slug)}</button>
+      ${openLine==='scene'?sceneEditor():''}
+      <div class="add"><button type="button" data-act="addline" data-i="-1">+ שורה</button></div>
+      ${rows}
+      <div class="fin">סוף</div>
+    </article>
+    ${finishBlock()}
+    <div class="nav"><button type="button" class="btn ghost" data-act="go" data-k="3">חזרה לדמויות</button></div></section>`;
+}
+
+/* ================= views: teacher ================= */
+const SAMPLE = [{name:'דני',g:'m'},{name:'נועה',g:'f'},{name:'עומר',g:'m'},{name:'מאיה',g:'f'},{name:'איתי',g:'m'},{name:'שירה',g:'f'}];
+const SAMPLE_FLIP = [{name:'נועה',g:'f'},{name:'דני',g:'m'},{name:'מאיה',g:'f'},{name:'עומר',g:'m'},{name:'שירה',g:'f'},{name:'איתי',g:'m'}];
+const typeLabel = t => t==='act' ? 'אקשן: מה רואים' : 'דמות '+LETTERS[ci(t)]+' מדברת';
+
+function pinView(){
+  const setting = view==='pinset', changing = setting && !!pinSaved;
+  return `<section class="panel pinbox"><h3>${setting?(changing?'קוד מורה חדש':'בחירת קוד מורה'):'כניסה למצב מורה'}</h3>
+    <p class="help">${setting?'בוחרים קוד של 4 ספרות. בלי הקוד אי אפשר להיכנס למצב מורה בטאבלט הזה. כדאי לבחור אותו קוד בכל הטאבלטים.':'הקלידו את קוד המורה.'}</p>
+    <div class="field"><label for="pin1">${setting?'הקוד':'קוד מורה'}</label><input type="password" id="pin1" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="off"></div>
+    ${setting?'<div class="field"><label for="pin2">שוב, לבדיקה</label><input type="password" id="pin2" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="off"></div>':''}
+    ${T.pinErr?`<p class="err">${esc(T.pinErr)}</p>`:''}
+    <div class="row"><button type="button" class="btn pri" data-act="${setting?'pin-set':'pin-go'}">${setting?'שמור קוד':'כניסה'}</button>
+    <button type="button" class="btn ghost" data-act="${changing?'pin-cancel':'mode'}">ביטול</button></div></section>`;
+}
+function pinSubmit(){
+  const v1=((document.getElementById('pin1')||{}).value||'').trim();
+  if(view==='pin'){
+    if(pinHash(v1)===pinSaved){ view='teacher'; T.pinErr=''; }
+    else T.pinErr='הקוד לא נכון.';
+  } else {
+    const v2=((document.getElementById('pin2')||{}).value||'').trim();
+    if(!/^\d{4,8}$/.test(v1)) T.pinErr='הקוד צריך להיות 4 ספרות לפחות.';
+    else if(v1!==v2) T.pinErr='שני הקודים לא זהים. נסו שוב.';
+    else { pinSaved=pinHash(v1); store(K.pin,pinSaved); view='teacher'; T.pinErr=''; toast('קוד המורה נשמר'); }
+  }
+  render(); const el=document.getElementById('pin1'); if(el && view!=='teacher') el.focus();
+}
+function teacherView(){
+  if(T.editing) return editorView();
+  return `<section class="panel"><h3>מצב מורה: הסיפורים שלי</h3>
+    <p class="help">כאן בונים סיפור לתלמידים: כותרת סצנה, ואחריה שורה אחרי שורה. לכל שורה כותבים כמה אפשרויות, והתלמידים בוחרים ביניהן או כותבים משהו משלהם.</p>
+    <p class="help">גרסה ${APP_VERSION}</p>
+    <div class="row"><button type="button" class="btn pri" data-act="t-new">+ סיפור חדש</button><button type="button" class="btn small ghost" data-act="pin-change">שינוי קוד מורה</button></div>
+    ${mine.length?`<div class="mylist">${mine.map(s=>`<div class="myitem"><div><b>${esc(s.title)}</b><br><span>${esc(s.genre)} · ${s.beats.length} שורות</span></div>
+      <div class="row"><button type="button" class="btn small" data-act="t-edit" data-id="${s.id}">עריכה</button><button type="button" class="btn small" data-act="t-share" data-id="${s.id}">שליחה לתלמידים</button><button type="button" class="btn small" data-act="t-try" data-id="${s.id}">לנסות</button></div>
+      ${T.code&&T.code.id===s.id?`<div style="flex-basis:100%;display:flex;flex-direction:column;gap:8px">
+        <p class="help">שלחו לתלמידים את ${canLink?'הקישור':'הקוד'}. ${canLink?'מי שפותח את הקישור מקבל את הסיפור מיד.':'בתסריטון הם לוחצים על "קיבלתם קוד סיפור מהמורה?" ומדביקים.'}</p>
+        <div class="codebox">${esc(canLink?T.code.link:T.code.code)}</div>
+        <div class="row"><button type="button" class="btn small pri" data-act="t-copycode">העתק ${canLink?'קישור':'קוד'}</button>${canLink?'<button type="button" class="btn small" data-act="t-copyraw">העתק רק את הקוד</button>':''}</div></div>`:''}
+      </div>`).join('')}</div>`:`<div class="empty">עוד אין סיפורים משלך. אפשר להתחיל מאפס, או לשכפל אחד מהמוכנים ולשנות אותו.</div>`}
+  </section>
+  <section class="panel"><h3>הקבוצות בטאבלט הזה</h3>
+    <p class="help">כל קבוצה שומרת כאן את התסריט שלה. רק במצב מורה אפשר למחוק קבוצה.</p>
+    ${groups.length?`<div class="mylist">${[...groups].sort((a,b)=>b.updated-a.updated).map(g=>`<div class="myitem"><div><b>${esc(g.team)}</b><br><span>${esc(groupWhere(g)||'')}${groupWhere(g)?' · ':''}${esc(g.state&&g.state.title||'עוד אין תסריט')} · ${fmtDate(g.updated)}</span></div>
+      <div class="row"><span>אודישנים: ${(g.state&&g.state.auds)||0} מתוך ${audLimit(g.state||{})}</span><button type="button" class="btn small" data-act="g-more" data-id="${g.id}">+1 אודישן</button><button type="button" class="btn small" data-act="g-del" data-id="${g.id}">מחק</button></div></div>`).join('')}</div>`:'<div class="empty">אין עדיין קבוצות בטאבלט הזה.</div>'}
+  </section>
+  <section class="panel"><h3>להתחיל מסיפור מוכן</h3><p class="help">משכפלים, ואז משנים כמה שרוצים.</p>
+    <div class="row">${BUILTIN.map(s=>`<button type="button" class="btn small" data-act="t-dup" data-id="${s.id}">${esc(s.title)}</button>`).join('')}</div></section>`;
+}
+function previewCtx(){
+  const st=T.editing, chars = T.flip?SAMPLE_FLIP:SAMPLE;
+  const sc = isCustomScene(st) ? sceneFor(st,null) : (()=>{ const tp=TOPICS[0]; return {place:tp.place,to:tp.to,in:tp.in,obj:tp.obj,ev:tp.ev}; })();
+  return {chars, sc};
+}
+function beatPreview(b){
+  const {chars,sc}=previewCtx(), opts=b.o.map(s=>s.trim()).filter(Boolean);
+  if(!opts.length) return '';
+  const k=ci(b.t);
+  return `<div class="preview"><b>ככה התלמידים יראו (בדוגמה: ${esc(chars[0].name)} ו${esc(chars[1].name)}):</b>
+    ${opts.map(o=>b.t==='act'?`<div class="pv-act">${esc(fillCtx(o,chars,sc))}</div>`:`<div class="pv-dlg"><i>${esc(charName(chars,k))}</i>${esc(fillCtx(o,chars,sc))}</div>`).join('')}</div>`;
+}
+function beatTools(i, nChars){
+  const st=T.editing, custom=isCustomScene(st);
+  const names = Array.from({length:nChars},(_,k)=>`<button type="button" data-act="t-ins" data-i="${i}" data-tok="{${LETTERS[k]}}">שם דמות ${LETTERS[k]}</button>`).join('');
+  return `<div class="btools"><span class="lbl">להכניס:</span>${names}
+    <button type="button" data-act="t-gopen" data-i="${i}">מילה שמשתנה לבן/בת</button>
+    <button type="button" data-act="t-ins" data-i="${i}" data-tok="{במקום}">ב+מקום</button><button type="button" data-act="t-ins" data-i="${i}" data-tok="{למקום}">ל+מקום</button>
+    ${custom?'':'<button type="button" data-act="t-ins" data-i="'+i+'" data-tok="{חפץ}">החפץ החשוב</button>'}</div>
+    ${T.gform===i?`<div class="gform"><div class="field"><label for="g-who">של מי?</label><select id="g-who">${Array.from({length:nChars},(_,k)=>`<option value="${LETTERS[k]}">דמות ${LETTERS[k]}</option>`).join('')}<option value="אב">דמות א וב יחד</option></select></div>
+      <div class="field"><label for="g-m">כשזה בן</label><input type="text" id="g-m" placeholder="נכנס"></div>
+      <div class="field"><label for="g-f">כשזו בת</label><input type="text" id="g-f" placeholder="נכנסה"></div>
+      <button type="button" class="btn small pri" data-act="t-gins" data-i="${i}">הכנס</button><button type="button" class="btn small ghost" data-act="t-gclose">ביטול</button></div>`:''}`;
+}
+function editorView(){
+  const st=T.editing, sc=st.scene||{m:'topic'}, custom=sc.m==='custom';
+  const nChars = Math.min(6, Math.max(charsNeeded(st)+1, 2));
+  return `<section class="panel"><h3>1. פרטי הסיפור</h3>
+    <div class="meta"><div class="field"><label for="t-title">שם הסיפור</label><input type="text" id="t-title" data-tin="title" value="${esc(st.title)}" maxlength="40"></div>
+      <div class="field"><label for="t-genre">ז׳אנר</label><input type="text" id="t-genre" data-tin="genre" value="${esc(st.genre)}" list="genres" maxlength="20"><datalist id="genres"><option>קומדיה</option><option>הרפתקה</option><option>בלשי</option><option>מדע בדיוני</option><option>דרמה</option><option>פנטזיה</option><option>אימה קלה</option></datalist></div></div>
+    <div class="field"><label for="t-desc">משפט קצר על הסיפור (התלמידים רואים אותו כשהם בוחרים)</label><input type="text" id="t-desc" data-tin="desc" value="${esc(st.desc)}" maxlength="120"></div>
+  </section>
+  <section class="panel"><h3>2. כותרת הסצנה: איפה ומתי</h3>
+    <p class="help">כל סצנה בתסריט נפתחת בכותרת: <b>פנים</b> או <b>חוץ</b>, המקום, והזמן. למשל: <b>פנים. כיתה ד׳ – בוקר</b>. התלמידים יראו אותה בראש התסריט, ויוכלו לשנות אותה.</p>
+    <div class="radio">
+      <label><input type="radio" name="scm" data-tin="scm" value="topic" ${custom?'':'checked'}><span>התלמידים בוחרים מקום מתוך רשימה (כיתה, יער, מסיבה, מגרש, חוף)</span></label>
+      <label><input type="radio" name="scm" data-tin="scm" value="custom" ${custom?'checked':''}><span>אני קובע את המקום</span></label>
+    </div>
+    ${custom?`<div class="scenebox">
+      <div class="seg" role="group" aria-label="פנים או חוץ">${['פנים','חוץ'].map(v=>`<button type="button" data-act="t-sc" data-f="ie" data-v="${v}" aria-pressed="${(sc.ie||'פנים')===v}">${v}</button>`).join('')}</div>
+      <div class="field"><label for="t-loc">המקום</label><input type="text" id="t-loc" data-tin="scloc" value="${esc(sc.loc||'')}" placeholder="למשל: חדר האוכל" maxlength="40"></div>
+      <div class="chips">${TIMES.map(v=>`<button type="button" class="chip" data-act="t-sc" data-f="time" data-v="${v}" aria-pressed="${(sc.time||'יום')===v}" style="${(sc.time||'יום')===v?'background:var(--ink);color:var(--surface)':''}">${v}</button>`).join('')}</div>
+      <div class="slugpv" id="t-slugpv">סצנה 1. ${esc(slugOf({ie:sc.ie||'פנים',loc:sc.loc||'…',time:sc.time||'יום'}))}</div></div>`:''}
+  </section>
+  <section class="panel"><h3>3. השורות של הסצנה</h3>
+    <p class="help">אחרי הכותרת באה שורת <b>אקשן</b>: מה רואים כשהסצנה נפתחת. אחר כך הדמויות מדברות. בכל שורה כותבים כמה אפשרויות, <b>כל אפשרות בשורה נפרדת</b>, והתלמידים בוחרים ביניהן.</p>
+    <p class="help">כדי שהתלמידים יוכלו לבחור שמות, לוחצים על <b>"שם דמות א"</b> במקום לכתוב שם. ומילה שמשתנה בין בן לבת (נכנס/נכנסה) מכניסים עם <b>"מילה שמשתנה לבן/בת"</b>. מתחת לכל שורה רואים איך זה ייראה.</p>
+    <div class="row"><button type="button" class="btn small" data-act="t-flip">בדוגמה: ${T.flip?'נועה (בת) ודני (בן)':'דני (בן) ונועה (בת)'} · החלף</button></div>
+    ${st.beats.map((b,i)=>{ const k=ci(b.t); return `<div class="beat ${b.t==='act'?'act':'c'+k}"><div class="beat-head"><span class="num">${i+1}</span>
+      <select data-tin="btype" data-i="${i}" aria-label="סוג שורה ${i+1}"><option value="act" ${b.t==='act'?'selected':''}>${typeLabel('act')}</option>${KEYS.slice(0,nChars).map(K2=>`<option value="${K2}" ${b.t===K2?'selected':''}>${typeLabel(K2)}</option>`).join('')}</select>
+      <span class="sp"></span><button type="button" class="iconbtn" data-act="t-up" data-i="${i}" aria-label="הזז למעלה" ${i===0?'disabled':''}>↑</button><button type="button" class="iconbtn" data-act="t-down" data-i="${i}" aria-label="הזז למטה" ${i===st.beats.length-1?'disabled':''}>↓</button><button type="button" class="iconbtn" data-act="t-del" data-i="${i}" aria-label="מחק שורה">×</button></div>
+      <div class="field"><label for="b-${i}">${b.t==='act'?'מה רואים? (כל אפשרות בשורה נפרדת)':'מה הדמות אומרת? (כל אפשרות בשורה נפרדת)'}</label><textarea id="b-${i}" data-tin="bopts" data-i="${i}">${esc(b.o.join('\n'))}</textarea></div>
+      ${beatTools(i,nChars)}
+      <div id="pv-${i}">${beatPreview(b)}</div></div>`;}).join('')}
+    <div class="row"><button type="button" class="btn small" data-act="t-add" data-t="act">+ שורת אקשן</button><button type="button" class="btn small" data-act="t-add" data-t="dlg">+ דמות מדברת</button></div></section>
+  <div class="nav">${T.err?`<span class="err">${esc(T.err)}</span>`:'<span></span>'}<div class="row"><button type="button" class="btn ghost" data-act="t-cancel">ביטול</button><button type="button" class="btn pri" data-act="t-save">שמור סיפור</button></div></div>`;
+}
+
+function render(){
+  const app=document.getElementById('app');
+  const ae=document.activeElement, focusId=ae&&ae.id, selS=ae&&ae.selectionStart;
+  let body;
+  if(view==='teacher') body=teacherView();
+  else if(view==='pin'||view==='pinset') body=pinView();
+  else if(view==='groups') body=groupsView();
+  else body = groupBar() + track() + (S.step===1?stepStory():S.step===2?stepTopic():S.step===3?stepChars():stepScript());
+  app.innerHTML = header() + body;
+  if(focusId){ const el=document.getElementById(focusId); if(el){ el.focus({preventScroll:true}); try{ if(selS!=null) el.setSelectionRange(selS,selS); }catch(e){} } }
+}
+
+/* ================= teacher text insertion ================= */
+function insertTok(i, tok){
+  const el=document.getElementById('b-'+i); if(!el) return;
+  const pos = (document.activeElement===el ? el.selectionStart : caret[i]) ?? el.value.length;
+  const end = (document.activeElement===el ? el.selectionEnd : pos) ?? pos;
+  const before=el.value.slice(0,pos), after=el.value.slice(end);
+  const pad = before && !/\s$/.test(before) && !/(^|\s)[ובלשהמכ]$/.test(before) ? ' ' : '';   // keep Hebrew prefixes glued: ו{ב}
+  el.value = before + pad + tok + after;
+  const p = before.length + pad.length + tok.length; caret[i]=p;
+  T.editing.beats[i].o = el.value.split('\n');
+  el.focus(); el.setSelectionRange(p,p);
+  const pv=document.getElementById('pv-'+i); if(pv) pv.innerHTML=beatPreview(T.editing.beats[i]);
+}
+
+/* ================= events ================= */
+document.addEventListener('click', e=>{
+  const b=e.target.closest('[data-act]'); if(!b) return;
+  const a=b.dataset.act, i=+b.dataset.i;
+  if(a==='mode'){ view = (view==='kid'||view==='groups') ? (pinSaved?'pin':'pinset') : (curGroup()?'kid':'groups'); T.editing=null; T.code=''; T.pinErr=''; render(); scrollTo(0,0);
+    if(view!=='kid') setTimeout(()=>{ const el=document.getElementById('pin1'); if(el) el.focus(); },0); return; }
+  if(a==='pin-go'||a==='pin-set'){ pinSubmit(); return; }
+  if(a==='pin-change'){ view='pinset'; T.pinErr=''; render(); scrollTo(0,0); return; }
+  if(a==='pin-cancel'){ view='teacher'; T.pinErr=''; render(); return; }
+  if(a==='g-switch'){ save(); curId=null; store(K.cur,null); view='groups'; T.groupErr=''; render(); scrollTo(0,0); return; }
+  if(a==='g-open'){ const g=groups.find(x=>x.id===b.dataset.id); if(!g) return; curId=g.id; store(K.cur,curId); S=g.state; openLine=-1;
+    if(S.storyId && !storyById(S.storyId)){ S.storyId=null; S.step=1; S.lines=null; }
+    view='kid'; render(); scrollTo(0,0); toast('ממשיכים: '+g.team); return; }
+  if(a==='g-new'){ const v=id=>((document.getElementById(id)||{}).value||'').trim();
+    const school=v('g-school'), cls=v('g-cls'), team=v('g-team'), title=v('g-title');
+    if(!team){ T.groupErr='כתבו שם לקבוצה, או את השמות שלכם.'; render(); const el=document.getElementById('g-team'); if(el) el.focus(); return; }
+    store(K.last,{school,cls});
+    const st=freshState(); if(title){ st.title=title; st.keepTitle=title; } st.authors=team;
+    const g={id:'grp-'+Date.now().toString(36), school, cls, team, created:Date.now(), updated:Date.now(), state:st};
+    groups.push(g); curId=g.id; store(K.cur,curId); S=st; save(); T.groupErr=''; view='kid'; openLine=-1; render(); scrollTo(0,0); toast('בהצלחה, '+team+'!'); return; }
+  if(a==='g-more'){ const g=groups.find(x=>x.id===b.dataset.id); if(!g) return; g.state.audExtra=(g.state.audExtra||0)+1; store(K.groups,groups); render(); toast('נוסף אודישן ל'+g.team); return; }
+  if(a==='g-del'){ if(!b.dataset.sure){ b.dataset.sure='1'; b.textContent='בטוח? לחץ שוב'; return; }
+    groups=groups.filter(x=>x.id!==b.dataset.id); store(K.groups,groups); if(curId===b.dataset.id){ curId=null; store(K.cur,null); S=freshState(); } render(); toast('הקבוצה נמחקה'); return; }
+  if(a==='go'){ const k=+b.dataset.k; if(k>1 && !S.storyId) return; S.step=k; openLine=-1; if(k>=3) ensureChars(); save(); render(); scrollTo(0,0); return; }
+  if(a==='story'){ startStory(b.dataset.id); S.step=2; save(); render(); scrollTo(0,0); return; }
+  if(a==='topic'){ S.topic=b.dataset.id; S.scene=null; save(); render(); return; }
+  if(a==='gender'){ S.chars[i].g=b.dataset.g; save(); render(); return; }
+  if(a==='pickname'){ S.chars[i].name=b.dataset.n; save(); render(); return; }
+  if(a==='addchar'){ if(S.chars.length<6){ S.chars.push(newChar()); save(); render(); setTimeout(()=>{ const el=document.getElementById('name-'+(S.chars.length-1)); if(el) el.focus(); },0);} return; }
+  if(a==='rmchar'){ const key=KEYS[i]; if((S.lines||[]).some(L=>L.t===key)){ toast('לדמות הזו יש שורות בתסריט. קודם מחקו אותן.'); return; } S.chars.splice(i,1); save(); render(); return; }
+  if(a==='scene'){ openLine = openLine==='scene'?-1:'scene'; render(); return; }
+  if(a==='sc'){ S.scene=Object.assign({}, S.scene||{}, {[b.dataset.f]:b.dataset.v}); save(); render(); return; }
+  if(a==='screset'){ S.scene=null; save(); render(); return; }
+  if(a==='line'){ openLine = openLine===i?-1:i; render(); return; }
+  if(a==='close'){ openLine=-1; render(); return; }
+  if(a==='choose'){ S.lines[i].pick=+b.dataset.j; save(); render(); return; }
+  if(a==='settype'){ S.lines[i].t=b.dataset.t; save(); render(); return; }
+  if(a==='addline'){ const at=i+1, prev=S.lines[i]; const t = prev&&prev.t==='A'?'B':'A'; S.lines.splice(at,0,{t,opts:[],pick:-1,custom:''}); openLine=at; save(); render();
+    setTimeout(()=>{ const el=document.getElementById('custom-'+at); if(el) el.focus(); },0); return; }
+  if(a==='delline'){ S.lines.splice(i,1); openLine=-1; save(); render(); return; }
+  if(a==='finish'){ S.done=true; openLine=-1; save(); render(); setTimeout(()=>{ const f=document.querySelector('.finish'); if(f) f.scrollIntoView({block:'center',behavior:'smooth'}); },0); return; }
+  if(a==='unfinish'){ S.done=false; save(); render(); return; }
+  if(a==='shuffle'){ for(const L of S.lines) if(L.opts.length){ L.pick=Math.floor(Math.random()*L.opts.length); } openLine=-1; save(); render(); toast('הוגרל תסריט חדש'); return; }
+  if(a==='copy'){ copy(scriptText(),'התסריט הועתק'); return; }
+  if(a==='file'){ saveFile(((S.title||'תסריט').replace(/[\\/:*?"<>|]/g,''))+'.txt', scriptText()); return; }
+  if(a==='reset'){ if(b.dataset.sure){ startStory(S.storyId); render(); toast('התחלנו מחדש'); } else { b.dataset.sure='1'; b.textContent='בטוחים? לחצו שוב'; } return; }
+  if(a==='kidimport'){ const v=(document.getElementById('kidcode')||{}).value; T.importErr=''; T.importOk='';
+    try{ const st=receive(v); T.importOk='נוסף: '+st.title; render(); }catch(err){ T.importErr='הקוד לא נכון. בדקו שהעתקתם את כולו.'; render(); } return; }
+
+  // teacher
+  if(a==='t-new'){ T.editing={id:'m-'+Date.now().toString(36), genre:'', title:'', desc:'', scene:{m:'topic'}, beats:[{t:'act',o:['']},{t:'A',o:['']},{t:'B',o:['']}]}; T.err=''; T.gform=-1; render(); scrollTo(0,0); return; }
+  if(a==='t-dup'){ const s=BUILTIN.find(x=>x.id===b.dataset.id); T.editing={id:'m-'+Date.now().toString(36), genre:s.genre, title:s.title+' (שלי)', desc:s.desc, scene:{m:'topic'}, beats:s.beats.map(x=>({t:x.t,o:x.o.slice()}))}; T.err=''; T.gform=-1; render(); scrollTo(0,0); return; }
+  if(a==='t-edit'){ const s=mine.find(x=>x.id===b.dataset.id); T.editing=JSON.parse(JSON.stringify(s)); if(!T.editing.scene) T.editing.scene={m:'topic'}; T.err=''; T.gform=-1; render(); scrollTo(0,0); return; }
+  if(a==='t-cancel'){ T.editing=null; render(); return; }
+  if(a==='t-flip'){ T.flip=!T.flip; render(); return; }
+  if(a==='t-sc'){ T.editing.scene=Object.assign({ie:'פנים',time:'יום',loc:''}, T.editing.scene, {[b.dataset.f]:b.dataset.v}); render(); return; }
+  if(a==='t-add'){ const bs=T.editing.beats; let t=b.dataset.t;
+    if(t==='dlg'){ const last=[...bs].reverse().find(x=>x.t!=='act'); t = last&&last.t==='A'?'B':'A'; }
+    bs.push({t,o:['']}); render(); setTimeout(()=>{ const el=document.getElementById('b-'+(bs.length-1)); if(el) el.focus(); },0); return; }
+  if(a==='t-del'){ T.editing.beats.splice(i,1); T.gform=-1; render(); return; }
+  if(a==='t-up'||a==='t-down'){ const j=a==='t-up'?i-1:i+1, bs=T.editing.beats; [bs[i],bs[j]]=[bs[j],bs[i]]; T.gform=-1; render(); return; }
+  if(a==='t-ins'){ insertTok(i, b.dataset.tok); return; }
+  if(a==='t-gopen'){ T.gform = T.gform===i?-1:i; render(); setTimeout(()=>{ const el=document.getElementById('g-m'); if(el) el.focus(); },0); return; }
+  if(a==='t-gclose'){ T.gform=-1; render(); return; }
+  if(a==='t-gins'){ const who=document.getElementById('g-who').value, m=document.getElementById('g-m').value.trim(), f=document.getElementById('g-f').value.trim();
+    if(!m||!f){ toast('כתבו את המילה גם לבן וגם לבת'); return; }
+    T.gform=-1; render(); insertTok(i, `{${who}:${m}|${f}}`); return; }
+  if(a==='t-save'){ const st=T.editing;
+    st.beats = st.beats.map(x=>({t:x.t,o:x.o.map(s=>s.trim()).filter(Boolean)})).filter(x=>x.o.length);
+    if(!st.title.trim()){ T.err='חסר שם לסיפור.'; render(); return; }
+    if(st.scene&&st.scene.m==='custom'&&!(st.scene.loc||'').trim()){ T.err='כתבו את המקום של הסצנה, או בחרו שהתלמידים יבחרו מקום.'; render(); return; }
+    if(st.beats.length<2){ T.err='צריך לפחות שתי שורות עם אפשרויות.'; render(); return; }
+    if(!st.genre.trim()) st.genre='סיפור';
+    const k=mine.findIndex(m=>m.id===st.id); if(k>=0) mine[k]=st; else mine.unshift(st);
+    store(K.mine, mine); T.editing=null; T.err=''; render(); scrollTo(0,0); toast('הסיפור נשמר'); return; }
+  if(a==='t-share'){ const s=mine.find(x=>x.id===b.dataset.id), code=encodeStory(s);
+    T.code={id:s.id, code, link: location.origin+location.pathname+'#story='+code}; render(); return; }
+  if(a==='t-copycode'){ copy(canLink?T.code.link:T.code.code, canLink?'הקישור הועתק':'הקוד הועתק'); return; }
+  if(a==='t-copyraw'){ copy(T.code.code,'הקוד הועתק'); return; }
+  if(a==='t-try'){ if(!curGroup()){ const g={id:'grp-'+Date.now().toString(36), school:'', cls:'', team:'ניסיון מורה', created:Date.now(), updated:Date.now(), state:freshState()}; groups.push(g); curId=g.id; store(K.cur,curId); S=g.state; }
+    view='kid'; startStory(b.dataset.id); S.step=2; save(); render(); scrollTo(0,0); return; }
+});
+document.addEventListener('input', e=>{
+  const el=e.target;
+  if(el.dataset.in==='name'){ S.chars[+el.dataset.i].name=el.value; save(); return; }
+  if(el.dataset.in==='title'){ S.title=el.value; save(); const p=document.querySelector('.ptitle'); if(p) p.textContent=el.value; return; }
+  if(el.dataset.in==='authors'){ S.authors=el.value; save(); const p=document.querySelector('.pby'); if(p) p.textContent=el.value?'כתבו: '+el.value:' '; return; }
+  if(el.dataset.in==='scloc'){ S.scene=Object.assign({}, S.scene||{}, {loc:el.value}); save(); const p=document.querySelector('.slugline'); if(p) p.lastChild.textContent='סצנה 1. '+scene().slug; return; }
+  if(el.dataset.in==='custom'){ const L=S.lines[+el.dataset.i]; L.custom=el.value; L.pick = el.value.trim()||!L.opts.length ? -1 : (L.pick===-1?0:L.pick); save();
+    const ln=document.querySelector(`.ln[data-i="${el.dataset.i}"] .say`); if(ln) ln.textContent=lineText(L)||'(שורה ריקה)';
+    document.querySelectorAll(`.opt[data-i="${el.dataset.i}"]`).forEach(o=>o.setAttribute('aria-pressed', String(+o.dataset.j===L.pick)));
+    return; }
+  if(el.dataset.tin && T.editing){
+    const f=el.dataset.tin;
+    if(f==='title'||f==='genre'||f==='desc') T.editing[f]=el.value;
+    if(f==='scloc'){ T.editing.scene=Object.assign({ie:'פנים',time:'יום'}, T.editing.scene, {loc:el.value}); const p=document.getElementById('t-slugpv'); if(p) p.textContent='סצנה 1. '+slugOf({ie:T.editing.scene.ie,loc:el.value||'…',time:T.editing.scene.time}); }
+    if(f==='bopts'){ const i=+el.dataset.i; T.editing.beats[i].o = el.value.split('\n'); caret[i]=el.selectionStart; const pv=document.getElementById('pv-'+i); if(pv) pv.innerHTML=beatPreview(T.editing.beats[i]); }
+  }
+});
+document.addEventListener('change', e=>{
+  const el=e.target;
+  if(el.dataset.in==='name'||el.dataset.in==='scloc'){ render(); return; }
+  if(el.dataset.tin==='btype' && T.editing){ T.editing.beats[+el.dataset.i].t=el.value; render(); return; }
+  if(el.dataset.tin==='scm' && T.editing){ T.editing.scene=Object.assign({ie:'פנים',time:'יום',loc:''}, T.editing.scene, {m:el.value}); render(); return; }
+});
+document.addEventListener('keydown', e=>{ if(e.key==='Enter' && (e.target.id==='pin1'||e.target.id==='pin2')){ e.preventDefault(); if(e.target.id==='pin1' && view==='pinset'){ const n=document.getElementById('pin2'); if(n) n.focus(); return; } pinSubmit(); } });
+const remember = e=>{ const el=e.target; if(el.dataset && el.dataset.tin==='bopts') caret[+el.dataset.i]=el.selectionStart; };
+document.addEventListener('keyup', remember); document.addEventListener('click', remember, true); document.addEventListener('focusout', remember);
+
+/* ================= audition: camera + script side by side ================= */
+const AUD = {mode:'aud', who:0, idx:0, stream:null, facing:'user', rec:null, chunks:[], url:'', mime:'', ext:'webm', t0:0, timer:0, actor:'', blob:null};
+const $id = id => document.getElementById(id);
+const audLines = () => (S.lines||[]).map((L,i)=>({i, t:L.t, text:lineText(L)})).filter(x=>x.text && x.text.trim());
+const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+
+function openAud(mode){
+  const lines=audLines(); if(!lines.length){ toast('אין עדיין שורות בתסריט'); return; }
+  AUD.mode = mode||'aud';
+  if(AUD.mode==='aud' && audLeft()===0){ toast('נגמרו האודישנים. עכשיו אקשן!'); render(); return; }
+  AUD.facing = AUD.mode==='scene' ? 'environment' : 'user';   // the scene is filmed by a friend, an audition by yourself
+  const speakers=[...new Set(lines.filter(x=>x.t!=='act').map(x=>ci(x.t)))];
+  if(!speakers.includes(AUD.who)) AUD.who = speakers[0] ?? 0;
+  AUD.idx = 0;
+  $id('aud').hidden=false; document.body.style.overflow='hidden';
+  renderAudSide(); startAudCam();
+}
+function closeAud(){
+  if(AUD.rec && AUD.rec.state==='recording'){ AUD.rec.onstop=null; AUD.rec.stop(); }
+  clearInterval(AUD.timer); stopAudCam(); hideReview();
+  $id('aud').hidden=true; document.body.style.overflow=''; render();
+}
+function camMsg(html){ const m=$id('audMsg'); m.innerHTML=html; m.hidden=!html; }
+async function startAudCam(){
+  stopAudCam(); camMsg('');
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ camMsg(noCamText()); return; }
+  const v={facingMode:{ideal:AUD.facing}, width:{ideal:1280}, height:{ideal:720}};
+  try{ AUD.stream = await navigator.mediaDevices.getUserMedia({video:v, audio:true}); }
+  catch(e){ try{ AUD.stream = await navigator.mediaDevices.getUserMedia({video:v}); } catch(e2){ camMsg(noCamText(e2)); return; } }
+  const vid=$id('audVid'); vid.srcObject=AUD.stream; vid.classList.toggle('mirror', AUD.facing==='user');
+  vid.play().catch(()=>{});
+}
+function noCamText(err){
+  if(!canLink) return '<b>המצלמה לא נפתחת בתצוגה של Claude.</b>זה יעבוד באפליקציה עצמה, בקישור של GitHub.<br>בינתיים אפשר לעשות חזרות עם התסריט שלמטה.';
+  return '<b>אין גישה למצלמה.</b>אשרו גישה למצלמה ולמיקרופון בהגדרות הדפדפן, ונסו שוב.' + (err&&err.name?`<br><small>(${esc(err.name)})</small>`:'');
+}
+function stopAudCam(){ if(AUD.stream){ AUD.stream.getTracks().forEach(t=>t.stop()); AUD.stream=null; } const v=$id('audVid'); if(v) v.srcObject=null; }
+
+function slateText(){
+  if(AUD.mode==='scene') return `<b>סצנה 1</b> · טייק ${(S.takes||0)+1}<br>${esc(S.title||'')}`;
+  const role=charName(S.chars,AUD.who);
+  return `<b>אודישן</b> · ${esc(AUD.actor||'השחקן/ית')} בתפקיד <b>${esc(role)}</b><br>${esc(S.title||'')}`;
+}
+function renderAudSide(){
+  const lines=audLines();
+  const speakers=[...new Set(lines.filter(x=>x.t!=='act').map(x=>ci(x.t)))].sort((a,b)=>a-b);
+  if(AUD.mode==='scene') $id('audHead').innerHTML = `<b style="font-size:17px">🎬 צילום הסצנה · טייק ${(S.takes||0)+1}</b>
+    <span class="lbl">מישהו אחד מצלם, וכולם משחקים. התסריט כאן כדי להציץ בו בין טייקים.</span>`;
+  else $id('audHead').innerHTML = `<span class="lbl">${audLeft()?`אודישן ${(S.auds||0)+1} מתוך ${audLimit()}`:'<b style="color:#FFC23D">סיימתם את כל האודישנים! סגרו ולחצו אקשן.</b>'}</span>
+    <span class="lbl">על איזה תפקיד האודישן?</span>
+    <div class="row">${speakers.map(k=>`<button type="button" class="rolechip" data-act="aud-who" data-k="${k}" aria-pressed="${AUD.who===k}">${esc(charName(S.chars,k))}</button>`).join('')}</div>
+    <div class="row"><label class="lbl" for="audActor">מי משחק?</label><input type="text" id="audActor" value="${esc(AUD.actor)}" placeholder="שם השחקן/ית" maxlength="24"></div>`;
+  $id('audTele').innerHTML = lines.map((x,n)=>{
+    const mine = AUD.mode==='aud' && x.t!=='act' && ci(x.t)===AUD.who;
+    if(x.t==='act') return `<button type="button" class="tl act ${n===AUD.idx?'cur':''}" data-act="aud-go" data-n="${n}">${esc(x.text)}</button>`;
+    return `<button type="button" class="tl ${mine?'mine':''} ${n===AUD.idx?'cur':''}" data-act="aud-go" data-n="${n}"><i>${esc(charName(S.chars,ci(x.t)))}</i>${esc(x.text)}</button>`;
+  }).join('');
+  $id('audSlate').innerHTML = slateText();
+  const cur=$id('audTele').querySelector('.cur'); if(cur) cur.scrollIntoView({block:'center', behavior:'smooth'});
+}
+function audGo(n){ const L=audLines().length; AUD.idx=Math.max(0,Math.min(L-1,n)); renderAudSide(); }
+
+function pickMime(){
+  if(typeof MediaRecorder==='undefined') return null;
+  for(const [m,ext] of [['video/mp4;codecs=avc1,mp4a','mp4'],['video/mp4','mp4'],['video/webm;codecs=vp9,opus','webm'],['video/webm;codecs=vp8,opus','webm'],['video/webm','webm']]){
+    try{ if(MediaRecorder.isTypeSupported(m)) return {m,ext}; }catch(e){}
+  }
+  return {m:'',ext:'webm'};
+}
+function fmt(ms){ const s=Math.floor(ms/1000); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+async function toggleRec(){
+  if(AUD.rec && AUD.rec.state==='recording'){ AUD.rec.stop(); return; }
+  if(!AUD.stream){ toast(canLink?'המצלמה לא פעילה':'המצלמה עובדת רק באפליקציה עצמה'); return; }
+  if(AUD.mode==='aud' && audLeft()===0){ toast('נגמרו האודישנים. סגרו ולחצו אקשן!'); return; }
+  const mt=pickMime(); if(!mt){ toast('הדפדפן הזה לא יודע להקליט וידאו'); return; }
+  const c=$id('audCount'); c.hidden=false;
+  for(const n of [3,2,1]){ c.textContent=n; await new Promise(r=>setTimeout(r,800)); }
+  if(AUD.mode==='scene'){ c.textContent='אקשן!'; await new Promise(r=>setTimeout(r,600)); }
+  c.hidden=true;
+  AUD.chunks=[]; AUD.mime=mt.m; AUD.ext=mt.ext;
+  try{ AUD.rec = mt.m ? new MediaRecorder(AUD.stream,{mimeType:mt.m}) : new MediaRecorder(AUD.stream); }
+  catch(e){ toast('לא הצלחתי להתחיל הקלטה'); return; }
+  AUD.rec.ondataavailable = e=>{ if(e.data && e.data.size) AUD.chunks.push(e.data); };
+  AUD.rec.onstop = ()=>{
+    clearInterval(AUD.timer); $id('audRec').classList.remove('on'); $id('audTime').classList.remove('on');
+    AUD.blob = new Blob(AUD.chunks, {type: AUD.rec.mimeType || AUD.mime || 'video/webm'});
+    if(AUD.url) URL.revokeObjectURL(AUD.url);
+    AUD.url = URL.createObjectURL(AUD.blob);
+    const p=$id('audPlay'); p.src=AUD.url; $id('audReview').hidden=false;
+    // a recording shorter than 3 seconds is a false start and does not count
+    if(Date.now()-AUD.t0 >= 3000){
+      if(AUD.mode==='scene'){ AUD.takeNo=(S.takes||0)+1; S.takes=AUD.takeNo; }
+      else { S.auds=(S.auds||0)+1; if(!audLeft()) toast('זה היה האודישן האחרון. עכשיו אקשן!'); }
+      save();
+    }
+    renderAudSide();
+  };
+  AUD.rec.start(500); AUD.t0=Date.now();
+  $id('audRec').classList.add('on'); $id('audTime').classList.add('on');
+  AUD.timer=setInterval(()=>{ $id('audTime').textContent=fmt(Date.now()-AUD.t0); },250);
+}
+function hideReview(){ const p=$id('audPlay'); if(p){ p.pause(); p.removeAttribute('src'); p.load(); } const r=$id('audReview'); if(r) r.hidden=true; $id('audTime').textContent='00:00'; }
+function saveTake(){
+  if(!AUD.blob) return;
+  const d=new Date(), pad=n=>String(n).padStart(2,'0');
+  const kind = AUD.mode==='scene' ? `scene1-take${AUD.takeNo||1}` : 'audition';
+  const name=`${kind}-${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}.${AUD.ext}`; // ASCII: some browsers drop Hebrew download names
+  const file=new File([AUD.blob], name, {type:AUD.blob.type||'video/'+AUD.ext});
+  if(IS_IOS && navigator.canShare && navigator.canShare({files:[file]})){ navigator.share({files:[file]}).catch(()=>{}); return; }
+  const a=document.createElement('a'); a.href=AUD.url; a.download=name; document.body.appendChild(a); a.click(); a.remove();
+  toast('הסרטון נשמר בטלפון');
+}
+
+document.addEventListener('click', e=>{
+  const b=e.target.closest('[data-act^="aud"]'); if(!b) return;
+  const a=b.dataset.act;
+  if(a==='aud-open') openAud('aud');
+  else if(a==='aud-scene') openAud('scene');
+  else if(a==='aud-close') closeAud();
+  else if(a==='aud-flip'){ AUD.facing = AUD.facing==='user'?'environment':'user'; startAudCam(); }
+  else if(a==='aud-rec') toggleRec();
+  else if(a==='aud-save') saveTake();
+  else if(a==='aud-retake') hideReview();
+  else if(a==='aud-who'){ AUD.who=+b.dataset.k; const lines=audLines(); const n=lines.findIndex(x=>ci(x.t)===AUD.who); AUD.idx=Math.max(0,n); renderAudSide(); }
+  else if(a==='aud-next') audGo(AUD.idx+1);
+  else if(a==='aud-prev') audGo(AUD.idx-1);
+  else if(a==='aud-go') audGo(+b.dataset.n);
+});
+document.addEventListener('input', e=>{ if(e.target.id==='audActor'){ AUD.actor=e.target.value; $id('audSlate').innerHTML=slateText(); } });
+document.addEventListener('keydown', e=>{ if($id('aud').hidden || e.target.tagName==='INPUT') return;
+  if(e.key==='ArrowLeft'||e.key===' '){ e.preventDefault(); audGo(AUD.idx+1); } else if(e.key==='ArrowRight'){ audGo(AUD.idx-1); } else if(e.key==='Escape') closeAud(); });
+
+/* ================= boot ================= */
+function bootFromHash(){
+  const h=location.hash||'';
+  if(h.startsWith('#story=')){
+    try{ const st=receive(h); if(curGroup()){ view='kid'; startStory(st.id); S.step=2; save(); } toast('קיבלתם סיפור מהמורה: '+st.title); }
+    catch(e){ toast('הקישור לסיפור לא תקין'); }
+    try{ history.replaceState(null,'',location.pathname); }catch(e){}
+  }
+}
+if(S.storyId && !storyById(S.storyId)){ S.storyId=null; S.step=1; S.lines=null; }
+bootFromHash();
+render();
+addEventListener('hashchange', ()=>{ bootFromHash(); render(); });
+})();
+</script>
+<script>
+// Keeps a copy of the app on the tablet, so it opens without Wi-Fi after the first visit.
+if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
+  addEventListener('load', ()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); });
+}
+</script>
+
+</body></html>
