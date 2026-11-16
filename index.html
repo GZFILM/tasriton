@@ -6,8 +6,8 @@
 <title>תסריטון</title>
 <meta name="description" content="כותבים סצנה, שורה אחרי שורה: אפליקציית תסריט לכיתות ג׳–ו׳">
 <meta name="theme-color" content="#1D1B38">
-<meta name="author" content="גל זיו · Gal Ziv MOTION LAB">
-<meta name="copyright" content="© 2026 Gal Ziv MOTION LAB. All rights reserved.">
+<meta name="author" content="GZ MOTION LAB">
+<meta name="copyright" content="© 2026 GZ MOTION LAB">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="תסריטון">
 <meta property="og:title" content="תסריטון">
@@ -350,11 +350,12 @@ document.documentElement.dir='rtl'; document.documentElement.lang='he';
 //   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
 //   {מקום} {למקום} {במקום}   the place of the scene
 //   {חפץ} {אירוע}            the important object and the event from the chosen topic
-const APP_VERSION = '1.10';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
+const APP_VERSION = '1.11';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
 const APP_DATE = '16.11.2026';
 const APP_URL = 'https://gzfilm.github.io/tasriton/';
 // "What's new": newest first. Add an entry here with every update.
 const CHANGES = [
+  {v:'1.11', d:'16.11.2026', items:['שורת הקרדיט: © 2026 GZ MOTION LAB']},
   {v:'1.10', d:'16.11.2026', items:['בלוגו: משענת הכיסא נראית כמו דף מחברת, עם שורות וקו שוליים']},
   {v:'1.9', d:'16.11.2026', items:['המרדף אחרי שוקו: בוחרים איפה מתחילים, בכיתה או במסדרון']},
   {v:'1.8', d:'16.11.2026', items:['לוגו חדש ונקי: כיסא במאי בצהוב על כחול']},
@@ -674,7 +675,7 @@ function aboutView(){
   <section class="panel"><h3>להוסיף למסך הבית</h3>
     <p class="help"><b>אייפון ואייפד (Safari):</b> כפתור השיתוף ← "הוסף למסך הבית".<br><b>אנדרואיד (Chrome):</b> שלוש הנקודות ← "התקנת אפליקציה".</p></section>
   <section class="panel"><h3>זכויות</h3>
-    <p>© 2026 גל זיו MOTION LAB. כל הזכויות שמורות.</p><p dir="ltr" lang="en" style="text-align:left">© 2026 Gal Ziv MOTION LAB. All rights reserved.</p>
+    <p dir="ltr" lang="en" style="text-align:right">© 2026 GZ MOTION LAB</p>
     <div class="row"><button type="button" class="btn ghost" data-act="m-home">חזרה</button></div></section>`;
 }
 async function shareApp(){
@@ -980,7 +981,7 @@ function render(){
   else if(view==='news') body=newsView();
   else if(view==='about') body=aboutView();
   else body = groupBar() + track() + (S.step===1?stepStory():S.step===2?stepTopic():S.step===3?stepChars():stepScript());
-  app.innerHTML = header() + body + `<footer class="copy"><span>© 2026 גל זיו MOTION LAB. כל הזכויות שמורות.</span><span dir="ltr" lang="en">© 2026 Gal Ziv MOTION LAB. All rights reserved.</span></footer>`;
+  app.innerHTML = header() + body + `<footer class="copy"><span dir="ltr" lang="en">© 2026 GZ MOTION LAB</span></footer>`;
   if(focusId){ const el=document.getElementById(focusId); if(el){ el.focus({preventScroll:true}); try{ if(selS!=null) el.setSelectionRange(selS,selS); }catch(e){} } }
 }
 
