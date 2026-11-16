@@ -106,7 +106,7 @@ h1,h2,h3,p{margin:0}
 .pick[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 3px var(--accent) inset}
 .pick h3{font-size:18px;font-weight:700}
 .pick p{font-size:14px;color:var(--muted)}
-.genre{align-self:flex-start;font-size:12px;font-weight:500;padding:2px 9px;border-radius:999px;background:var(--field);border:1px solid var(--line)}
+.genre{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:3px 10px 3px 8px;border-radius:999px;background:var(--field);border:1px solid var(--line)}
 .from{position:absolute;top:10px;inset-inline-end:10px;font-size:11px;font-weight:700;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:1px 8px}
 .slug{font-family:var(--script);font-size:14px;color:var(--muted);direction:rtl}
 
@@ -233,6 +233,7 @@ h1,h2,h3,p{margin:0}
 .myitem span{font-size:13px;color:var(--muted)}
 .empty{border:1.5px dashed var(--line);border-radius:12px;padding:16px;text-align:center;color:var(--muted);font-size:14px}
 .err{color:var(--a);font-size:14px}
+.gi{flex:none;width:21px;height:21px;vertical-align:-5px}
 .copy{margin-top:18px;padding-top:12px;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12.5px;color:var(--muted);text-align:center}
 .grpbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;font-size:15px}
 .pinbox{max-width:420px;width:100%;align-self:center}
@@ -286,11 +287,12 @@ h1,h2,h3,p{margin:0}
 #splash.out{opacity:0;pointer-events:none}
 .sp-in{display:flex;flex-direction:column;align-items:center;gap:28px;padding:24px}
 .sp-logo{width:min(46vw,210px);height:auto;border-radius:22%;box-shadow:0 18px 50px rgba(0,0,0,.45);animation:spLogo .8s cubic-bezier(.2,.9,.3,1.3) both}
-.sp-words{display:flex;gap:.45em;font-family:"Secular One","Rubik",Arial,sans-serif;font-size:clamp(30px,8vw,52px);line-height:1;color:#EEEEF8;white-space:nowrap}
+.sp-words{display:flex;gap:.32em;font-family:"Secular One","Rubik",Arial,sans-serif;font-size:clamp(30px,8vw,52px);line-height:1;color:#EEEEF8;white-space:nowrap}
 .sp-words span{opacity:0;animation:spWord .5s ease-out both}
 .sp-words .w1{animation-delay:.85s}
-.sp-words .w2{animation-delay:1.35s}
-.sp-words .w3{color:#FFC23D;animation:spAction .55s cubic-bezier(.2,.9,.3,1.5) both;animation-delay:1.9s}
+.sp-words .w2{animation-delay:1.25s}
+.sp-words .w3{animation-delay:1.65s}
+.sp-words .w4{color:#FFC23D;animation:spAction .55s cubic-bezier(.2,.9,.3,1.5) both;animation-delay:2.15s}
 @keyframes spLogo{0%{opacity:0;transform:scale(.55) rotate(-6deg)}100%{opacity:1;transform:none}}
 @keyframes spWord{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:none}}
 @keyframes spAction{0%{opacity:0;transform:scale(.4)}100%{opacity:1;transform:none}}
@@ -324,7 +326,7 @@ h1,h2,h3,p{margin:0}
 </g>
 <rect x="122" y="286" width="268" height="34" rx="6" fill="#E8A92A"/>
 </g></svg>
-<div class="sp-words" dir="ltr" lang="en"><span class="w1">Write.</span><span class="w2">Say.</span><span class="w3">Action!</span></div>
+<div class="sp-words" dir="ltr" lang="en"><span class="w1">Write</span><span class="w2">and</span><span class="w3">say</span><span class="w4">Action!</span></div>
 </div>
 </div>
 <script>
@@ -333,7 +335,7 @@ h1,h2,h3,p{margin:0}
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const end=()=>{ if(!sp.isConnected) return; sp.classList.add('out'); setTimeout(()=>sp.remove(), 450); };
   sp.addEventListener('click', end);
-  setTimeout(end, reduce ? 1200 : 3000);
+  setTimeout(end, reduce ? 1200 : 3300);
 })();
 </script>
 <div class="wrap" dir="rtl" lang="he" id="app"></div>
@@ -370,12 +372,13 @@ document.documentElement.dir='rtl'; document.documentElement.lang='he';
 //   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
 //   {מקום} {למקום} {במקום}   the place of the scene
 //   {חפץ} {אירוע}            the important object and the event from the chosen topic
-const APP_VERSION = '1.4';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
+const APP_VERSION = '1.5';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
 const APP_DATE = '16.11.2026';
 const APP_URL = 'https://gzfilm.github.io/tasriton/';
 // "What's new": newest first. Add an entry here with every update.
 const CHANGES = [
-  {v:'1.4', d:'16.11.2026', items:['מסך פתיחה מונפש: Write. Say. Action!','נגיעה במסך מדלגת על הפתיחה']},
+  {v:'1.5', d:'16.11.2026', items:['אייקונים קטנים לכל ז׳אנר: קומדיה, הרפתקה, בלשי, מדע בדיוני, דרמה, פנטזיה ואימה קלה','מסך הפתיחה: Write and say Action!']},
+  {v:'1.4', d:'16.11.2026', items:['מסך פתיחה מונפש','נגיעה במסך מדלגת על הפתיחה']},
   {v:'1.3', d:'16.11.2026', items:['הלוגו בתוך האפליקציה הוא עכשיו כיסא הבמאי, כמו האייקון במסך הבית']},
   {v:'1.2', d:'16.11.2026', items:['תפריט חדש: בית, שיתוף, מה חדש ובדיקת עדכונים','עמוד אודות ופרטיות','הודעה קטנה כשהאפליקציה מתעדכנת']},
   {v:'1.1', d:'16.11.2026', items:['שורת זכויות יוצרים בעברית ובאנגלית','תצוגה מקדימה עם האייקון כששולחים את הקישור']},
@@ -705,13 +708,26 @@ function groupsView(){
       ${T.groupErr?`<p class="err">${esc(T.groupErr)}</p>`:''}
       <div class="row"><button type="button" class="btn pri" data-act="g-new">פותחים קבוצה ומתחילים</button></div></div></section>`;
 }
+// Small genre icons on the story cards (matched by the start of the genre name).
+const GI = (d,label) => `<svg class="gi" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
+const GENRE_ICONS = [
+  ['קומ', GI('<circle cx="12" cy="12" r="10" fill="#FFC23D"/><circle cx="8.5" cy="9.5" r="1.4" fill="#1D1B38"/><circle cx="15.5" cy="9.5" r="1.4" fill="#1D1B38"/><path d="M7 13.5c1.2 2.6 3 3.6 5 3.6s3.8-1 5-3.6" stroke="#1D1B38" stroke-width="1.8" fill="none" stroke-linecap="round"/>')],
+  ['הרפ', GI('<circle cx="12" cy="14.5" r="6.5" fill="#F4C9A0"/><path d="M6.4 12.6c1-.9 2-1.2 3-1M17.6 12.6c-1-.9-2-1.2-3-1" stroke="#B5651D" stroke-width="1.6" stroke-linecap="round" fill="none"/><path d="M7.5 9.5c0-3.2 2-5 4.5-5s4.5 1.8 4.5 5z" fill="#E8B84A"/><rect x="7.5" y="7.9" width="9" height="1.6" fill="#E8534A"/><ellipse cx="12" cy="10" rx="9.5" ry="1.9" fill="#D9A23A"/><circle cx="9.7" cy="14.2" r=".9" fill="#1D1B38"/><circle cx="14.3" cy="14.2" r=".9" fill="#1D1B38"/><g fill="#C9814A"><circle cx="8.6" cy="16.1" r=".45"/><circle cx="9.6" cy="16.6" r=".45"/><circle cx="14.4" cy="16.6" r=".45"/><circle cx="15.4" cy="16.1" r=".45"/></g><path d="M10 17.6c1.2 1 2.8 1 4 0" stroke="#1D1B38" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M13.8 17.9l5.4 2.2" stroke="#E8B84A" stroke-width="1.1" stroke-linecap="round"/>')],
+  ['בלש', GI('<path d="M4.5 15c0-5.5 3.4-9 7.5-9s7.5 3.5 7.5 9z" fill="#A0703E"/><path d="M8 7.8v7.2M12 6v9M16 7.8v7.2M5.2 11.5h13.6" stroke="#6E4622" stroke-width="1" opacity=".7"/><path d="M3 15h6.5l-.9 2.8C6 17.8 3.7 16.8 3 15z" fill="#8A5C30"/><path d="M21 15h-6.5l.9 2.8c2.6 0 4.9-1 5.6-2.8z" fill="#8A5C30"/><circle cx="12" cy="5.6" r="1.4" fill="#6E4622"/>')],
+  ['מדע', GI('<g transform="rotate(45 12 12)"><path d="M9.5 16.5h5l-1 3.5-1.5 2-1.5-2z" fill="#FFC23D"/><path d="M7.7 13l-2.7 3.5v1.5h2.7zM16.3 13l2.7 3.5v1.5h-2.7z" fill="#E8534A"/><path d="M12 2.5c3 2.2 4.3 5.6 4.3 9.3v4.7H7.7v-4.7c0-3.7 1.3-7.1 4.3-9.3z" fill="#EEF0F7" stroke="#1D1B38" stroke-width="1"/><path d="M12 2.5c1.6 1.2 2.7 2.7 3.4 4.4H8.6c.7-1.7 1.8-3.2 3.4-4.4z" fill="#E8534A"/><circle cx="12" cy="10.5" r="2" fill="#2F7FD8" stroke="#1D1B38" stroke-width="1"/></g>')],
+  ['דרמ', GI('<path d="M2.5 5.2c2.7-1.3 5.8-1.3 8.5 0v5.2c0 3.1-1.9 5.4-4.25 5.4S2.5 13.5 2.5 10.4z" fill="#FFC23D"/><path d="M4.5 8.2h1.6M7.4 8.2H9" stroke="#1D1B38" stroke-width="1.2" stroke-linecap="round"/><path d="M4.9 11.5c1.1 1.3 2.6 1.3 3.7 0" stroke="#1D1B38" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M13 8.8c2.7-1.3 5.8-1.3 8.5 0V14c0 3.1-1.9 5.4-4.25 5.4S13 17.1 13 14z" fill="#7B5CE0"/><path d="M15 11.8h1.6M17.9 11.8h1.6" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/><path d="M15.4 16.4c1.1-1.3 2.6-1.3 3.7 0" stroke="#fff" stroke-width="1.2" fill="none" stroke-linecap="round"/>')],
+  ['פנט', GI('<path d="M4 20.5L13.5 11" stroke="#5B3FC4" stroke-width="2.4" stroke-linecap="round"/><path d="M4 20.5l1.8-1.8" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M16 2.8l1.5 3.3 3.6.4-2.7 2.4.8 3.5L16 10.6l-3.2 1.8.8-3.5-2.7-2.4 3.6-.4z" fill="#FFC23D"/><circle cx="20.5" cy="15" r="1" fill="#FFC23D"/><circle cx="8.5" cy="4.5" r=".8" fill="#FFC23D"/>')],
+  ['אימ', GI('<path d="M5 21V11a7 7 0 0 1 14 0v10l-2.3-1.8L14.3 21 12 19.2 9.7 21l-2.4-1.8z" fill="#EEF0F7" stroke="#1D1B38" stroke-width="1.2" stroke-linejoin="round"/><ellipse cx="9.6" cy="11" rx="1.1" ry="1.5" fill="#1D1B38"/><ellipse cx="14.4" cy="11" rx="1.1" ry="1.5" fill="#1D1B38"/><ellipse cx="12" cy="14.8" rx="1" ry="1.3" fill="#1D1B38"/>')],
+];
+const BOOK_ICON = GI('<path d="M3 5.5c3-1 6-1 9 .8v13c-3-1.8-6-1.8-9-.8z" fill="#2F7FD8"/><path d="M21 5.5c-3-1-6-1-9 .8v13c3-1.8 6-1.8 9-.8z" fill="#139C8C"/>');
+const genreIcon = g => { const t=String(g||'').trim(); const hit=GENRE_ICONS.find(([k])=>t.startsWith(k)); return hit?hit[1]:BOOK_ICON; };
 function stepStory(){
   const list=allStories();
   return `<section style="display:flex;flex-direction:column;gap:12px"><h2 class="h2">איזה סיפור נכתוב היום?</h2>
     <p class="lead">בוחרים סיפור. אחר כך בוחרים איפה הוא קורה ומי הדמויות.</p>
     <div class="grid">${list.map(s=>`<button type="button" class="pick" data-act="story" data-id="${s.id}" aria-pressed="${S.storyId===s.id}">
       ${s._src==='got'?'<span class="from">מהמורה</span>':s._src==='mine'?'<span class="from">שלי</span>':''}
-      <span class="genre">${esc(s.genre)}</span><h3>${esc(s.title)}</h3><p>${esc(s.desc)}</p></button>`).join('')}</div>
+      <span class="genre">${genreIcon(s.genre)}${esc(s.genre)}</span><h3>${esc(s.title)}</h3><p>${esc(s.desc)}</p></button>`).join('')}</div>
     <details class="panel"><summary style="cursor:pointer;font-weight:500">קיבלתם קוד סיפור מהמורה?</summary>
       <div class="field" style="margin-top:10px"><label for="kidcode">הדביקו כאן את הקוד</label><textarea id="kidcode" placeholder="TSR1...."></textarea></div>
       <div class="row"><button type="button" class="btn pri small" data-act="kidimport">הוסף סיפור</button>
@@ -846,7 +862,7 @@ function teacherView(){
     <p class="help">כאן בונים סיפור לתלמידים: כותרת סצנה, ואחריה שורה אחרי שורה. לכל שורה כותבים כמה אפשרויות, והתלמידים בוחרים ביניהן או כותבים משהו משלהם.</p>
     <p class="help">גרסה ${APP_VERSION} · ${APP_DATE}</p>
     <div class="row"><button type="button" class="btn pri" data-act="t-new">+ סיפור חדש</button><button type="button" class="btn small ghost" data-act="pin-change">שינוי קוד מורה</button></div>
-    ${mine.length?`<div class="mylist">${mine.map(s=>`<div class="myitem"><div><b>${esc(s.title)}</b><br><span>${esc(s.genre)} · ${s.beats.length} שורות</span></div>
+    ${mine.length?`<div class="mylist">${mine.map(s=>`<div class="myitem"><div><b>${esc(s.title)}</b><br><span>${genreIcon(s.genre)} ${esc(s.genre)} · ${s.beats.length} שורות</span></div>
       <div class="row"><button type="button" class="btn small" data-act="t-edit" data-id="${s.id}">עריכה</button><button type="button" class="btn small" data-act="t-share" data-id="${s.id}">שליחה לתלמידים</button><button type="button" class="btn small" data-act="t-try" data-id="${s.id}">לנסות</button></div>
       ${T.code&&T.code.id===s.id?`<div style="flex-basis:100%;display:flex;flex-direction:column;gap:8px">
         <p class="help">שלחו לתלמידים את ${canLink?'הקישור':'הקוד'}. ${canLink?'מי שפותח את הקישור מקבל את הסיפור מיד.':'בתסריטון הם לוחצים על "קיבלתם קוד סיפור מהמורה?" ומדביקים.'}</p>
