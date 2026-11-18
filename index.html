@@ -24,8 +24,8 @@
 <meta name="author" content="G.Z. MOTION LAB">
 <meta name="copyright" content="© 2026 G.Z. MOTION LAB">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="icons/icon-192.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/tasriton-192.png">
+<link rel="apple-touch-icon" href="icons/tasriton-apple-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="תסריטון">
@@ -258,6 +258,11 @@ h1,h2,h3,p{margin:0}
 .jfork .jn{font-size:12px;padding:5px 9px}
 @media (prefers-reduced-motion:no-preference){ .jn.now{animation:jpulse 2.4s ease-in-out infinite} }
 @keyframes jpulse{50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 18%,transparent)}}
+.installbox{align-items:center;text-align:center}
+.installbox .appicon{border-radius:22%;box-shadow:0 8px 24px rgba(20,20,50,.25)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;text-align:start;max-width:440px;width:100%}
+.steps li{display:flex;gap:12px;align-items:flex-start;font-size:16px;line-height:1.55}
+.stepn{flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-weight:700;display:grid;place-items:center}
 .grpbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;font-size:15px}
 .pinbox{max-width:420px;width:100%;align-self:center}
 .pinbox input{font-size:24px;letter-spacing:.3em;text-align:center}
@@ -373,11 +378,12 @@ document.documentElement.dir='rtl'; document.documentElement.lang='he';
 //   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
 //   {מקום} {למקום} {במקום}   the place of the scene
 //   {חפץ} {אירוע}            the important object and the event from the chosen topic
-const APP_VERSION = '1.14';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
-const APP_DATE = '16.11.2026';
+const APP_VERSION = '1.15';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
+const APP_DATE = '18.11.2026';
 const APP_URL = 'https://gzfilm.github.io/tasriton/';
 // "What's new": newest first. Add an entry here with every update.
 const CHANGES = [
+  {v:'1.15', d:'18.11.2026', items:['בתפריט: "התקנה במסך הבית". באנדרואיד נפתח חלון ההתקנה, ובאייפון ובאייפד מופיעים שלבים מדויקים','תיקון: האייקון החדש מגיע עכשיו לכל המכשירים, גם לאלה שהתקינו מוקדם']},
   {v:'1.14', d:'16.11.2026', items:['מפת מסלול בראש העמוד: סיפור ← מקום ← דמויות ← סיום תסריט ← שוטינג ליסט ותסריט ← אודישן ← צילום הסרט']},
   {v:'1.13', d:'16.11.2026', items:['במרדף: אפשר להחליף את נקודת ההתחלה גם מעמוד התסריט']},
   {v:'1.12', d:'16.11.2026', items:['שורת הקרדיט: © 2026 G.Z. MOTION LAB']},
@@ -660,13 +666,15 @@ const IC = {
   update: ico('<path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/>'),
   teacher: ico('<rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>'),
   about: ico('<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>'),
+  install: ico('<rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 7v7M9 11l3 3 3-3M10.5 18.5h3"/>'),
 };
 function menuPanel(){
-  const inTeacher = !(view==='kid'||view==='groups'||view==='news'||view==='about');
+  const inTeacher = !(view==='kid'||view==='groups'||view==='news'||view==='about'||view==='install');
   const item=(act,icon,label,sub)=>`<button type="button" role="menuitem" data-act="${act}">${icon}<span><b>${label}</b>${sub?`<small>${sub}</small>`:''}</span></button>`;
   return `<button type="button" class="menuveil" data-act="menu-close" aria-label="סגירת התפריט" tabindex="-1"></button>
   <nav class="menu" id="mainmenu" role="menu" aria-label="תפריט">
     ${item('m-home',IC.home,'בית','מי עובד עכשיו?')}
+    ${isInstalled()?'':item('m-install',IC.install,'התקנה במסך הבית','אייקון של תסריטון בטלפון או בטאבלט')}
     ${item('m-share',IC.share,'שיתוף האפליקציה','שליחת הקישור לחברים')}
     ${item('m-news',IC.news,'מה חדש','גרסה '+APP_VERSION+' · '+APP_DATE)}
     ${item('m-update',IC.update,'בדיקת עדכונים','')}
@@ -685,6 +693,41 @@ function newsView(){
     ${CHANGES.map((c,i)=>`<div class="rel ${i===0?'latest':''}"><div class="relhead"><b>גרסה ${c.v}</b><span>${c.d}</span>${i===0?'<span class="tag">העדכון האחרון</span>':''}</div>
       <ul>${c.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('')}
     <div class="row"><button type="button" class="btn" data-act="m-update">${IC.update}בדיקת עדכונים</button><button type="button" class="btn ghost" data-act="m-home">חזרה</button></div></section>`;
+}
+// Install on the home screen: Android shows its own install window; iPhone/iPad get clear steps.
+let installPrompt = null;
+addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); installPrompt = e; });
+addEventListener('appinstalled', ()=>{ installPrompt = null; toast('תסריטון הותקן! 🎬 מעכשיו פותחים מהאייקון.'); });
+const isInstalled = () => { try{ return matchMedia('(display-mode: standalone)').matches || navigator.standalone===true; }catch(e){ return false; } };
+const IS_ANDROID = /Android/i.test(navigator.userAgent);
+const isIosSafari = () => IS_IOS && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(navigator.userAgent);   // called later, after IS_IOS exists
+async function installApp(){
+  if(installPrompt){
+    installPrompt.prompt();
+    try{ const c = await installPrompt.userChoice; if(c && c.outcome==='accepted') toast('מתקינים... 🎬'); }catch(e){}
+    installPrompt = null; return;
+  }
+  T.editing=null; view='install'; render(); scrollTo(0,0);
+}
+const SHARE_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F7FD8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-4px" aria-label="כפתור השיתוף"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M6 11H5v10h14V11h-1"/></svg>';
+function installView(){
+  const step = (n,html) => `<li><span class="stepn">${n}</span><span>${html}</span></li>`;
+  let steps;
+  if(IS_IOS && !isIosSafari()) steps = step(1,'פותחים את הקישור הזה ב-<b>Safari</b> (המצפן הכחול). רק משם אפשר להוסיף למסך הבית.')
+    + step(2,`לוחצים על כפתור השיתוף ${SHARE_ICON}.`) + step(3,'בוחרים <b>"הוסף למסך הבית"</b>, ואז <b>"הוסף"</b>.');
+  else if(IS_IOS) steps = step(1,`לוחצים על כפתור השיתוף ${SHARE_ICON}. באייפון הוא בתחתית המסך, ובאייפד למעלה ליד שורת הכתובת.`)
+    + step(2,'גוללים מעט למטה ובוחרים <b>"הוסף למסך הבית"</b>.') + step(3,'השם "תסריטון" כבר כתוב. לוחצים <b>"הוסף"</b>.');
+  else if(IS_ANDROID) steps = step(1,'לוחצים על <b>שלוש הנקודות ⋮</b> למעלה בדפדפן Chrome.')
+    + step(2,'בוחרים <b>"התקנת אפליקציה"</b> או <b>"הוספה למסך הבית"</b>.') + step(3,'מאשרים עם <b>"התקנה"</b>.');
+  else steps = step(1,'פותחים את הכתובת בטלפון או בטאבלט:<br><b dir="ltr">'+APP_URL.replace('https://','')+'</b>')
+    + step(2,'<b>אייפון ואייפד:</b> ב-Safari, כפתור השיתוף ← "הוסף למסך הבית".') + step(3,'<b>אנדרואיד:</b> ב-Chrome, שלוש הנקודות ← "התקנת אפליקציה".');
+  return `<section class="panel installbox">
+    <img src="icons/tasriton-192.png" width="96" height="96" alt="האייקון של תסריטון" class="appicon">
+    <h3>תסריטון במסך הבית</h3>
+    <p class="help">ככה תסריטון נפתחת כמו אפליקציה: על כל המסך, עם אייקון של כיסא במאי, וגם בלי אינטרנט.</p>
+    <ol class="steps">${steps}</ol>
+    <p class="help">אחרי ההתקנה פותחים תמיד מהאייקון. בפתיחה הראשונה מאשרים מצלמה ומיקרופון.</p>
+    <div class="row" style="justify-content:center"><button type="button" class="btn ghost" data-act="m-home">חזרה</button></div></section>`;
 }
 function aboutView(){
   return `<section class="panel"><h3>אודות תסריטון</h3>
@@ -1020,6 +1063,7 @@ function render(){
   else if(view==='groups') body=groupsView();
   else if(view==='news') body=newsView();
   else if(view==='about') body=aboutView();
+  else if(view==='install') body=installView();
   else body = journey() + groupBar() + track() + (S.step===1?stepStory():S.step===2?stepTopic():S.step===3?stepChars():stepScript());
   app.innerHTML = header() + body + `<footer class="copy"><span dir="ltr" lang="en">© 2026 G.Z. MOTION LAB</span></footer>`;
   { const j=app.querySelector('.journey'), c=j&&j.querySelector('[aria-current]'); if(c) j.scrollLeft = c.offsetLeft - (j.clientWidth - c.offsetWidth)/2; }
@@ -1050,9 +1094,10 @@ document.addEventListener('click', e=>{
   if(a==='m-home'){ T.menu=false; T.editing=null; T.code=''; save(); curId=null; store(K.cur,null); view='groups'; render(); scrollTo(0,0); return; }
   if(a==='m-share'){ T.menu=false; render(); shareApp(); return; }
   if(a==='m-news'){ T.menu=false; T.newVer=false; store('tasritaon-seenver', APP_VERSION); T.editing=null; view='news'; render(); scrollTo(0,0); return; }
+  if(a==='m-install'){ T.menu=false; render(); installApp(); return; }
   if(a==='m-about'){ T.menu=false; T.editing=null; view='about'; render(); scrollTo(0,0); return; }
   if(a==='m-update'){ T.menu=false; render(); checkUpdate(); return; }
-  if(a==='mode'){ T.menu=false; view = (view==='kid'||view==='groups'||view==='news'||view==='about') ? (pinSaved?'pin':'pinset') : (curGroup()?'kid':'groups'); T.editing=null; T.code=''; T.pinErr=''; render(); scrollTo(0,0);
+  if(a==='mode'){ T.menu=false; view = (view==='kid'||view==='groups'||view==='news'||view==='about'||view==='install') ? (pinSaved?'pin':'pinset') : (curGroup()?'kid':'groups'); T.editing=null; T.code=''; T.pinErr=''; render(); scrollTo(0,0);
     if(view!=='kid') setTimeout(()=>{ const el=document.getElementById('pin1'); if(el) el.focus(); },0); return; }
   if(a==='pin-go'||a==='pin-set'){ pinSubmit(); return; }
   if(a==='pin-change'){ view='pinset'; T.pinErr=''; render(); scrollTo(0,0); return; }
