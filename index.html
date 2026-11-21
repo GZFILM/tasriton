@@ -19,7 +19,7 @@
 <meta name="twitter:description" content="Try Tasriton by G.Z Motion Lab. Write a scene and shoot it at the same time.">
 <meta name="twitter:image" content="https://gzfilm.github.io/tasriton/share-v2.jpg">
 <title>תסריטון</title>
-<meta name="description" content="כותבים סצנה, שורה אחרי שורה: אפליקציית תסריט לכיתות ג׳–ו׳">
+<meta name="description" content="כותבים סצנה, שורה אחרי שורה: אפליקציית תסריט לבתי ספר, לקולנוענים ולכל מי שאוהב סרטים">
 <meta name="theme-color" content="#1D1B38">
 <meta name="author" content="G.Z. MOTION LAB">
 <meta name="copyright" content="© 2026 G.Z. MOTION LAB">
@@ -387,11 +387,12 @@ document.documentElement.dir='rtl'; document.documentElement.lang='he';
 //   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
 //   {מקום} {למקום} {במקום}   the place of the scene
 //   {חפץ} {אירוע}            the important object and the event from the chosen topic
-const APP_VERSION = '1.17';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
+const APP_VERSION = '1.18';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
 const APP_DATE = '21.11.2026';
 const APP_URL = 'https://gzfilm.github.io/tasriton/';
 // "What's new": newest first. Add an entry here with every update.
 const CHANGES = [
+  {v:'1.18', d:'21.11.2026', items:['תסריטון לבתי ספר, לקולנוענים ולכל מי שאוהב סרטים (באודות ובשיתוף)']},
   {v:'1.17', d:'21.11.2026', items:['מסך בית חדש: האפליקציה נפתחת במסך פתיחה, וקבוצה שכבר התחילה ממשיכה מאיפה שעצרה','קבוצה חדשה נפתחת רק כשמבקשים: מכפתור במסך הבית או מהתפריט','בפתיחת קבוצה בוחרים: בית ספר, צוות או קולנוען, וממלאים רק את מה שמתאים']},
   {v:'1.16', d:'18.11.2026', items:['באייקון: הקלאפר פתוח, עם המקל העליון בזווית']},
   {v:'1.15', d:'18.11.2026', items:['בתפריט: "התקנה במסך הבית". באנדרואיד נפתח חלון ההתקנה, ובאייפון ובאייפד מופיעים שלבים מדויקים','תיקון: האייקון החדש מגיע עכשיו לכל המכשירים, גם לאלה שהתקינו מוקדם']},
@@ -744,7 +745,7 @@ function installView(){
 }
 function aboutView(){
   return `<section class="panel"><h3>אודות תסריטון</h3>
-    <p>תסריטון היא אפליקציה לכתיבת תסריט ולצילום סצנה, לכיתות ג׳–ו׳. בוחרים סיפור, מקום ודמויות, כותבים שורה אחרי שורה, עושים אודישנים ובסוף צועקים: אקשן!</p>
+    <p>תסריטון היא אפליקציה לכתיבת תסריט ולצילום סצנה: לבתי ספר, לקולנוענים ולכל מי שאוהב סרטים. בוחרים סיפור, מקום ודמויות, כותבים שורה אחרי שורה, עושים אודישנים ובסוף צועקים: אקשן!</p>
     <p class="help">גרסה ${APP_VERSION} · עדכון אחרון ${APP_DATE}</p></section>
   <section class="panel"><h3>פרטיות</h3>
     <ul class="plain">
@@ -761,7 +762,7 @@ function aboutView(){
 }
 async function shareApp(){
   const url = canLink ? location.origin+location.pathname : APP_URL;
-  const data = {title:'תסריטון', text:'תסריטון: אפליקציית תסריט לכיתות ג׳–ו׳. כותבים סצנה, עושים אודישן וצועקים אקשן!', url};
+  const data = {title:'תסריטון', text:'תסריטון: אפליקציית תסריט לבתי ספר, לקולנוענים ולכל מי שאוהב סרטים. כותבים סצנה, עושים אודישן וצועקים אקשן!', url};
   try{ if(navigator.share){ await navigator.share(data); return; } }catch(e){ if(e && e.name==='AbortError') return; }
   copy(url, 'הקישור הועתק. אפשר להדביק אותו בוואטסאפ או במייל.');
 }
