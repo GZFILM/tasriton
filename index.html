@@ -111,6 +111,15 @@ h1,h2,h3,p{margin:0}
 .pick[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 3px var(--accent) inset}
 .pick h3{font-size:18px;font-weight:700}
 .pick p{font-size:14px;color:var(--muted)}
+/* Home welcome and the school / crew / filmmaker tiles */
+.welcome{align-items:center;text-align:center;padding:22px 16px}
+.welcome .clap{width:84px;height:84px}
+.kinds{grid-template-columns:repeat(3,1fr);gap:10px}
+.pick.kind{align-items:center;text-align:center;padding:18px 8px;gap:8px}
+.pick.kind p{font-size:13px;line-height:1.35}
+.pick.kind:hover{border-color:var(--accent)}
+.kicon{font-size:40px;line-height:1}
+.pick.kind h3{font-size:21px}
 .genre{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:3px 10px 3px 8px;border-radius:999px;background:var(--field);border:1px solid var(--line)}
 .from{position:absolute;top:10px;inset-inline-end:10px;font-size:11px;font-weight:700;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:1px 8px}
 .slug{font-family:var(--script);font-size:14px;color:var(--muted);direction:rtl}
@@ -378,11 +387,12 @@ document.documentElement.dir='rtl'; document.documentElement.lang='he';
 //   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
 //   {מקום} {למקום} {במקום}   the place of the scene
 //   {חפץ} {אירוע}            the important object and the event from the chosen topic
-const APP_VERSION = '1.16';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
-const APP_DATE = '18.11.2026';
+const APP_VERSION = '1.17';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
+const APP_DATE = '21.11.2026';
 const APP_URL = 'https://gzfilm.github.io/tasriton/';
 // "What's new": newest first. Add an entry here with every update.
 const CHANGES = [
+  {v:'1.17', d:'21.11.2026', items:['מסך בית חדש: האפליקציה נפתחת במסך פתיחה, וקבוצה שכבר התחילה ממשיכה מאיפה שעצרה','קבוצה חדשה נפתחת רק כשמבקשים: מכפתור במסך הבית או מהתפריט','בפתיחת קבוצה בוחרים: בית ספר, צוות או קולנוען, וממלאים רק את מה שמתאים']},
   {v:'1.16', d:'18.11.2026', items:['באייקון: הקלאפר פתוח, עם המקל העליון בזווית']},
   {v:'1.15', d:'18.11.2026', items:['בתפריט: "התקנה במסך הבית". באנדרואיד נפתח חלון ההתקנה, ובאייפון ובאייפד מופיעים שלבים מדויקים','תיקון: האייקון החדש מגיע עכשיו לכל המכשירים, גם לאלה שהתקינו מוקדם']},
   {v:'1.14', d:'16.11.2026', items:['מפת מסלול בראש העמוד: סיפור ← מקום ← דמויות ← סיום תסריט ← שוטינג ליסט ותסריט ← אודישן ← צילום הסרט']},
@@ -661,6 +671,7 @@ const CLAP = `<svg class="clap" viewBox="0 0 512 512" role="img" aria-label="ת�
 const ico = d => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 const IC = {
   menu: ico('<path d="M4 7h16M4 12h16M4 17h16"/>'),
+  plus: ico('<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>'),
   home: ico('<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>'),
   share: ico('<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/>'),
   news: ico('<path d="M12 3l2.4 5 5.6.8-4 3.9.9 5.5L12 15.6 7.1 18.2l.9-5.5-4-3.9 5.6-.8z"/>'),
@@ -670,11 +681,12 @@ const IC = {
   install: ico('<rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 7v7M9 11l3 3 3-3M10.5 18.5h3"/>'),
 };
 function menuPanel(){
-  const inTeacher = !(view==='kid'||view==='groups'||view==='news'||view==='about'||view==='install');
+  const inTeacher = !(view==='kid'||view==='groups'||view==='newgroup'||view==='news'||view==='about'||view==='install');
   const item=(act,icon,label,sub)=>`<button type="button" role="menuitem" data-act="${act}">${icon}<span><b>${label}</b>${sub?`<small>${sub}</small>`:''}</span></button>`;
   return `<button type="button" class="menuveil" data-act="menu-close" aria-label="סגירת התפריט" tabindex="-1"></button>
   <nav class="menu" id="mainmenu" role="menu" aria-label="תפריט">
-    ${item('m-home',IC.home,'בית','מי עובד עכשיו?')}
+    ${item('m-home',IC.home,'בית','ממשיכים קבוצה שכבר התחילה')}
+    ${item('g-start',IC.plus,'קבוצה חדשה','בית ספר, צוות או קולנוען')}
     ${isInstalled()?'':item('m-install',IC.install,'התקנה במסך הבית','אייקון של תסריטון בטלפון או בטאבלט')}
     ${item('m-share',IC.share,'שיתוף האפליקציה','שליחת הקישור לחברים')}
     ${item('m-news',IC.news,'מה חדש','גרסה '+APP_VERSION+' · '+APP_DATE)}
@@ -777,7 +789,8 @@ function track(){
     return `<li><button type="button" data-act="go" data-k="${k}" ${S.step===k?'aria-current="step"':''} class="${S.step>k?'done':''}" ${can?'':'disabled'}><b>${k}</b><span>${n}</span></button></li>`;}).join('')}</ol>`;
 }
 const fmtDate = t => { try{ return new Date(t).toLocaleDateString('he-IL',{day:'numeric',month:'numeric'}); }catch(e){ return ''; } };
-const groupWhere = g => [g.cls&&('כיתה '+g.cls), g.school].filter(Boolean).join(' · ');
+const groupWhere = g => g.kind==='crew' ? 'צוות צילום' : g.kind==='maker' ? 'קולנוען' :[g.cls&&('כיתה '+g.cls), g.school].filter(Boolean).join(' · ');
+const groupIcon = g => g.kind==='crew' ? '🎬' : g.kind==='maker' ? '🎥' : '👥';
 // The journey map: the whole way from story to filming, so kids know auditions and filming are coming.
 function journey(){
   const done=!!S.done, left=audLeft();
@@ -793,24 +806,49 @@ function journey(){
 }
 function groupBar(){
   const g=curGroup(); if(!g) return '';
-  return `<div class="grpbar"><span>👥 <b>${esc(g.team)}</b>${groupWhere(g)?' · '+esc(groupWhere(g)):''}</span><button type="button" class="btn small" data-act="g-switch">קבוצה אחרת</button></div>`;
+  return `<div class="grpbar"><span>${groupIcon(g)} <b>${esc(g.team)}</b>${groupWhere(g)?' · '+esc(groupWhere(g)):''}</span><button type="button" class="btn small" data-act="g-switch">קבוצה אחרת</button></div>`;
 }
+// Home: a welcome screen. Groups that already started continue from here; a new group opens only on request.
 function groupsView(){
-  const last=load(K.last,{school:'',cls:''});
   const list=[...groups].sort((a,b)=>b.updated-a.updated);
-  return `<section style="display:flex;flex-direction:column;gap:12px"><h2 class="h2">מי עובד עכשיו?</h2>
-    <p class="lead">קבוצה שכבר התחילה בוחרת את עצמה וממשיכה מאיפה שהפסיקה. קבוצה שמתחילה עכשיו פותחת קבוצה חדשה.</p>
-    ${list.length?`<div class="grid">${list.map(g=>`<button type="button" class="pick" data-act="g-open" data-id="${g.id}">
-      <h3>👥 ${esc(g.team)}</h3>${groupWhere(g)?`<p>${esc(groupWhere(g))}</p>`:''}
+  return `<section style="display:flex;flex-direction:column;gap:12px">
+    <div class="panel welcome">${CLAP}<h2 class="h2">ברוכים הבאים לתסריטון</h2>
+      <p class="lead">כותבים תסריט מתבנית, עורכים אותו, עושים אודישנים ויוצאים לצלם.</p>
+      <div class="row" style="justify-content:center"><button type="button" class="btn pri big" data-act="g-start">+ קבוצה חדשה</button></div></div>
+    ${list.length?`<h2 class="h2">ממשיכים מאיפה שעצרנו</h2>
+    <div class="grid">${list.map(g=>`<button type="button" class="pick" data-act="g-open" data-id="${g.id}">
+      <h3>${groupIcon(g)} ${esc(g.team)}</h3>${groupWhere(g)?`<p>${esc(groupWhere(g))}</p>`:''}
       <p>${g.state&&g.state.storyId?'התסריט: <b>'+esc(g.state.title||'בלי שם')+'</b>':'עוד לא בחרו סיפור'}</p>
-      <span class="genre">עבדו לאחרונה: ${fmtDate(g.updated)}</span></button>`).join('')}</div>`:''}
-    <div class="panel"><h3>+ קבוצה חדשה</h3>
-      <div class="meta"><div class="field"><label for="g-school">שם בית הספר</label><input type="text" id="g-school" value="${esc(last.school)}" maxlength="40"></div>
-        <div class="field"><label for="g-cls">כיתה</label><input type="text" id="g-cls" value="${esc(last.cls)}" placeholder="למשל: ה׳2" maxlength="12"></div></div>
-      <div class="field"><label for="g-team">שם הקבוצה, או השמות של כולם</label><input type="text" id="g-team" placeholder="למשל: נועה, דני ותמר" maxlength="60"></div>
-      <div class="field"><label for="g-title">שם התסריט (אפשר גם אחר כך)</label><input type="text" id="g-title" maxlength="40"></div>
+      <span class="genre">עבדו לאחרונה: ${fmtDate(g.updated)}</span></button>`).join('')}</div>`:''}</section>`;
+}
+// New group: first choose who is writing (school / crew / filmmaker), then only the fields that fit.
+const KINDS = [
+  {id:'school', icon:'🏫', name:'בית ספר', desc:'כיתה או קבוצת תלמידים'},
+  {id:'crew',   icon:'🎬', name:'צוות',    desc:'צוות צילום שעובד ביחד'},
+  {id:'maker',  icon:'🎥', name:'קולנוען', desc:'יוצר אחד, הסרט שלי'},
+];
+function newGroupView(){
+  const k=T.gkind;
+  if(!k) return `<section style="display:flex;flex-direction:column;gap:12px"><h2 class="h2">קבוצה חדשה: מי כותב?</h2>
+    <div class="grid kinds">${KINDS.map(x=>`<button type="button" class="pick kind" data-act="g-kind" data-id="${x.id}">
+      <span class="kicon" aria-hidden="true">${x.icon}</span><h3>${x.name}</h3><p>${x.desc}</p></button>`).join('')}</div>
+    <div class="nav"><button type="button" class="btn ghost" data-act="m-home">חזרה</button></div></section>`;
+  const kk=KINDS.find(x=>x.id===k), last=load(K.last,{school:'',cls:''});
+  const f=(id,label,attrs='')=>`<div class="field"><label for="${id}">${label}</label><input type="text" id="${id}" ${attrs}></div>`;
+  const fields = k==='school'
+    ? `<div class="meta">${f('g-school','שם בית הספר',`value="${esc(last.school)}" maxlength="40"`)}${f('g-cls','כיתה',`value="${esc(last.cls)}" placeholder="למשל: ה׳2" maxlength="12"`)}</div>
+       ${f('g-team','שם הקבוצה, או השמות של כולם','placeholder="למשל: נועה, דני ותמר" maxlength="60"')}
+       ${f('g-title','שם התסריט (אפשר גם אחר כך)','maxlength="40"')}`
+    : k==='crew'
+    ? `${f('g-team','שם הצוות או ההפקה','placeholder="למשל: הפקות החצר" maxlength="60"')}
+       ${f('g-members','מי בצוות (אפשר גם אחר כך)','placeholder="למשל: נועה – במאית, דני – צלם" maxlength="120"')}
+       ${f('g-title','שם הסרט (אפשר גם אחר כך)','maxlength="40"')}`
+    : `${f('g-team','השם שלך','maxlength="60"')}
+       ${f('g-title','שם הסרט (אפשר גם אחר כך)','maxlength="40"')}`;
+  return `<section style="display:flex;flex-direction:column;gap:12px"><h2 class="h2">${kk.icon} קבוצה חדשה: ${kk.name}</h2>
+    <div class="panel">${fields}
       ${T.groupErr?`<p class="err">${esc(T.groupErr)}</p>`:''}
-      <div class="row"><button type="button" class="btn pri" data-act="g-new">פותחים קבוצה ומתחילים</button></div></div></section>`;
+      <div class="row"><button type="button" class="btn ghost" data-act="g-start">חזרה</button><button type="button" class="btn pri" data-act="g-new">${k==='maker'?'מתחילים לכתוב':'פותחים ומתחילים'}</button></div></div></section>`;
 }
 // Small genre icons on the story cards (matched by the start of the genre name).
 const GI = (d,label) => `<svg class="gi" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
@@ -1062,6 +1100,7 @@ function render(){
   if(view==='teacher') body=teacherView();
   else if(view==='pin'||view==='pinset') body=pinView();
   else if(view==='groups') body=groupsView();
+  else if(view==='newgroup') body=newGroupView();
   else if(view==='news') body=newsView();
   else if(view==='about') body=aboutView();
   else if(view==='install') body=installView();
@@ -1098,7 +1137,7 @@ document.addEventListener('click', e=>{
   if(a==='m-install'){ T.menu=false; render(); installApp(); return; }
   if(a==='m-about'){ T.menu=false; T.editing=null; view='about'; render(); scrollTo(0,0); return; }
   if(a==='m-update'){ T.menu=false; render(); checkUpdate(); return; }
-  if(a==='mode'){ T.menu=false; view = (view==='kid'||view==='groups'||view==='news'||view==='about'||view==='install') ? (pinSaved?'pin':'pinset') : (curGroup()?'kid':'groups'); T.editing=null; T.code=''; T.pinErr=''; render(); scrollTo(0,0);
+  if(a==='mode'){ T.menu=false; view = (view==='kid'||view==='groups'||view==='newgroup'||view==='news'||view==='about'||view==='install') ? (pinSaved?'pin':'pinset') : (curGroup()?'kid':'groups'); T.editing=null; T.code=''; T.pinErr=''; render(); scrollTo(0,0);
     if(view!=='kid') setTimeout(()=>{ const el=document.getElementById('pin1'); if(el) el.focus(); },0); return; }
   if(a==='pin-go'||a==='pin-set'){ pinSubmit(); return; }
   if(a==='pin-change'){ view='pinset'; T.pinErr=''; render(); scrollTo(0,0); return; }
@@ -1107,12 +1146,15 @@ document.addEventListener('click', e=>{
   if(a==='g-open'){ const g=groups.find(x=>x.id===b.dataset.id); if(!g) return; curId=g.id; store(K.cur,curId); S=g.state; openLine=-1;
     if(S.storyId && !storyById(S.storyId)){ S.storyId=null; S.step=1; S.lines=null; }
     view='kid'; render(); scrollTo(0,0); toast('ממשיכים: '+g.team); return; }
+  if(a==='g-start'){ T.menu=false; T.editing=null; save(); curId=null; store(K.cur,null); T.gkind=null; T.groupErr=''; view='newgroup'; render(); scrollTo(0,0); return; }
+  if(a==='g-kind'){ T.gkind=b.dataset.id; T.groupErr=''; render(); scrollTo(0,0); setTimeout(()=>{ const el=document.getElementById(T.gkind==='school'?'g-school':'g-team'); if(el) el.focus(); },0); return; }
   if(a==='g-new'){ const v=id=>((document.getElementById(id)||{}).value||'').trim();
-    const school=v('g-school'), cls=v('g-cls'), team=v('g-team'), title=v('g-title');
-    if(!team){ T.groupErr='כתבו שם לקבוצה, או את השמות שלכם.'; render(); const el=document.getElementById('g-team'); if(el) el.focus(); return; }
-    store(K.last,{school,cls});
+    const kind=T.gkind||'school';
+    const school=kind==='school'?v('g-school'):'', cls=kind==='school'?v('g-cls'):'', team=v('g-team'), members=kind==='crew'?v('g-members'):'', title=v('g-title');
+    if(!team){ T.groupErr = kind==='crew'?'כתבו שם לצוות או להפקה.':kind==='maker'?'כתבו את השם שלך.':'כתבו שם לקבוצה, או את השמות שלכם.'; render(); const el=document.getElementById('g-team'); if(el) el.focus(); return; }
+    if(kind==='school') store(K.last,{school,cls});
     const st=freshState(); if(title){ st.title=title; st.keepTitle=title; } st.authors=team;
-    const g={id:'grp-'+Date.now().toString(36), school, cls, team, created:Date.now(), updated:Date.now(), state:st};
+    const g={id:'grp-'+Date.now().toString(36), kind, school, cls, team, members, created:Date.now(), updated:Date.now(), state:st}; T.gkind=null;
     groups.push(g); curId=g.id; store(K.cur,curId); S=st; save(); T.groupErr=''; view='kid'; openLine=-1; render(); scrollTo(0,0); toast('בהצלחה, '+team+'!'); return; }
   if(a==='g-more'){ const g=groups.find(x=>x.id===b.dataset.id); if(!g) return; g.state.audExtra=(g.state.audExtra||0)+1; store(K.groups,groups); render(); toast('נוסף אודישן ל'+g.team); return; }
   if(a==='g-del'){ if(!b.dataset.sure){ b.dataset.sure='1'; b.textContent='בטוח? לחץ שוב'; return; }
