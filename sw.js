@@ -1,7 +1,7 @@
 // Tasriton offline support.
 // The app always tries the internet first, so updates arrive right away.
 // Without Wi-Fi it opens the copy saved on the tablet.
-const CACHE = 'tasriton-v5';   // bump to clear old copies on every device
+const CACHE = 'tasriton-v6';   // bump to clear old copies on every device
 const FILES = [
   './', 'index.html', 'manifest.webmanifest', 'fonts/fonts.css',
   "fonts/david-libre-hebrew-0.woff2",  "fonts/david-libre-hebrew-2.woff2",  "fonts/david-libre-latin-1.woff2",  "fonts/david-libre-latin-3.woff2",  "fonts/rubik-hebrew-4.woff2",  "fonts/rubik-latin-5.woff2",  "fonts/secular-one-hebrew-6.woff2",  "fonts/secular-one-latin-7.woff2",
