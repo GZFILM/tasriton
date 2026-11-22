@@ -318,6 +318,18 @@ h1,h2,h3,p{margin:0}
 .side-nav{display:flex;gap:8px;padding:8px max(14px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 8px) max(14px,env(safe-area-inset-left,0px));border-top:1px solid #2C2A47}
 .side-nav button{flex:1;min-height:46px;border-radius:10px;border:1.5px solid #3A3860;background:#201F38;color:#F2F1F8;font-size:16px}
 .side-nav .next{background:#FFC23D;color:#2A1E00;border-color:#FFC23D;font-weight:700;flex:2}
+/* full-screen camera: only the camera, the whole frame (what you see is what is recorded), thirds lines */
+#aud.full{display:block}
+#aud.full .side{display:none}
+#aud.full .cam{position:absolute;inset:0}
+#aud.full .cam > video{object-fit:contain}
+.cambtn[aria-pressed="true"]{background:#FFC23D;color:#2A1E00;border-color:#FFC23D;font-weight:700}
+.camfr{position:absolute;pointer-events:none;z-index:1;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.55);
+  background:linear-gradient(to right,transparent calc(33.333% - .5px),rgba(255,255,255,.35) calc(33.333% - .5px),rgba(255,255,255,.35) calc(33.333% + .5px),transparent calc(33.333% + .5px),transparent calc(66.666% - .5px),rgba(255,255,255,.35) calc(66.666% - .5px),rgba(255,255,255,.35) calc(66.666% + .5px),transparent calc(66.666% + .5px)),
+  linear-gradient(to bottom,transparent calc(33.333% - .5px),rgba(255,255,255,.35) calc(33.333% - .5px),rgba(255,255,255,.35) calc(33.333% + .5px),transparent calc(33.333% + .5px),transparent calc(66.666% - .5px),rgba(255,255,255,.35) calc(66.666% - .5px),rgba(255,255,255,.35) calc(66.666% + .5px),transparent calc(66.666% + .5px))}
+#aud:not(.full) .camfr{display:none}
+#aud.full .slate{bottom:auto;top:calc(env(safe-area-inset-top,0px) + 54px)}
+#aud.full .cambot{bottom:calc(env(safe-area-inset-bottom,0px) + 16px)}
 
 #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 20px);background:var(--ink);color:var(--surface);padding:10px 18px;border-radius:999px;font-size:15px;z-index:50;max-width:calc(100% - 32px);text-align:center}
 @media (prefers-reduced-motion:no-preference){ .ln,.pick,.btn{transition:background .15s,border-color .15s} }
@@ -372,7 +384,8 @@ h1,h2,h3,p{margin:0}
   <div class="cam" id="audCam">
     <video id="audVid" playsinline muted autoplay></video>
     <div class="msg" id="audMsg" hidden></div>
-    <div class="camtop"><button type="button" class="cambtn" data-act="aud-close">סגור</button><span class="rectime" id="audTime">00:00</span><button type="button" class="cambtn" data-act="aud-flip">החלף מצלמה</button></div>
+    <div class="camtop"><button type="button" class="cambtn" data-act="aud-close">סגור</button><span class="rectime" id="audTime">00:00</span><span style="display:flex;gap:8px"><button type="button" class="cambtn" id="audFull" data-act="aud-full" aria-pressed="false">מסך מלא</button><button type="button" class="cambtn" data-act="aud-flip">החלף מצלמה</button></span></div>
+    <div class="camfr" id="audFrame"></div>
     <div class="slate" id="audSlate"></div>
     <div class="cambot"><button type="button" class="recbtn" id="audRec" data-act="aud-rec" aria-label="הקלטה"><span></span></button></div>
     <div class="count" id="audCount" hidden></div>
@@ -400,11 +413,12 @@ document.documentElement.dir='rtl'; document.documentElement.lang='he';
 //   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
 //   {מקום} {למקום} {במקום}   the place of the scene
 //   {חפץ} {אירוע}            the important object and the event from the chosen topic
-const APP_VERSION = '1.19';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
-const APP_DATE = '21.11.2026';
+const APP_VERSION = '1.20';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
+const APP_DATE = '22.11.2026';
 const APP_URL = 'https://gzfilm.github.io/tasriton/';
 // "What's new": newest first. Add an entry here with every update.
 const CHANGES = [
+  {v:'1.20', d:'22.11.2026', items:['מצלמה במסך מלא: בכפתור "מסך מלא" במסך הצילום המצלמה תופסת את כל המסך, רואים את כל הפריים בדיוק כמו שמוקלט, עם קווי שליש. "חזרה לתסריט" מחזיר את התסריט לצד המצלמה','הטאבלט זוכר את הבחירה לפעם הבאה']},
   {v:'1.19', d:'21.11.2026', items:['הלוגו בתוך האפליקציה הוא עכשיו הילדים המצלמים, כמו האייקון במסך הבית','מסך הפתיחה: רק הילדים, והם זזים: צועקים במגפון, כותבים ומצלמים','בקבוצה חדשה: קולנוען/ית, ואייקונים חדשים לבית ספר, צוות וקולנוען/ית']},
   {v:'1.18', d:'21.11.2026', items:['תסריטון לבתי ספר, לקולנוענים ולכל מי שאוהב סרטים (באודות ובשיתוף)']},
   {v:'1.17', d:'21.11.2026', items:['מסך בית חדש: האפליקציה נפתחת במסך פתיחה, וקבוצה שכבר התחילה ממשיכה מאיפה שעצרה','קבוצה חדשה נפתחת רק כשמבקשים: מכפתור במסך הבית או מהתפריט','בפתיחת קבוצה בוחרים: בית ספר, צוות או קולנוען, וממלאים רק את מה שמתאים']},
@@ -1293,13 +1307,35 @@ function openAud(mode){
   if(!speakers.includes(AUD.who)) AUD.who = speakers[0] ?? 0;
   AUD.idx = 0;
   $id('aud').hidden=false; document.body.style.overflow='hidden';
-  renderAudSide(); startAudCam();
+  setFull(AUD.full); renderAudSide(); startAudCam();
 }
 function closeAud(){
   if(AUD.rec && AUD.rec.state==='recording'){ AUD.rec.onstop=null; AUD.rec.stop(); }
   clearInterval(AUD.timer); stopAudCam(); hideReview();
+  try{ if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }catch(e){}
   $id('aud').hidden=true; document.body.style.overflow=''; render();
 }
+// Full-screen camera: hides the script, shows the whole frame with thirds lines. Remembered on this tablet.
+AUD.full = !!load('tasritaon-camfull', false);
+function setFull(on){
+  AUD.full = !!on; store('tasritaon-camfull', AUD.full);
+  const el=$id('aud'); el.classList.toggle('full', AUD.full);
+  const b=$id('audFull'); b.setAttribute('aria-pressed', AUD.full); b.textContent = AUD.full ? 'חזרה לתסריט' : 'מסך מלא';
+  try{   // also hide the browser bars where the tablet allows it
+    if(AUD.full && el.requestFullscreen && !document.fullscreenElement) el.requestFullscreen().catch(()=>{});
+    else if(!AUD.full && document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+  }catch(e){}
+  requestAnimationFrame(fitFrame);
+}
+// Put the frame and thirds lines exactly over the picture (the video is letterboxed, not cropped).
+function fitFrame(){
+  const v=$id('audVid'), f=$id('audFrame'); if(!v||!f) return;
+  const W=v.clientWidth, H=v.clientHeight, vw=v.videoWidth, vh=v.videoHeight;
+  if(!vw||!vh||!W||!H){ f.style.cssText='inset:0'; return; }
+  const s=Math.min(W/vw, H/vh), w=vw*s, h=vh*s;
+  f.style.cssText=`left:${(W-w)/2}px;top:${(H-h)/2}px;width:${w}px;height:${h}px`;
+}
+addEventListener('resize', ()=>{ if(!$id('aud').hidden) fitFrame(); });
 function camMsg(html){ const m=$id('audMsg'); m.innerHTML=html; m.hidden=!html; }
 async function startAudCam(){
   stopAudCam(); camMsg('');
@@ -1307,7 +1343,7 @@ async function startAudCam(){
   const v={facingMode:{ideal:AUD.facing}, width:{ideal:1280}, height:{ideal:720}};
   try{ AUD.stream = await navigator.mediaDevices.getUserMedia({video:v, audio:true}); }
   catch(e){ try{ AUD.stream = await navigator.mediaDevices.getUserMedia({video:v}); } catch(e2){ camMsg(noCamText(e2)); return; } }
-  const vid=$id('audVid'); vid.srcObject=AUD.stream; vid.classList.toggle('mirror', AUD.facing==='user');
+  const vid=$id('audVid'); vid.onloadedmetadata=fitFrame; vid.onresize=fitFrame; vid.srcObject=AUD.stream; vid.classList.toggle('mirror', AUD.facing==='user');
   vid.play().catch(()=>{});
 }
 function noCamText(err){
@@ -1399,6 +1435,7 @@ document.addEventListener('click', e=>{
   if(a==='aud-open') openAud('aud');
   else if(a==='aud-scene') openAud('scene');
   else if(a==='aud-close') closeAud();
+  else if(a==='aud-full') setFull(!AUD.full);
   else if(a==='aud-flip'){ AUD.facing = AUD.facing==='user'?'environment':'user'; startAudCam(); }
   else if(a==='aud-rec') toggleRec();
   else if(a==='aud-save') saveTake();
