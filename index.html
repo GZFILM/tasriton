@@ -67,7 +67,7 @@ h1,h2,h3,p{margin:0}
 /* top */
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .logo{display:flex;align-items:center;gap:10px}
-.clap{width:44px;height:44px;flex:none;border-radius:10px;box-shadow:0 2px 6px rgba(20,20,50,.18)}
+.clap{width:44px;height:44px;flex:none;border-radius:22%;box-shadow:0 2px 6px rgba(20,20,50,.18)}
 .logo h1{font-family:var(--display);font-size:30px;font-weight:400;line-height:1}
 .logo small{display:block;font-size:13px;color:var(--muted)}
 .top{position:relative}
@@ -113,12 +113,13 @@ h1,h2,h3,p{margin:0}
 .pick p{font-size:14px;color:var(--muted)}
 /* Home welcome and the school / crew / filmmaker tiles */
 .welcome{align-items:center;text-align:center;padding:22px 16px}
-.welcome .clap{width:84px;height:84px}
+.welcome .clap{width:96px;height:96px}
 .kinds{grid-template-columns:repeat(3,1fr);gap:10px}
 .pick.kind{align-items:center;text-align:center;padding:18px 8px;gap:8px}
 .pick.kind p{font-size:13px;line-height:1.35}
 .pick.kind:hover{border-color:var(--accent)}
-.kicon{font-size:40px;line-height:1}
+.kicon{line-height:0}.kicon .kic{width:64px;height:64px}
+.kic{width:1.35em;height:1.35em;vertical-align:-.3em;border-radius:24%;display:inline-block}
 .pick.kind h3{font-size:21px}
 .genre{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:3px 10px 3px 8px;border-radius:999px;background:var(--field);border:1px solid var(--line)}
 .from{position:absolute;top:10px;inset-inline-end:10px;font-size:11px;font-weight:700;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:1px 8px}
@@ -325,32 +326,44 @@ h1,h2,h3,p{margin:0}
 #splash.out{opacity:0;pointer-events:none}
 .sp-in{display:flex;flex-direction:column;align-items:center;gap:28px;padding:24px}
 .sp-logo{width:min(46vw,210px);height:auto;border-radius:22%;box-shadow:0 18px 50px rgba(0,0,0,.45);animation:spLogo .8s cubic-bezier(.2,.9,.3,1.3) both}
-.sp-words{display:flex;gap:.32em;font-family:"Secular One","Rubik",Arial,sans-serif;font-size:clamp(30px,8vw,52px);line-height:1;color:#EEEEF8;white-space:nowrap}
-.sp-words span{opacity:0;animation:spWord .5s ease-out both}
-.sp-words .w1{animation-delay:.85s}
-.sp-words .w2{animation-delay:1.25s}
-.sp-words .w3{animation-delay:1.65s}
-.sp-words .w4{color:#FFC23D;animation:spAction .55s cubic-bezier(.2,.9,.3,1.5) both;animation-delay:2.15s}
+.sp-logo{width:min(56vw,260px)}
+/* the three kids: pop in one after another, then keep busy (shout, write, film) */
+.kids{display:block}
+.kids .k-l,.kids .k-m,.kids .k-r,.kids .k-in,.kids .k-ph,.kids .k-nb{transform-box:fill-box}
+.sp-logo .k-l,.sp-logo .k-m,.sp-logo .k-r{transform-origin:50% 100%;animation:kidPop .5s cubic-bezier(.2,.9,.3,1.4) both}
+.sp-logo .k-l{animation-delay:.45s}.sp-logo .k-m{animation-delay:.6s}.sp-logo .k-r{animation-delay:.75s}
+.live .k-l .k-in{animation:kidBob 1.1s ease-in-out infinite}
+.live .k-m .k-in{animation:kidBob 1.3s ease-in-out .2s infinite}
+.live .k-r .k-in{animation:kidBob 1.2s ease-in-out .4s infinite}
+.live .k-ph{transform-origin:20% 95%;animation:kidFilm 1.6s ease-in-out infinite}
+.live .k-nb{transform-origin:50% 50%;animation:kidWrite 1.4s ease-in-out infinite}
+.live .k-shout{animation:kidShout .7s steps(2,jump-none) infinite}
+.live .k-rec{animation:kidRec 1s steps(2,jump-none) infinite}
+.welcome .live .k-in,.welcome .live .k-ph,.welcome .live .k-nb{animation-duration:2.2s}
+@keyframes kidPop{0%{opacity:0;transform:translateY(40%) scale(.85)}100%{opacity:1;transform:none}}
+@keyframes kidBob{0%,100%{transform:none}50%{transform:translateY(-4%)}}
+@keyframes kidFilm{0%,100%{transform:none}50%{transform:rotate(-7deg)}}
+@keyframes kidWrite{0%,100%{transform:none}50%{transform:rotate(5deg)}}
+@keyframes kidShout{0%{opacity:1}100%{opacity:0}}
+@keyframes kidRec{0%{opacity:1}100%{opacity:.15}}
 @keyframes spLogo{0%{opacity:0;transform:scale(.55) rotate(-6deg)}100%{opacity:1;transform:none}}
-@keyframes spWord{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:none}}
-@keyframes spAction{0%{opacity:0;transform:scale(.4)}100%{opacity:1;transform:none}}
-@media (prefers-reduced-motion: reduce){ .sp-logo,.sp-words span{animation:none!important;opacity:1} }
+@media (prefers-reduced-motion: reduce){ .sp-logo,.kids *{animation:none!important;opacity:1} }
 
 </style>
 
 <div id="splash" aria-hidden="true">
 <div class="sp-in">
-<svg class="sp-logo" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#1D1B38"/><g transform="translate(256 262) scale(.94) translate(-256 -262)"><g fill="none" stroke="#FFC23D" stroke-linecap="round" stroke-linejoin="round"><path d="M156 112v300M356 112v300" stroke-width="22"/><path d="M120 262h72M320 262h72" stroke-width="20"/><path d="M156 304l200 108M356 304L156 412" stroke-width="18"/></g><rect x="145" y="126" width="222" height="86" rx="10" fill="#FFC23D"/><rect x="145" y="290" width="222" height="28" rx="10" fill="#FFC23D"/><g stroke="#1D1B38" stroke-width="3" opacity=".28"><path d="M153 149h206M153 170h206M153 191h206"/></g><path d="M343 130v78" stroke="#E8534A" stroke-width="3.5" opacity=".9"/><text x="246" y="189" text-anchor="middle" direction="rtl" font-family="Secular One" font-size="46" fill="#1D1B38">תסריטון</text></g></svg>
-<div class="sp-words" dir="ltr" lang="en"><span class="w1">Write</span><span class="w2">and</span><span class="w3">say</span><span class="w4">Action!</span></div>
+<div id="spKids"></div>
 </div>
 </div>
 <script>
 // Opening screen: plays once each time the app opens; tap to skip.
 (()=>{ const sp=document.getElementById('splash');
+  window.addEventListener('DOMContentLoaded', ()=>{ const h=document.getElementById('spKids'); if(h && typeof KIDS_PUBLIC==='function') h.outerHTML=KIDS_PUBLIC('sp-logo live'); });
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const end=()=>{ if(!sp.isConnected) return; sp.classList.add('out'); setTimeout(()=>sp.remove(), 450); };
   sp.addEventListener('click', end);
-  setTimeout(end, reduce ? 1200 : 3300);
+  setTimeout(end, reduce ? 1200 : 3000);
 })();
 </script>
 <div class="wrap" dir="rtl" lang="he" id="app"></div>
@@ -387,11 +400,12 @@ document.documentElement.dir='rtl'; document.documentElement.lang='he';
 //   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
 //   {מקום} {למקום} {במקום}   the place of the scene
 //   {חפץ} {אירוע}            the important object and the event from the chosen topic
-const APP_VERSION = '1.18';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
+const APP_VERSION = '1.19';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
 const APP_DATE = '21.11.2026';
 const APP_URL = 'https://gzfilm.github.io/tasriton/';
 // "What's new": newest first. Add an entry here with every update.
 const CHANGES = [
+  {v:'1.19', d:'21.11.2026', items:['הלוגו בתוך האפליקציה הוא עכשיו הילדים המצלמים, כמו האייקון במסך הבית','מסך הפתיחה: רק הילדים, והם זזים: צועקים במגפון, כותבים ומצלמים','בקבוצה חדשה: קולנוען/ית, ואייקונים חדשים לבית ספר, צוות וקולנוען/ית']},
   {v:'1.18', d:'21.11.2026', items:['תסריטון לבתי ספר, לקולנוענים ולכל מי שאוהב סרטים (באודות ובשיתוף)']},
   {v:'1.17', d:'21.11.2026', items:['מסך בית חדש: האפליקציה נפתחת במסך פתיחה, וקבוצה שכבר התחילה ממשיכה מאיפה שעצרה','קבוצה חדשה נפתחת רק כשמבקשים: מכפתור במסך הבית או מהתפריט','בפתיחת קבוצה בוחרים: בית ספר, צוות או קולנוען, וממלאים רק את מה שמתאים']},
   {v:'1.16', d:'18.11.2026', items:['באייקון: הקלאפר פתוח, עם המקל העליון בזווית']},
@@ -667,7 +681,23 @@ function scriptText(){
 }
 
 /* ================= views: kids ================= */
-const CLAP = `<svg class="clap" viewBox="0 0 512 512" role="img" aria-label="תסריטון"><rect width="512" height="512" rx="112" fill="#1D1B38"/><g transform="translate(256 262) scale(.94) translate(-256 -262)"><g fill="none" stroke="#FFC23D" stroke-linecap="round" stroke-linejoin="round"><path d="M156 112v300M356 112v300" stroke-width="22"/><path d="M120 262h72M320 262h72" stroke-width="20"/><path d="M156 304l200 108M356 304L156 412" stroke-width="18"/></g><rect x="145" y="126" width="222" height="86" rx="10" fill="#FFC23D"/><rect x="145" y="290" width="222" height="28" rx="10" fill="#FFC23D"/><g stroke="#1D1B38" stroke-width="11" stroke-linecap="round" opacity=".55"><path d="M172 152h150M172 186h150"/></g><path d="M340 134v70" stroke="#E8534A" stroke-width="10" stroke-linecap="round"/></g></svg>`;
+// The app icon: three kids making a film (same drawing as the home-screen icon, G.Z aLAB band at the bottom).
+// Parts have classes so the opening screen can make them move.
+let kidsN = 0;
+const KIDS_BAND = 'data:image/png;base64,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';
+const KIDS = (cls='') => { const n = ++kidsN; return `<svg class="kids ${cls}" viewBox="0 0 1024 1024" role="img" aria-label="תסריטון"><defs><linearGradient id="kg${n}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6B862"/><stop offset="1" stop-color="#E99A38"/></linearGradient><clipPath id="kc${n}"><rect width="1024" height="1024" rx="226"/></clipPath></defs><g clip-path="url(#kc${n})"><rect width="1024" height="1024" fill="url(#kg${n})"/><g transform="translate(0 -30) translate(512 600) scale(1.1) translate(-512 -600)">
+<g class="k-l"><g class="k-in"><circle cx="222" cy="492" r="42" fill="#0E1114"/><rect x="186" y="650" width="208" height="420" rx="96" fill="#0E1114"/><circle cx="290" cy="540" r="82" fill="#0E1114"/><circle cx="276" cy="534" r="11" fill="#FFF6EC"/><circle cx="314" cy="534" r="11" fill="#FFF6EC"/><path d="M280 568 Q298 582 316 568" fill="none" stroke="#F0A94C" stroke-width="10" stroke-linecap="round"/><polygon points="242,532 146,435 86,553 222,572" fill="#FFF6EC"/><path class="k-shout" d="M128 404 L108 374 M96 430 L70 410" stroke="#0E1114" stroke-width="15" stroke-linecap="round"/></g></g>
+<g class="k-r"><g class="k-in"><rect x="630" y="650" width="208" height="420" rx="96" fill="#0E1114"/><circle cx="734" cy="540" r="82" fill="#0E1114"/><path d="M652 540 A82 82 0 0 1 816 540" fill="none" stroke="#FFF6EC" stroke-width="16"/><circle cx="716" cy="552" r="11" fill="#FFF6EC"/><circle cx="754" cy="552" r="11" fill="#FFF6EC"/><path d="M718 586 Q736 600 754 586" fill="none" stroke="#F0A94C" stroke-width="10" stroke-linecap="round"/><g class="k-ph"><path d="M806 680 L830 520" stroke="#0E1114" stroke-width="48" stroke-linecap="round"/><rect x="788" y="380" width="92" height="140" rx="18" fill="#FFF6EC"/><circle cx="834" cy="418" r="18" fill="#0E1114"/><circle class="k-rec" cx="860" cy="494" r="10" fill="#E0402F"/></g></g></g>
+<g class="k-m"><g class="k-in"><rect x="388" y="600" width="248" height="480" rx="116" fill="#0E1114" stroke="#F0A94C" stroke-width="14"/><circle cx="512" cy="474" r="98" fill="#0E1114" stroke="#F0A94C" stroke-width="14"/><circle cx="482" cy="478" r="13" fill="#FFF6EC"/><circle cx="538" cy="478" r="13" fill="#FFF6EC"/><path d="M478 520 Q510 548 542 520" fill="none" stroke="#F0A94C" stroke-width="13" stroke-linecap="round"/><g transform="rotate(-8 512 720)"><g class="k-nb"><rect x="420" y="644" width="184" height="152" rx="14" fill="#FFF6EC"/><rect x="448" y="674" width="110" height="18" rx="9" fill="#0E1114"/><rect x="448" y="708" width="124" height="13" rx="6" fill="#0E1114" opacity=".45"/><rect x="448" y="734" width="92" height="13" rx="6" fill="#0E1114" opacity=".45"/><rect x="448" y="760" width="110" height="13" rx="6" fill="#0E1114" opacity=".45"/></g></g></g></g>
+</g><rect y="872" width="1024" height="152" fill="#0E1114"/><image href="${KIDS_BAND}" x="0" y="872" width="1024" height="152"/></g></svg>`; };
+// Small icons for the kind of group (school / crew / filmmaker), in the same amber-and-dark style.
+const KIND_ICON = {
+  school: '<svg class="kic" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="24" fill="#F0A94C"/><circle cx="20" cy="44" r="10" fill="#0E1114"/><circle cx="16.4" cy="43" r="1.8" fill="#FFF6EC"/><circle cx="23.6" cy="43" r="1.8" fill="#FFF6EC"/><path d="M17 48q3 2.4000000000000004 6 0" fill="none" stroke="#F0A94C" stroke-width="2" stroke-linecap="round"/><rect x="9" y="58" width="22" height="44" rx="10" fill="#0E1114"/><circle cx="80" cy="44" r="10" fill="#0E1114"/><circle cx="76.4" cy="43" r="1.8" fill="#FFF6EC"/><circle cx="83.6" cy="43" r="1.8" fill="#FFF6EC"/><path d="M77 48q3 2.4000000000000004 6 0" fill="none" stroke="#F0A94C" stroke-width="2" stroke-linecap="round"/><rect x="69" y="58" width="22" height="44" rx="10" fill="#0E1114"/><circle cx="50" cy="32" r="12" fill="#0E1114" stroke="#F0A94C" stroke-width="2.5"/><circle cx="45.8" cy="31" r="2.1" fill="#FFF6EC"/><circle cx="54.2" cy="31" r="2.1" fill="#FFF6EC"/><path d="M46.4 37q3.6 2.8800000000000003 7.2 0" fill="none" stroke="#F0A94C" stroke-width="2" stroke-linecap="round"/><rect x="36" y="47" width="28" height="56" rx="13" fill="#0E1114" stroke="#F0A94C" stroke-width="2.5"/><g transform="rotate(-8 50 68)"><rect x="35" y="58" width="30" height="24" rx="3" fill="#FFF6EC"/><rect x="40" y="63" width="17" height="3.5" rx="1.7" fill="#0E1114"/><rect x="40" y="70" width="20" height="3" rx="1.5" fill="#0E1114" opacity=".45"/><rect x="40" y="76" width="15" height="3" rx="1.5" fill="#0E1114" opacity=".45"/></g></svg>',
+  crew: '<svg class="kic" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="24" fill="#F0A94C"/><circle cx="31" cy="46" r="12" fill="#0E1114"/><circle cx="29" cy="45" r="2" fill="#FFF6EC"/><circle cx="37" cy="45" r="2" fill="#FFF6EC"/><path d="M29.6 50q3.4 2.72 6.8 0" fill="none" stroke="#F0A94C" stroke-width="2" stroke-linecap="round"/><rect x="18" y="62" width="26" height="42" rx="12" fill="#0E1114"/><polygon points="26,46 12,30 4,48 23,53" fill="#FFF6EC"/><path d="M10 23l-3-5M4 31l-5-3" stroke="#0E1114" stroke-width="3" stroke-linecap="round"/><circle cx="67" cy="46" r="12" fill="#0E1114"/><path d="M55 46a12 12 0 0 1 24 0" fill="none" stroke="#FFF6EC" stroke-width="3"/><circle cx="61" cy="48" r="2" fill="#FFF6EC"/><circle cx="69" cy="48" r="2" fill="#FFF6EC"/><path d="M61.6 53q3.4 2.72 6.8 0" fill="none" stroke="#F0A94C" stroke-width="2" stroke-linecap="round"/><rect x="54" y="62" width="26" height="42" rx="12" fill="#0E1114"/><path d="M77 68l5-22" stroke="#0E1114" stroke-width="7" stroke-linecap="round"/><rect x="75" y="24" width="16" height="23" rx="3" fill="#FFF6EC"/><circle cx="83" cy="30.5" r="3" fill="#0E1114"/><circle cx="87" cy="42.5" r="1.8" fill="#E0402F"/></svg>',
+  maker: '<svg class="kic" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="24" fill="#F0A94C"/><circle cx="42" cy="42" r="15" fill="#0E1114"/><path d="M27 42a15 15 0 0 1 30 0" fill="none" stroke="#FFF6EC" stroke-width="3.5"/><circle cx="38" cy="45" r="2.3" fill="#FFF6EC"/><circle cx="47" cy="45" r="2.3" fill="#FFF6EC"/><path d="M38.9 50.5q3.6 2.8800000000000003 7.2 0" fill="none" stroke="#F0A94C" stroke-width="2" stroke-linecap="round"/><rect x="26" y="62" width="32" height="44" rx="15" fill="#0E1114"/><path d="M54 70l12-26" stroke="#0E1114" stroke-width="8" stroke-linecap="round"/><rect x="58" y="16" width="26" height="34" rx="5" fill="#FFF6EC"/><circle cx="71" cy="26" r="5" fill="#0E1114"/><circle cx="78" cy="43" r="2.6" fill="#E0402F"/><path d="M88 22l6-4M89 33h7" stroke="#0E1114" stroke-width="3" stroke-linecap="round"/></svg>'
+};
+window.KIDS_PUBLIC = KIDS;
+const CLAP = KIDS('clap');   // the app logo in the header (top corner)
 
 const ico = d => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 const IC = {
@@ -687,7 +717,7 @@ function menuPanel(){
   return `<button type="button" class="menuveil" data-act="menu-close" aria-label="סגירת התפריט" tabindex="-1"></button>
   <nav class="menu" id="mainmenu" role="menu" aria-label="תפריט">
     ${item('m-home',IC.home,'בית','ממשיכים קבוצה שכבר התחילה')}
-    ${item('g-start',IC.plus,'קבוצה חדשה','בית ספר, צוות או קולנוען')}
+    ${item('g-start',IC.plus,'קבוצה חדשה','בית ספר, צוות או קולנוען/ית')}
     ${isInstalled()?'':item('m-install',IC.install,'התקנה במסך הבית','אייקון של תסריטון בטלפון או בטאבלט')}
     ${item('m-share',IC.share,'שיתוף האפליקציה','שליחת הקישור לחברים')}
     ${item('m-news',IC.news,'מה חדש','גרסה '+APP_VERSION+' · '+APP_DATE)}
@@ -738,7 +768,7 @@ function installView(){
   return `<section class="panel installbox">
     <img src="icons/tasriton-192.png" width="96" height="96" alt="האייקון של תסריטון" class="appicon">
     <h3>תסריטון במסך הבית</h3>
-    <p class="help">ככה תסריטון נפתחת כמו אפליקציה: על כל המסך, עם אייקון של כיסא במאי, וגם בלי אינטרנט.</p>
+    <p class="help">ככה תסריטון נפתחת כמו אפליקציה: על כל המסך, עם האייקון של הילדים המצלמים, וגם בלי אינטרנט.</p>
     <ol class="steps">${steps}</ol>
     <p class="help">אחרי ההתקנה פותחים תמיד מהאייקון. בפתיחה הראשונה מאשרים מצלמה ומיקרופון.</p>
     <div class="row" style="justify-content:center"><button type="button" class="btn ghost" data-act="m-home">חזרה</button></div></section>`;
@@ -790,8 +820,8 @@ function track(){
     return `<li><button type="button" data-act="go" data-k="${k}" ${S.step===k?'aria-current="step"':''} class="${S.step>k?'done':''}" ${can?'':'disabled'}><b>${k}</b><span>${n}</span></button></li>`;}).join('')}</ol>`;
 }
 const fmtDate = t => { try{ return new Date(t).toLocaleDateString('he-IL',{day:'numeric',month:'numeric'}); }catch(e){ return ''; } };
-const groupWhere = g => g.kind==='crew' ? 'צוות צילום' : g.kind==='maker' ? 'קולנוען' :[g.cls&&('כיתה '+g.cls), g.school].filter(Boolean).join(' · ');
-const groupIcon = g => g.kind==='crew' ? '🎬' : g.kind==='maker' ? '🎥' : '👥';
+const groupWhere = g => g.kind==='crew' ? 'צוות צילום' : g.kind==='maker' ? 'קולנוען/ית' :[g.cls&&('כיתה '+g.cls), g.school].filter(Boolean).join(' · ');
+const groupIcon = g => KIND_ICON[g.kind] || KIND_ICON.school;
 // The journey map: the whole way from story to filming, so kids know auditions and filming are coming.
 function journey(){
   const done=!!S.done, left=audLeft();
@@ -813,7 +843,7 @@ function groupBar(){
 function groupsView(){
   const list=[...groups].sort((a,b)=>b.updated-a.updated);
   return `<section style="display:flex;flex-direction:column;gap:12px">
-    <div class="panel welcome">${CLAP}<h2 class="h2">ברוכים הבאים לתסריטון</h2>
+    <div class="panel welcome">${KIDS('clap live')}<h2 class="h2">ברוכים הבאים לתסריטון</h2>
       <p class="lead">כותבים תסריט מתבנית, עורכים אותו, עושים אודישנים ויוצאים לצלם.</p>
       <div class="row" style="justify-content:center"><button type="button" class="btn pri big" data-act="g-start">+ קבוצה חדשה</button></div></div>
     ${list.length?`<h2 class="h2">ממשיכים מאיפה שעצרנו</h2>
@@ -824,9 +854,9 @@ function groupsView(){
 }
 // New group: first choose who is writing (school / crew / filmmaker), then only the fields that fit.
 const KINDS = [
-  {id:'school', icon:'🏫', name:'בית ספר', desc:'כיתה או קבוצת תלמידים'},
-  {id:'crew',   icon:'🎬', name:'צוות',    desc:'צוות צילום שעובד ביחד'},
-  {id:'maker',  icon:'🎥', name:'קולנוען', desc:'יוצר אחד, הסרט שלי'},
+  {id:'school', icon:KIND_ICON.school, name:'בית ספר', desc:'כיתה או קבוצת תלמידים'},
+  {id:'crew',   icon:KIND_ICON.crew, name:'צוות',    desc:'צוות צילום שעובד ביחד'},
+  {id:'maker',  icon:KIND_ICON.maker, name:'קולנוען/ית', desc:'יוצר או יוצרת, הסרט שלי'},
 ];
 function newGroupView(){
   const k=T.gkind;
