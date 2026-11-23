@@ -416,11 +416,12 @@ document.documentElement.dir='rtl'; document.documentElement.lang='he';
 //   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
 //   {מקום} {למקום} {במקום}   the place of the scene
 //   {חפץ} {אירוע}            the important object and the event from the chosen topic
-const APP_VERSION = '1.21';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
+const APP_VERSION = '1.22';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
 const APP_DATE = '23.11.2026';
 const APP_URL = 'https://gzfilm.github.io/tasriton/';
 // "What's new": newest first. Add an entry here with every update.
 const CHANGES = [
+  {v:'1.22', d:'23.11.2026', items:['תיקון: סיפורים שנשמרו לפני העדכון כבר לא מציגים "(שלי)" בשם. הכוכבית ★ מסמנת אותם']},
   {v:'1.21', d:'23.11.2026', items:['מצב מורה: אפשר למחוק סיפור שכתבתם','מצב מורה: אפשר לערוך את הסיפורים המוכנים, והשינוי נשמר על הסיפור עצמו. "חזרה למקור" מחזיר את הגרסה המקורית','סיפור שכתבתם מסומן בכוכבית ★, ובשכפול לא נוסף יותר "(שלי)" לשם']},
   {v:'1.20', d:'22.11.2026', items:['מצלמה במסך מלא: בכפתור "מסך מלא" במסך הצילום המצלמה תופסת את כל המסך, רואים את כל הפריים בדיוק כמו שמוקלט, עם קווי שליש. "חזרה לתסריט" מחזיר את התסריט לצד המצלמה','הטאבלט זוכר את הבחירה לפעם הבאה']},
   {v:'1.19', d:'21.11.2026', items:['הלוגו בתוך האפליקציה הוא עכשיו הילדים המצלמים, כמו האייקון במסך הבית','מסך הפתיחה: רק הילדים, והם זזים: צועקים במגפון, כותבים ומצלמים','בקבוצה חדשה: קולנוען/ית, ואייקונים חדשים לבית ספר, צוות וקולנוען/ית']},
@@ -542,6 +543,10 @@ const store=(k,v)=>{ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){
 
 let mine = load(K.mine, []);        // stories the teacher wrote here
 let got  = load(K.got, []);         // stories received from a teacher's code
+// Before 1.21 a copied story got " (שלי)" added to its name. Now a star marks the teacher's own stories, so drop it from old saves.
+{ const MY=/\s*\(שלי\)\s*$/, fix=list=>{ let n=0; for(const s of list) if(s && MY.test(s.title||'')){ s.title=s.title.replace(MY,''); n++; } return n; };
+  if(fix(mine)) store(K.mine, mine);
+  if(fix(got)) store(K.got, got); }
 let S = load(K.state, null) || {step:1, storyId:null, topic:'school', chars:[{name:'דני',g:'m'},{name:'נועה',g:'f'}], title:'', authors:'', lines:null, scene:null};
 if(!S.chars){ S.chars=[S.A||{name:'דני',g:'m'}, S.B||{name:'נועה',g:'f'}]; delete S.A; delete S.B; }   // older saves
 // Groups: every group keeps its own script on this tablet, so it can continue next week.
@@ -551,6 +556,9 @@ let curId = load(K.cur, null);
 if(!groups.length && S.storyId){ const g={id:'grp-'+Date.now().toString(36), school:'', cls:'', team:'הקבוצה הקודמת', created:Date.now(), updated:Date.now(), state:S}; groups=[g]; curId=g.id; store(K.groups,groups); store(K.cur,curId); }
 const curGroup = ()=>groups.find(g=>g.id===curId);
 if(curGroup()) S = curGroup().state; else curId=null;
+{ const MY=/\s*\(שלי\)\s*$/; let n=0;   // the film name came from the story name, so drop the old " (שלי)" there too
+  for(const st of [S, ...groups.map(g=>g.state)]) if(st && MY.test(st.title||'')){ st.title=st.title.replace(MY,''); n++; }
+  if(n){ store(K.state, S); store(K.groups, groups); } }
 let view = curId ? 'kid' : 'groups';                   // 'kid' | 'teacher' | 'pin' (enter the teacher code) | 'pinset' (choose a code)
 let openLine = -1;                  // index of the open line, or 'scene'
 let T = {editing:null, err:'', code:'', importErr:'', importOk:'', gform:-1, flip:false, pinErr:'', groupErr:'', menu:false, newVer:false};
