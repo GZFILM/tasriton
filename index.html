@@ -123,6 +123,9 @@ h1,h2,h3,p{margin:0}
 .pick.kind h3{font-size:21px}
 .genre{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:3px 10px 3px 8px;border-radius:999px;background:var(--field);border:1px solid var(--line)}
 .from{position:absolute;top:10px;inset-inline-end:10px;font-size:11px;font-weight:700;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:1px 8px}
+.from.star{font-size:15px;line-height:1.3;padding:1px 6px}
+.mystar{color:var(--accent);margin-inline-end:4px}
+.edited{font-size:12px;font-weight:700;color:var(--accent-ink);background:var(--accent);border-radius:999px;padding:1px 8px;margin-inline-start:6px}
 .slug{font-family:var(--script);font-size:14px;color:var(--muted);direction:rtl}
 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:10px 18px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);font-weight:500}
@@ -413,11 +416,12 @@ document.documentElement.dir='rtl'; document.documentElement.lang='he';
 //   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
 //   {מקום} {למקום} {במקום}   the place of the scene
 //   {חפץ} {אירוע}            the important object and the event from the chosen topic
-const APP_VERSION = '1.20';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
-const APP_DATE = '22.11.2026';
+const APP_VERSION = '1.21';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
+const APP_DATE = '23.11.2026';
 const APP_URL = 'https://gzfilm.github.io/tasriton/';
 // "What's new": newest first. Add an entry here with every update.
 const CHANGES = [
+  {v:'1.21', d:'23.11.2026', items:['מצב מורה: אפשר למחוק סיפור שכתבתם','מצב מורה: אפשר לערוך את הסיפורים המוכנים, והשינוי נשמר על הסיפור עצמו. "חזרה למקור" מחזיר את הגרסה המקורית','סיפור שכתבתם מסומן בכוכבית ★, ובשכפול לא נוסף יותר "(שלי)" לשם']},
   {v:'1.20', d:'22.11.2026', items:['מצלמה במסך מלא: בכפתור "מסך מלא" במסך הצילום המצלמה תופסת את כל המסך, רואים את כל הפריים בדיוק כמו שמוקלט, עם קווי שליש. "חזרה לתסריט" מחזיר את התסריט לצד המצלמה','הטאבלט זוכר את הבחירה לפעם הבאה']},
   {v:'1.19', d:'21.11.2026', items:['הלוגו בתוך האפליקציה הוא עכשיו הילדים המצלמים, כמו האייקון במסך הבית','מסך הפתיחה: רק הילדים, והם זזים: צועקים במגפון, כותבים ומצלמים','בקבוצה חדשה: קולנוען/ית, ואייקונים חדשים לבית ספר, צוות וקולנוען/ית']},
   {v:'1.18', d:'21.11.2026', items:['תסריטון לבתי ספר, לקולנוענים ולכל מי שאוהב סרטים (באודות ובשיתוף)']},
@@ -559,7 +563,20 @@ let pinSaved = load(K.pin, '');
 const caret = {};                   // last cursor position in each teacher textarea
 const save = ()=>{ store(K.state, S); const g=curGroup(); if(g){ g.state=S; g.updated=Date.now(); store(K.groups, groups); } };
 
-const allStories = ()=>[...got.map(s=>({...s,_src:'got'})), ...mine.map(s=>({...s,_src:'mine'})), ...BUILTIN];
+// `mine` holds the teacher's own stories, and also edited versions of the ready-made stories
+// (same id as the original, base:true), so an edit replaces the original everywhere.
+// A deleted story that a group still uses is only hidden (gone:true), so that group's script keeps working.
+const BUILT = id => BUILTIN.find(s=>s.id===id);
+const ownStories = ()=>mine.filter(m=>!m.base);
+function merged(s){
+  const o=mine.find(m=>m.base && m.id===s.id); if(!o) return s;
+  const st={...s, genre:o.genre, title:o.title, desc:o.desc, beats:o.beats, scene:s.starts?s.scene:o.scene, _edited:true};
+  if(s.starts){ const i=o.beats.findIndex(b=>b.t==='sc');   // a start that opens elsewhere joins the edited route at the first scene change
+    st.starts=s.starts.map(v=>v.open?{...v, beats:[...v.open, ...(i>=0?o.beats.slice(i+1):[])]}:v); }
+  return st;
+}
+const allStories = ()=>[...got.map(s=>({...s,_src:'got'})), ...ownStories().map(s=>({...s,_src:'mine'})), ...BUILTIN.map(merged)];
+const listStories = ()=>allStories().filter(s=>!s.gone);
 const storyById = id => allStories().find(s=>s.id===id);
 const topic = ()=>TOPICS.find(t=>t.id===S.topic) || TOPICS[0];
 const withStart = (st, startId) => { if(!st || !st.starts) return st; const v=st.starts.find(x=>x.id===startId)||st.starts[0];
@@ -910,11 +927,11 @@ const GENRE_ICONS = [   // all in the logo's yellow with dark outlines
 const BOOK_ICON = GI('<path d="M3 5.5c3-1 6-1 9 .8v13c-3-1.8-6-1.8-9-.8z" fill="#FFC23D" stroke="#1D1B38" stroke-width="1.3" stroke-linejoin="round"/><path d="M21 5.5c-3-1-6-1-9 .8v13c3-1.8 6-1.8 9-.8z" fill="#FFF1C2" stroke="#1D1B38" stroke-width="1.3" stroke-linejoin="round"/>');
 const genreIcon = g => { const t=String(g||'').trim(); const hit=GENRE_ICONS.find(([k])=>t.startsWith(k)); return hit?hit[1]:BOOK_ICON; };
 function stepStory(){
-  const list=allStories();
+  const list=listStories();
   return `<section style="display:flex;flex-direction:column;gap:12px"><h2 class="h2">איזה סיפור נכתוב היום?</h2>
     <p class="lead">בוחרים סיפור. אחר כך בוחרים איפה הוא קורה ומי הדמויות.</p>
     <div class="grid">${list.map(s=>`<button type="button" class="pick" data-act="story" data-id="${s.id}" aria-pressed="${S.storyId===s.id}">
-      ${s._src==='got'?'<span class="from">מהמורה</span>':s._src==='mine'?'<span class="from">שלי</span>':''}
+      ${s._src==='got'?'<span class="from">מהמורה</span>':s._src==='mine'?'<span class="from star" title="סיפור שכתבתי">★</span>':''}
       <span class="genre">${genreIcon(s.genre)}${esc(s.genre)}</span><h3>${esc(s.title)}</h3><p>${esc(s.desc)}</p></button>`).join('')}</div>
     <details class="panel"><summary style="cursor:pointer;font-weight:500">קיבלתם קוד סיפור מהמורה?</summary>
       <div class="field" style="margin-top:10px"><label for="kidcode">הדביקו כאן את הקוד</label><textarea id="kidcode" placeholder="TSR1...."></textarea></div>
@@ -1060,12 +1077,13 @@ function pinSubmit(){
 }
 function teacherView(){
   if(T.editing) return editorView();
+  const myList = ownStories().filter(s=>!s.gone);
   return `<section class="panel"><h3>מצב מורה: הסיפורים שלי</h3>
     <p class="help">כאן בונים סיפור לתלמידים: כותרת סצנה, ואחריה שורה אחרי שורה. לכל שורה כותבים כמה אפשרויות, והתלמידים בוחרים ביניהן או כותבים משהו משלהם.</p>
     <p class="help">גרסה ${APP_VERSION} · ${APP_DATE}</p>
     <div class="row"><button type="button" class="btn pri" data-act="t-new">+ סיפור חדש</button><button type="button" class="btn small ghost" data-act="pin-change">שינוי קוד מורה</button></div>
-    ${mine.length?`<div class="mylist">${mine.map(s=>`<div class="myitem"><div><b>${esc(s.title)}</b><br><span>${genreIcon(s.genre)} ${esc(s.genre)} · ${s.beats.length} שורות</span></div>
-      <div class="row"><button type="button" class="btn small" data-act="t-edit" data-id="${s.id}">עריכה</button><button type="button" class="btn small" data-act="t-share" data-id="${s.id}">שליחה לתלמידים</button><button type="button" class="btn small" data-act="t-try" data-id="${s.id}">לנסות</button></div>
+    ${myList.length?`<div class="mylist">${myList.map(s=>`<div class="myitem"><div><b><span class="mystar" aria-hidden="true">★</span>${esc(s.title)}</b><br><span>${genreIcon(s.genre)} ${esc(s.genre)} · ${s.beats.length} שורות</span></div>
+      <div class="row"><button type="button" class="btn small" data-act="t-edit" data-id="${s.id}">עריכה</button><button type="button" class="btn small" data-act="t-share" data-id="${s.id}">שליחה לתלמידים</button><button type="button" class="btn small" data-act="t-try" data-id="${s.id}">לנסות</button><button type="button" class="btn small ghost" data-act="t-rm" data-id="${s.id}">מחיקה</button></div>
       ${T.code&&T.code.id===s.id?`<div style="flex-basis:100%;display:flex;flex-direction:column;gap:8px">
         <p class="help">שלחו לתלמידים את ${canLink?'הקישור':'הקוד'}. ${canLink?'מי שפותח את הקישור מקבל את הסיפור מיד.':'בתסריטון הם לוחצים על "קיבלתם קוד סיפור מהמורה?" ומדביקים.'}</p>
         <div class="codebox">${esc(canLink?T.code.link:T.code.code)}</div>
@@ -1077,8 +1095,10 @@ function teacherView(){
     ${groups.length?`<div class="mylist">${[...groups].sort((a,b)=>b.updated-a.updated).map(g=>`<div class="myitem"><div><b>${esc(g.team)}</b><br><span>${esc(groupWhere(g)||'')}${groupWhere(g)?' · ':''}${esc(g.state&&g.state.title||'עוד אין תסריט')} · ${fmtDate(g.updated)}</span></div>
       <div class="row"><span>אודישנים: ${(g.state&&g.state.auds)||0} מתוך ${audLimit(g.state||{})}</span><button type="button" class="btn small" data-act="g-more" data-id="${g.id}">+1 אודישן</button><button type="button" class="btn small" data-act="g-del" data-id="${g.id}">מחק</button></div></div>`).join('')}</div>`:'<div class="empty">אין עדיין קבוצות בטאבלט הזה.</div>'}
   </section>
-  <section class="panel"><h3>להתחיל מסיפור מוכן</h3><p class="help">משכפלים, ואז משנים כמה שרוצים.</p>
-    <div class="row">${BUILTIN.map(s=>`<button type="button" class="btn small" data-act="t-dup" data-id="${s.id}">${esc(s.title)}</button>`).join('')}</div></section>`;
+  <section class="panel"><h3>הסיפורים המוכנים</h3>
+    <p class="help"><b>עריכה</b> משנה את הסיפור עצמו, והשינוי נשמר עליו. <b>שכפול</b> יוצר ממנו סיפור חדש משלך, והמקורי נשאר כמו שהוא.</p>
+    <div class="mylist">${BUILTIN.map(merged).map(s=>`<div class="myitem"><div><b>${esc(s.title)}</b>${s._edited?'<span class="edited">נערך</span>':''}<br><span>${genreIcon(s.genre)} ${esc(s.genre)} · ${s.beats.length} שורות</span></div>
+      <div class="row"><button type="button" class="btn small" data-act="t-bedit" data-id="${s.id}">עריכה</button><button type="button" class="btn small" data-act="t-dup" data-id="${s.id}">שכפול לסיפור חדש</button><button type="button" class="btn small" data-act="t-try" data-id="${s.id}">לנסות</button>${s._edited?`<button type="button" class="btn small ghost" data-act="t-orig" data-id="${s.id}">חזרה למקור</button>`:''}</div></div>`).join('')}</div></section>`;
 }
 function previewCtx(){
   const st=T.editing, chars = T.flip?SAMPLE_FLIP:SAMPLE;
@@ -1107,12 +1127,14 @@ function beatTools(i, nChars){
 function editorView(){
   const st=T.editing, sc=st.scene||{m:'topic'}, custom=sc.m==='custom';
   const nChars = Math.min(6, Math.max(charsNeeded(st)+1, 2));
-  return `<section class="panel"><h3>1. פרטי הסיפור</h3>
+  const fixedStarts = st.base && BUILT(st.id) && BUILT(st.id).starts;   // the chase: the place comes from the starting point
+  return `${st.base?`<div class="panel"><p class="help"><b>עורכים סיפור מוכן.</b> השינויים נשמרים על הסיפור עצמו. אפשר תמיד לחזור לגרסה המקורית מרשימת הסיפורים המוכנים.</p></div>`:''}
+  <section class="panel"><h3>1. פרטי הסיפור</h3>
     <div class="meta"><div class="field"><label for="t-title">שם הסיפור</label><input type="text" id="t-title" data-tin="title" value="${esc(st.title)}" maxlength="40"></div>
       <div class="field"><label for="t-genre">ז׳אנר</label><input type="text" id="t-genre" data-tin="genre" value="${esc(st.genre)}" list="genres" maxlength="20"><datalist id="genres"><option>קומדיה</option><option>הרפתקה</option><option>בלשי</option><option>מדע בדיוני</option><option>דרמה</option><option>פנטזיה</option><option>אימה קלה</option></datalist></div></div>
     <div class="field"><label for="t-desc">משפט קצר על הסיפור (התלמידים רואים אותו כשהם בוחרים)</label><input type="text" id="t-desc" data-tin="desc" value="${esc(st.desc)}" maxlength="120"></div>
   </section>
-  <section class="panel"><h3>2. כותרת הסצנה: איפה ומתי</h3>
+  ${fixedStarts?`<section class="panel"><h3>2. כותרת הסצנה: איפה ומתי</h3><p class="help">בסיפור הזה התלמידים בוחרים נקודת התחלה, והיא קובעת את המקום של הסצנה הראשונה. את שאר הסצנות קובעות שורות "סצנה חדשה" שלמטה.</p></section>`:`<section class="panel"><h3>2. כותרת הסצנה: איפה ומתי</h3>
     <p class="help">כל סצנה בתסריט נפתחת בכותרת: <b>פנים</b> או <b>חוץ</b>, המקום, והזמן. למשל: <b>פנים. כיתה ד׳ – בוקר</b>. התלמידים יראו אותה בראש התסריט, ויוכלו לשנות אותה.</p>
     <div class="radio">
       <label><input type="radio" name="scm" data-tin="scm" value="topic" ${custom?'':'checked'}><span>התלמידים בוחרים מקום מתוך רשימה (כיתה, יער, מסיבה, מגרש, חוף)</span></label>
@@ -1123,7 +1145,7 @@ function editorView(){
       <div class="field"><label for="t-loc">המקום</label><input type="text" id="t-loc" data-tin="scloc" value="${esc(sc.loc||'')}" placeholder="למשל: חדר האוכל" maxlength="40"></div>
       <div class="chips">${TIMES.map(v=>`<button type="button" class="chip" data-act="t-sc" data-f="time" data-v="${v}" aria-pressed="${(sc.time||'יום')===v}" style="${(sc.time||'יום')===v?'background:var(--ink);color:var(--surface)':''}">${v}</button>`).join('')}</div>
       <div class="slugpv" id="t-slugpv">סצנה 1. ${esc(slugOf({ie:sc.ie||'פנים',loc:sc.loc||'…',time:sc.time||'יום'}))}</div></div>`:''}
-  </section>
+  </section>`}
   <section class="panel"><h3>3. השורות של הסצנה</h3>
     <p class="help">אחרי הכותרת באה שורת <b>אקשן</b>: מה רואים כשהסצנה נפתחת. אחר כך הדמויות מדברות. בכל שורה כותבים כמה אפשרויות, <b>כל אפשרות בשורה נפרדת</b>, והתלמידים בוחרים ביניהן.</p>
     <p class="help">כדי שהתלמידים יוכלו לבחור שמות, לוחצים על <b>"שם דמות א"</b> במקום לכתוב שם. ומילה שמשתנה בין בן לבת (נכנס/נכנסה) מכניסים עם <b>"מילה שמשתנה לבן/בת"</b>. מתחת לכל שורה רואים איך זה ייראה.</p>
@@ -1233,7 +1255,17 @@ document.addEventListener('click', e=>{
 
   // teacher
   if(a==='t-new'){ T.editing={id:'m-'+Date.now().toString(36), genre:'', title:'', desc:'', scene:{m:'topic'}, beats:[{t:'act',o:['']},{t:'A',o:['']},{t:'B',o:['']}]}; T.err=''; T.gform=-1; render(); scrollTo(0,0); return; }
-  if(a==='t-dup'){ const s=BUILTIN.find(x=>x.id===b.dataset.id); T.editing={id:'m-'+Date.now().toString(36), genre:s.genre, title:s.title+' (שלי)', desc:s.desc, scene:s.scene?Object.assign({},s.scene):{m:'topic'}, beats:s.beats.map(x=>({t:x.t,o:x.o.slice()}))}; T.err=''; T.gform=-1; render(); scrollTo(0,0); return; }
+  if(a==='t-bedit'){ const s=merged(BUILT(b.dataset.id)); if(!s) return;
+    T.editing={id:s.id, base:true, genre:s.genre, title:s.title, desc:s.desc, scene:s.scene?Object.assign({},s.scene):{m:'topic'}, beats:s.beats.map(x=>({t:x.t,o:x.o.slice()}))}; T.err=''; T.gform=-1; render(); scrollTo(0,0); return; }
+  if(a==='t-rm'||a==='t-orig'){ const id=b.dataset.id;
+    if(!b.dataset.sure){ b.dataset.sure='1'; b.textContent= a==='t-rm' ? 'בטוחים? לחצו שוב למחיקה' : 'בטוחים? השינויים יימחקו'; return; }
+    const k=mine.findIndex(m=>m.id===id && (a==='t-orig' ? m.base : !m.base)); if(k<0) return;
+    // a group that already writes with this story keeps it (hidden), so its script is not lost
+    const used = a==='t-rm' && (S.storyId===id || groups.some(g=>g.state && g.state.storyId===id));
+    if(used) mine[k]=Object.assign({}, mine[k], {gone:true}); else mine.splice(k,1);
+    if(T.code && T.code.id===id) T.code='';
+    store(K.mine, mine); render(); toast(a==='t-rm' ? 'הסיפור נמחק' : 'הסיפור חזר לגרסה המקורית'); return; }
+  if(a==='t-dup'){ const s=merged(BUILT(b.dataset.id)); T.editing={id:'m-'+Date.now().toString(36), genre:s.genre, title:s.title, desc:s.desc, scene:s.scene?Object.assign({},s.scene):{m:'topic'}, beats:s.beats.map(x=>({t:x.t,o:x.o.slice()}))}; T.err=''; T.gform=-1; render(); scrollTo(0,0); return; }
   if(a==='t-edit'){ const s=mine.find(x=>x.id===b.dataset.id); T.editing=JSON.parse(JSON.stringify(s)); if(!T.editing.scene) T.editing.scene={m:'topic'}; T.err=''; T.gform=-1; render(); scrollTo(0,0); return; }
   if(a==='t-cancel'){ T.editing=null; render(); return; }
   if(a==='t-flip'){ T.flip=!T.flip; render(); return; }
