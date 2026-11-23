@@ -5,18 +5,18 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="G.Z aLAB">
-<meta property="og:title" content="Tasriton · by G.Z aLAB">
-<meta property="og:description" content="Try Tasriton by G.Z aLAB. Write a scene and shoot it at the same time.">
+<meta property="og:title" content="תסריטון · G.Z aLAB">
+<meta property="og:description" content="כותבים תסריט ומצלמים">
 <meta property="og:url" content="https://gzfilm.github.io/tasriton/">
 <meta property="og:image" content="https://gzfilm.github.io/tasriton/share-v3.jpg">
 <meta property="og:image:secure_url" content="https://gzfilm.github.io/tasriton/share-v3.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Tasriton · by G.Z aLAB">
+<meta property="og:image:alt" content="תסריטון · G.Z aLAB">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Tasriton · by G.Z aLAB">
-<meta name="twitter:description" content="Try Tasriton by G.Z aLAB. Write a scene and shoot it at the same time.">
+<meta name="twitter:title" content="תסריטון · G.Z aLAB">
+<meta name="twitter:description" content="כותבים תסריט ומצלמים">
 <meta name="twitter:image" content="https://gzfilm.github.io/tasriton/share-v3.jpg">
 <title>תסריטון</title>
 <meta name="description" content="כותבים סצנה, שורה אחרי שורה: אפליקציית תסריט לבתי ספר, לקולנוענים ולכל מי שאוהב סרטים">
@@ -421,7 +421,7 @@ const APP_DATE = '23.11.2026';
 const APP_URL = 'https://gzfilm.github.io/tasriton/';
 // "What's new": newest first. Add an entry here with every update.
 const CHANGES = [
-  {v:'1.23', d:'23.11.2026', items:['תמונה חדשה כששולחים את הקישור לתסריטון (בוואטסאפ ובכל מקום): הילדים המצלמים ו-G.Z aLAB']},
+  {v:'1.23', d:'23.11.2026', items:['תמונה חדשה כששולחים את הקישור לתסריטון (בוואטסאפ ובכל מקום): הילדים המצלמים ו-G.Z aLAB','הודעת השיתוף קצרה יותר: "תסריטון: כותבים תסריט ומצלמים."']},
   {v:'1.22', d:'23.11.2026', items:['תיקון: סיפורים שנשמרו לפני העדכון כבר לא מציגים "(שלי)" בשם. הכוכבית ★ מסמנת אותם','הקרדיט בתחתית: © 2026 G.Z aLAB']},
   {v:'1.21', d:'23.11.2026', items:['מצב מורה: אפשר למחוק סיפור שכתבתם','מצב מורה: אפשר לערוך את הסיפורים המוכנים, והשינוי נשמר על הסיפור עצמו. "חזרה למקור" מחזיר את הגרסה המקורית','סיפור שכתבתם מסומן בכוכבית ★, ובשכפול לא נוסף יותר "(שלי)" לשם']},
   {v:'1.20', d:'22.11.2026', items:['מצלמה במסך מלא: בכפתור "מסך מלא" במסך הצילום המצלמה תופסת את כל המסך, רואים את כל הפריים בדיוק כמו שמוקלט, עם קווי שליש. "חזרה לתסריט" מחזיר את התסריט לצד המצלמה','הטאבלט זוכר את הבחירה לפעם הבאה']},
@@ -831,8 +831,8 @@ function aboutView(){
     <div class="row"><button type="button" class="btn ghost" data-act="m-home">חזרה</button></div></section>`;
 }
 async function shareApp(){
-  const url = canLink ? location.origin+location.pathname : APP_URL;
-  const data = {title:'תסריטון', text:'תסריטון: אפליקציית תסריט לבתי ספר, לקולנוענים ולכל מי שאוהב סרטים. כותבים סצנה, עושים אודישן וצועקים אקשן!', url};
+  const url = (canLink ? location.origin+location.pathname : APP_URL) + '?s=' + APP_VERSION;   // a new address per version, so WhatsApp shows the current picture and not an old one it remembers
+  const data = {title:'תסריטון', text:'תסריטון: כותבים תסריט ומצלמים.', url};
   try{ if(navigator.share){ await navigator.share(data); return; } }catch(e){ if(e && e.name==='AbortError') return; }
   copy(url, 'הקישור הועתק. אפשר להדביק אותו בוואטסאפ או במייל.');
 }
