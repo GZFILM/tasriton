@@ -4,25 +4,25 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="G.Z Motion Lab">
-<meta property="og:title" content="Tasriton · by G.Z Motion Lab">
-<meta property="og:description" content="Try Tasriton by G.Z Motion Lab. Write a scene and shoot it at the same time.">
+<meta property="og:site_name" content="G.Z aLAB">
+<meta property="og:title" content="Tasriton · by G.Z aLAB">
+<meta property="og:description" content="Try Tasriton by G.Z aLAB. Write a scene and shoot it at the same time.">
 <meta property="og:url" content="https://gzfilm.github.io/tasriton/">
 <meta property="og:image" content="https://gzfilm.github.io/tasriton/share-v2.jpg">
 <meta property="og:image:secure_url" content="https://gzfilm.github.io/tasriton/share-v2.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Tasriton · by G.Z Motion Lab">
+<meta property="og:image:alt" content="Tasriton · by G.Z aLAB">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Tasriton · by G.Z Motion Lab">
-<meta name="twitter:description" content="Try Tasriton by G.Z Motion Lab. Write a scene and shoot it at the same time.">
+<meta name="twitter:title" content="Tasriton · by G.Z aLAB">
+<meta name="twitter:description" content="Try Tasriton by G.Z aLAB. Write a scene and shoot it at the same time.">
 <meta name="twitter:image" content="https://gzfilm.github.io/tasriton/share-v2.jpg">
 <title>תסריטון</title>
 <meta name="description" content="כותבים סצנה, שורה אחרי שורה: אפליקציית תסריט לבתי ספר, לקולנוענים ולכל מי שאוהב סרטים">
 <meta name="theme-color" content="#1D1B38">
-<meta name="author" content="G.Z. MOTION LAB">
-<meta name="copyright" content="© 2026 G.Z. MOTION LAB">
+<meta name="author" content="G.Z aLAB">
+<meta name="copyright" content="© 2026 G.Z aLAB">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="icons/tasriton-192.png">
 <link rel="apple-touch-icon" href="icons/tasriton-apple-180.png">
@@ -421,7 +421,7 @@ const APP_DATE = '23.11.2026';
 const APP_URL = 'https://gzfilm.github.io/tasriton/';
 // "What's new": newest first. Add an entry here with every update.
 const CHANGES = [
-  {v:'1.22', d:'23.11.2026', items:['תיקון: סיפורים שנשמרו לפני העדכון כבר לא מציגים "(שלי)" בשם. הכוכבית ★ מסמנת אותם']},
+  {v:'1.22', d:'23.11.2026', items:['תיקון: סיפורים שנשמרו לפני העדכון כבר לא מציגים "(שלי)" בשם. הכוכבית ★ מסמנת אותם','הקרדיט בתחתית: © 2026 G.Z aLAB']},
   {v:'1.21', d:'23.11.2026', items:['מצב מורה: אפשר למחוק סיפור שכתבתם','מצב מורה: אפשר לערוך את הסיפורים המוכנים, והשינוי נשמר על הסיפור עצמו. "חזרה למקור" מחזיר את הגרסה המקורית','סיפור שכתבתם מסומן בכוכבית ★, ובשכפול לא נוסף יותר "(שלי)" לשם']},
   {v:'1.20', d:'22.11.2026', items:['מצלמה במסך מלא: בכפתור "מסך מלא" במסך הצילום המצלמה תופסת את כל המסך, רואים את כל הפריים בדיוק כמו שמוקלט, עם קווי שליש. "חזרה לתסריט" מחזיר את התסריט לצד המצלמה','הטאבלט זוכר את הבחירה לפעם הבאה']},
   {v:'1.19', d:'21.11.2026', items:['הלוגו בתוך האפליקציה הוא עכשיו הילדים המצלמים, כמו האייקון במסך הבית','מסך הפתיחה: רק הילדים, והם זזים: צועקים במגפון, כותבים ומצלמים','בקבוצה חדשה: קולנוען/ית, ואייקונים חדשים לבית ספר, צוות וקולנוען/ית']},
@@ -826,7 +826,7 @@ function aboutView(){
   <section class="panel"><h3>להוסיף למסך הבית</h3>
     <p class="help"><b>אייפון ואייפד (Safari):</b> כפתור השיתוף ← "הוסף למסך הבית".<br><b>אנדרואיד (Chrome):</b> שלוש הנקודות ← "התקנת אפליקציה".</p></section>
   <section class="panel"><h3>זכויות</h3>
-    <p dir="ltr" lang="en" style="text-align:right">© 2026 G.Z. MOTION LAB</p>
+    <p dir="ltr" lang="en" style="text-align:right">© 2026 G.Z aLAB</p>
     <div class="row"><button type="button" class="btn ghost" data-act="m-home">חזרה</button></div></section>`;
 }
 async function shareApp(){
@@ -1180,7 +1180,7 @@ function render(){
   else if(view==='about') body=aboutView();
   else if(view==='install') body=installView();
   else body = journey() + groupBar() + track() + (S.step===1?stepStory():S.step===2?stepTopic():S.step===3?stepChars():stepScript());
-  app.innerHTML = header() + body + `<footer class="copy"><span dir="ltr" lang="en">© 2026 G.Z. MOTION LAB</span></footer>`;
+  app.innerHTML = header() + body + `<footer class="copy"><span dir="ltr" lang="en">© 2026 G.Z aLAB</span></footer>`;
   { const j=app.querySelector('.journey'), c=j&&j.querySelector('[aria-current]'); if(c) j.scrollLeft = c.offsetLeft - (j.clientWidth - c.offsetWidth)/2; }
   if(focusId){ const el=document.getElementById(focusId); if(el){ el.focus({preventScroll:true}); try{ if(selS!=null) el.setSelectionRange(selS,selS); }catch(e){} } }
 }

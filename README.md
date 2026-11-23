@@ -14,4 +14,4 @@
 
 ---
 
-© 2026 G.Z. MOTION LAB
+© 2026 G.Z aLAB
