@@ -416,11 +416,12 @@ document.documentElement.dir='rtl'; document.documentElement.lang='he';
 //   {אב:זכר|נקבה}            plural for the first two characters (נקבה only when both are girls)
 //   {מקום} {למקום} {במקום}   the place of the scene
 //   {חפץ} {אירוע}            the important object and the event from the chosen topic
-const APP_VERSION = '1.23';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
-const APP_DATE = '23.11.2026';
+const APP_VERSION = '1.24';                 // shown in the menu and in teacher mode, so you can see a tablet got the update
+const APP_DATE = '24.11.2026';
 const APP_URL = 'https://gzfilm.github.io/tasriton/';
 // "What's new": newest first. Add an entry here with every update.
 const CHANGES = [
+  {v:'1.24', d:'24.11.2026', items:['בתסריט: אפשר למחוק כל שורה, גם שורה של דמות מהסיפור. לוחצים על השורה ואז "מחק את השורה" (פעמיים, כדי לא למחוק בטעות). הדמות עצמה נשארת בשאר התסריט']},
   {v:'1.23', d:'23.11.2026', items:['תמונה חדשה כששולחים את הקישור לתסריטון (בוואטסאפ ובכל מקום): הילדים המצלמים ו-G.Z aLAB','הודעת השיתוף קצרה יותר: "תסריטון: כותבים תסריט ומצלמים."']},
   {v:'1.22', d:'23.11.2026', items:['תיקון: סיפורים שנשמרו לפני העדכון כבר לא מציגים "(שלי)" בשם. הכוכבית ★ מסמנת אותם','הקרדיט בתחתית: © 2026 G.Z aLAB']},
   {v:'1.21', d:'23.11.2026', items:['מצב מורה: אפשר למחוק סיפור שכתבתם','מצב מורה: אפשר לערוך את הסיפורים המוכנים, והשינוי נשמר על הסיפור עצמו. "חזרה למקור" מחזיר את הגרסה המקורית','סיפור שכתבתם מסומן בכוכבית ★, ובשכפול לא נוסף יותר "(שלי)" לשם']},
@@ -1002,7 +1003,7 @@ function optsPanel(L,i){
   return `<div class="opts">${whoPick}${opts}
     <label class="lbl" for="custom-${i}">${isCustomLine?'מה כתוב בשורה?':'או כתבו בעצמכם:'}</label>
     <textarea id="custom-${i}" data-in="custom" data-i="${i}" placeholder="${L.t==='sc'?'למשל: פנים. ספרייה – צהריים':L.t==='act'?'מה רואים עכשיו?':'מה הדמות אומרת?'}">${esc(L.custom)}</textarea>
-    <div class="row"><button type="button" class="btn small" data-act="close">סגור</button>${isCustomLine?`<button type="button" class="btn small" data-act="delline" data-i="${i}">מחק שורה</button>`:''}</div></div>`;
+    <div class="row"><button type="button" class="btn small" data-act="close">סגור</button><button type="button" class="btn small ghost" data-act="delline" data-i="${i}">מחק את השורה</button></div></div>`;
 }
 const CAM_ICON = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3z"/></svg>`;
 // Auditions are limited: 3, or one per speaking character if there are more. The teacher can add more.
@@ -1252,7 +1253,10 @@ document.addEventListener('click', e=>{
   if(a==='settype'){ S.lines[i].t=b.dataset.t; save(); render(); return; }
   if(a==='addline'){ const at=i+1, prev=S.lines[i]; const t = prev&&prev.t==='A'?'B':'A'; S.lines.splice(at,0,{t,opts:[],pick:-1,custom:''}); openLine=at; save(); render();
     setTimeout(()=>{ const el=document.getElementById('custom-'+at); if(el) el.focus(); },0); return; }
-  if(a==='delline'){ S.lines.splice(i,1); openLine=-1; save(); render(); return; }
+  if(a==='delline'){ const L=S.lines[i]; if(!L) return;
+    // a line from the story (or one with text) asks once more, so a slip of the finger does not lose it
+    if(((L.opts||[]).length || (L.custom||'').trim()) && !b.dataset.sure){ b.dataset.sure='1'; b.textContent='בטוחים? לחצו שוב למחיקה'; return; }
+    S.lines.splice(i,1); openLine=-1; save(); render(); toast('השורה נמחקה'); return; }
   if(a==='finish'){ S.done=true; openLine=-1; save(); render(); setTimeout(()=>{ const f=document.querySelector('.finish'); if(f) f.scrollIntoView({block:'center',behavior:'smooth'}); },0); return; }
   if(a==='unfinish'){ S.done=false; save(); render(); return; }
   if(a==='shuffle'){ for(const L of S.lines) if(L.opts.length){ L.pick=Math.floor(Math.random()*L.opts.length); } openLine=-1; save(); render(); toast('הוגרל תסריט חדש'); return; }
